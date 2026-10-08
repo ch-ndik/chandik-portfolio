@@ -27,6 +27,7 @@
   --c-accent:      79 79 255;     /* #4F4FFF — accent: links, focus, highlights */
   --c-deep-blue:   27 55 177;     /* #1B37B1 — homepage intro + Get in touch */
   --c-on-dark:     255 255 255;
+  --c-footer:      17 17 17;      /* #111111 — footer background */
 
   /* Work group colours — used for group headings and hover text */
   --c-samsung:     79 79 255;     /* #4F4FFF Samsung Design Delhi */
@@ -275,12 +276,17 @@ main { padding-top: var(--nav-h); }
 [data-include="nav"] { display: block; height: var(--nav-h); position: fixed; inset: 0 0 auto; }
 
 /* --- Footer (partials/footer.js) --- */
-.footer { border-top: 1px solid var(--line); background: rgb(var(--c-wash)); margin-top: var(--section-gap); }
+/* Dark footer on every page, with the CHANDIK sticker as a signature */
+.footer { background: rgb(var(--c-footer)); color: #fff; margin-top: var(--section-gap); }
 .footer__inner {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  gap: var(--space-5); padding-block: var(--space-7);
+  gap: var(--space-6); padding-block: var(--space-8);
 }
+.footer__signature img { width: clamp(160px, 18vw, 220px); height: auto; }
 .footer__links { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.footer .btn--primary { background: #fff; color: #000; }
+.footer .btn--secondary { color: #fff; border-color: rgb(255 255 255 / .25); }
+.footer .btn--secondary:hover { background: rgb(255 255 255 / .1); }
 
 /* --- Buttons --- */
 .btn {

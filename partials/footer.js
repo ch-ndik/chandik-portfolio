@@ -4,7 +4,7 @@ window.SITE_PARTIALS = window.SITE_PARTIALS || {};
 window.SITE_PARTIALS.footer = `
 <footer class="footer">
   <div class="container footer__inner">
-    <p class="eyebrow">Chandik A Chandran • 2026</p>
+    <a class="footer__signature" href="{{root}}index.html"><img src="{{root}}images/home/sticker-signature.webp" width="560" height="185" alt="Chandik A Chandran"></a>
     <div class="footer__links">
       <a class="btn btn--primary" href="{{root}}files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Download Resume</a>
       <a class="btn btn--secondary" href="https://www.instagram.com/chandik_/" target="_blank" rel="noopener">Instagram</a>
