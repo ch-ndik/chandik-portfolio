@@ -1,0 +1,797 @@
+/* ==========================================================================
+   chandik. — master stylesheet
+   Every page links this one file. Change a token or a style here and it
+   updates everywhere. See /Master.html for a visual reference of all of it.
+
+   Contents
+   1. Tokens        — colours, type scale, spacing, radius, shadows, motion
+   2. Base          — reset + element defaults (h1, h2, h3, p, a, small…)
+   3. Text styles   — named variants (.display, .eyebrow, .metric…)
+   4. Layout        — .container, .stack, .grid helpers
+   5. Components    — nav, footer, buttons, project row, case intro, …
+   6. Utilities
+   ========================================================================== */
+
+
+/* 1. TOKENS ---------------------------------------------------------------- */
+:root {
+  /* Font — DM Sans everywhere, weights 300–700 */
+  --font: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Colour (RGB channels, use as rgb(var(--token)) or rgb(var(--token) / .5)) */
+  --c-page:        245 245 245;   /* page background #F5F5F5 */
+  --c-wash:        236 236 236;   /* alt surfaces, image backdrops, footer */
+  --c-surface:     255 255 255;   /* cards, floating previews */
+  --c-ink:         25 25 25;      /* primary text */
+  --c-ink-strong:  0 0 0;         /* primary button */
+  --c-accent:      79 79 255;     /* #4F4FFF — accent: links, focus, highlights */
+  --c-deep-blue:   27 55 177;     /* #1B37B1 — homepage intro + Get in touch */
+  --c-on-dark:     255 255 255;
+
+  /* Work group colours — used for group headings and hover text */
+  --c-samsung:     79 79 255;     /* #4F4FFF Samsung Design Delhi */
+  --c-polygon:     224 38 66;     /* #E02642 Polygon Design Inc. */
+  --c-nid:         8 150 0;       /* #089600 NID Ahmedabad */
+
+  --text-primary:   rgb(var(--c-ink));
+  --text-body:      rgb(112 112 112);           /* #707070 — all paragraphs */
+  --text-secondary: rgb(var(--c-ink) / .56);
+  --text-tertiary:  rgb(var(--c-ink) / .4);
+
+  --tint-1: rgb(0 0 0 / .03);   /* hover fills */
+  --tint-2: rgb(0 0 0 / .05);
+  --tint-3: rgb(0 0 0 / .08);
+  --line:        rgb(0 0 0 / .07);  /* hairline dividers */
+  --line-strong: rgb(0 0 0 / .12);  /* button borders */
+
+  /* Type scale (min → max, fluid between 375px and 1440px viewports) */
+  --fs-h1:      56px;                                       /* 56 */
+  --fs-display: clamp(2.5rem, 1.95rem + 2.35vw, 4rem);      /* 40 → 64 */
+  --fs-h2:      24px;                                       /* 24 */
+  --fs-h3:      clamp(1.25rem, 1.2rem + .19vw, 1.375rem);   /* 20 → 22 */
+  --fs-metric:  clamp(1.625rem, 1.4rem + .94vw, 2.25rem);   /* 26 → 36 */
+  --fs-body:    1rem;                                       /* 16 */
+  --fs-small:   .875rem;                                     /* 14 */
+  --fs-caption: .8125rem;                                    /* 13 */
+  --fs-eyebrow: .75rem;                                      /* 12 */
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --section-gap: clamp(64px, 3rem + 5vw, 128px);  /* between major sections */
+  --block-gap:   clamp(32px, 1.5rem + 2vw, 56px); /* between blocks in a section */
+  --para-gap:    20px;                            /* between paragraphs */
+
+  /* Layout */
+  --container: 1000px;            /* max content width (excl. side padding) */
+  --gutter: 20px;                 /* side padding 20 → 40 → 60, see .container */
+  --measure: 68ch;                /* max line length for paragraphs */
+  --nav-h: 64px;
+
+  /* Homepage project list + hero preview (see .project-row / .hero-preview) */
+  --project-text-max: 400px;      /* max width of a project's title + description */
+  --project-gap:      clamp(96px, 4rem + 6vw, 160px);  /* vertical space between project cards (home v2) */
+  --preview-start:    430px;      /* image's left edge, measured from the list's left edge */
+  --preview-max-w:    800px;      /* hover image max width */
+
+  /* Radius */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-pill: 9999px;
+
+  /* Elevation */
+  --shadow-1: 0 1px 2px rgb(0 0 0 / .05);
+  --shadow-2: 0 0 0 .5px rgb(0 0 0 / .06), 0 1px 3px rgb(0 0 0 / .06), 0 1px 2px rgb(0 0 0 / .06);
+  --shadow-3: 0 10px 15px -3px rgb(0 0 0 / .06);
+  --shadow-4: 0 25px 50px -12px rgb(0 0 0 / .25);
+
+  /* Motion */
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --dur: .2s;
+}
+
+
+/* 2. BASE ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--nav-h) + 16px); }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  font-optical-sizing: auto;
+  color: var(--text-primary);
+  background: rgb(var(--c-page));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, video { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+::selection { background: rgb(var(--c-accent) / .18); }
+:focus-visible { outline: 2px solid rgb(var(--c-accent)); outline-offset: 3px; border-radius: 4px; }
+
+h1, h2, h3, p, figure, dl, dd, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+
+/* h1 — page title (case study titles) */
+h1 {
+  font-size: var(--fs-h1);
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -0.1px;
+  text-transform: capitalize;
+  color: #000000;
+}
+/* h2 — section headings ("Background", "Approach", company names) */
+h2 {
+  font-size: var(--fs-h2);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+/* h3 — sub-headings (project titles, exploration titles) */
+h3 {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+/* p — body copy (all paragraphs, including intros) */
+p {
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  color: var(--text-body);
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+small, .small { font-size: var(--fs-small); line-height: 1.45; }
+strong { font-weight: 500; color: var(--text-primary); }
+
+/* Inline text link */
+.link {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur);
+}
+.link:hover { text-decoration-color: currentColor; }
+
+
+/* 3. TEXT STYLES ----------------------------------------------------------- */
+/* .display — homepage hero headline */
+.display {
+  font-size: var(--fs-display);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-transform: none;
+  color: var(--text-primary);
+}
+.display em { font-style: italic; font-weight: 300; }
+
+/* Group colour: set .theme-samsung / .theme-polygon / .theme-nid on a wrapper,
+   then use rgb(var(--group)) inside it */
+.theme-samsung { --group: var(--c-samsung); }
+.theme-polygon { --group: var(--c-polygon); }
+.theme-nid     { --group: var(--c-nid); }
+
+/* .eyebrow — small uppercase label above titles / in meta */
+.eyebrow {
+  font-size: var(--fs-eyebrow);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* .metric — large impact statement; wrap the numbers in <strong> */
+.metric {
+  font-size: var(--fs-metric);
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+  color: var(--text-secondary);
+  max-width: 30ch;
+  text-wrap: balance;
+}
+.metric strong { font-weight: 500; color: var(--text-primary); }
+
+/* .quote — large editorial line within body text (same look as the pull quote, no label or divider) */
+.quote {
+  font-size: var(--fs-metric);
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  max-width: 32ch;
+  text-wrap: balance;
+}
+
+/* .caption — under images, small notes */
+.caption {
+  font-size: var(--fs-caption);
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+
+/* 4. LAYOUT ---------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+@media (min-width: 768px)  { :root { --gutter: 40px; } }
+@media (min-width: 1024px) { :root { --gutter: 60px; } }
+
+main { padding-top: var(--nav-h); }
+.no-nav main { padding-top: 0; }   /* pages without the top nav (homepage) */
+
+/* .stack — vertical rhythm; set --gap to override */
+.stack { display: flex; flex-direction: column; gap: var(--gap, var(--para-gap)); }
+
+/* .section — major page section with consistent spacing */
+.section { padding-block: var(--section-gap); }
+.section + .section { padding-top: 0; }
+.section--ruled { border-top: 1px solid var(--line); padding-top: var(--section-gap) !important; }
+
+
+/* 5. COMPONENTS ------------------------------------------------------------ */
+
+/* --- Nav (partials/nav.js) --- */
+.nav {
+  position: fixed; inset: 0 0 auto; z-index: 100;
+  height: var(--nav-h);
+  background: rgb(var(--c-page) / .85);
+  backdrop-filter: saturate(1.6) blur(14px);
+  -webkit-backdrop-filter: saturate(1.6) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.nav__inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.nav__logo { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.03em; }
+.nav__links { display: flex; align-items: center; gap: var(--space-2); }
+.nav__link {
+  font-size: var(--fs-small); color: var(--text-secondary);
+  padding: 6px 10px; border-radius: var(--r-pill);
+  transition: color var(--dur), background-color var(--dur);
+}
+.nav__link:hover, .nav__link[aria-current="page"] { color: var(--text-primary); background: var(--tint-1); }
+@media (max-width: 479px) { .nav__link--hide-sm { display: none; } }
+[data-include="nav"] { display: block; height: var(--nav-h); position: fixed; inset: 0 0 auto; }
+
+/* --- Footer (partials/footer.js) --- */
+.footer { border-top: 1px solid var(--line); background: rgb(var(--c-wash)); margin-top: var(--section-gap); }
+.footer__inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-5); padding-block: var(--space-7);
+}
+.footer__links { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 42px; padding: 0 20px;
+  border-radius: var(--r-pill);
+  font-family: inherit; font-size: 15px; font-weight: 500; letter-spacing: -0.01em;
+  white-space: nowrap; cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--dur), border-color var(--dur), opacity var(--dur);
+}
+.btn svg { width: 14px; height: 14px; flex: none; }
+.btn--primary   { background: rgb(var(--c-ink-strong)); color: rgb(var(--c-on-dark)); }
+.btn--primary:hover { opacity: .82; }
+.btn--secondary { border-color: var(--line-strong); color: var(--text-primary); background: transparent; }
+.btn--secondary:hover { background: var(--tint-2); }
+.btn--accent { background: rgb(var(--c-accent)); color: rgb(var(--c-page)); font-weight: 700; }
+.btn--accent:hover { opacity: .85; }
+.home-hero .btn--accent { background: rgb(var(--c-deep-blue)); }
+.btn--sm { height: 34px; padding: 0 14px; font-size: 14px; }
+
+/* --- Home hero --- */
+.home-hero { padding-top: clamp(48px, 2rem + 4vw, 96px); padding-bottom: var(--space-9); }
+/* Sticker: centred on the page; everything else stays left-aligned */
+.home-sticker { display: block; width: 100%; height: auto; margin-bottom: var(--space-8); }  /* full container width */
+.home-hero__intro { display: grid; gap: var(--space-6); position: relative; z-index: 1; }  /* above hover images (z-index 0) */
+.home-hero__text { display: grid; gap: var(--space-5); }
+/* Centred variant: text, intro and pills all centred */
+.home-hero__intro--center { justify-items: center; text-align: center; }
+.home-hero__intro--center .home-hero__text { justify-items: center; }
+.home-hero__intro--center p { margin-inline: auto; }
+.home-hero__intro--center .home-hero__links { justify-content: center; }
+.home-hero__links { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* .intro — the homepage introduction: bold, accent colour */
+.intro {
+  font-weight: 700; line-height: 1.3; letter-spacing: -0.03em;
+  color: rgb(var(--c-deep-blue)); max-width: 660px;
+}
+
+/* --- Work group (homepage: company + its projects, colour-coded) ---
+   Add .theme-samsung / .theme-polygon / .theme-nid to the section. */
+.work-group { position: relative; z-index: 1; padding-bottom: var(--space-9); }
+.work-group__head { margin-bottom: var(--space-6); color: rgb(var(--group, var(--c-ink))); }
+.work-group h2 {
+  font-size: var(--fs-body); font-weight: 700; line-height: 1.3; letter-spacing: -0.02em;
+  text-transform: uppercase; color: inherit;
+}
+.work-group__role {
+  font-size: var(--fs-body); line-height: 1.3; letter-spacing: -0.02em;
+  text-transform: uppercase; color: inherit;
+}
+
+/* --- Project row (homepage list item) ---
+   The row spans the full width of the list, so hovering anywhere along it
+   triggers the colour change and the hero image. Only the text is capped. */
+.project-list { display: grid; gap: var(--space-4); }  /* 16px between projects */
+.project-row { display: block; position: relative; z-index: 1; padding-block: var(--space-3); }
+.project-row h3, .project-row p { max-width: var(--project-text-max); }
+.project-row h3 { font-size: var(--fs-body); font-weight: 700; line-height: 1.3; letter-spacing: -0.03em; }
+.project-row p { margin-top: 2px; }
+.project-row:hover h3, .project-row:hover p,
+.project-row:focus-visible h3, .project-row:focus-visible p { color: rgb(var(--group, var(--c-accent))); }
+.project-row__ext { font-weight: 400; margin-left: 2px; }
+
+/* --- Project grid + card (homepage v2: visual-led, editorial) ---
+   12-column grid with mixed card sizes. Each card: a big visual (image now,
+   looping video later), tags overlaid on the visual, then title + description.
+   Size a card with a modifier; set the visual's shape with style="--ar: 16/9".
+     .project-card--full   12 cols      .project-card--wide   7 cols
+     .project-card--narrow  5 cols      .project-card--half   6 cols
+   To use a motion thumbnail, put inside .project-card__media:
+     <video src="…mp4" poster="…webp" muted loop playsinline></video>
+   site.js plays it only while on screen (and not at all with reduce-motion). */
+.project-grid { display: grid; gap: var(--project-gap) var(--space-6); }
+@media (min-width: 768px) {
+  .project-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .project-card--full   { grid-column: span 12; }
+  .project-card--wide   { grid-column: span 7; }
+  .project-card--narrow { grid-column: span 5; }
+  .project-card--half   { grid-column: span 6; }
+}
+.project-card { display: grid; gap: var(--space-4); align-content: start; }
+.project-card__media {
+  position: relative; overflow: hidden;
+  aspect-ratio: var(--ar, 4 / 3);
+  background: rgb(var(--c-wash));
+}
+.project-card__media img, .project-card__media video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transition: transform .8s var(--ease);
+}
+.project-card:hover .project-card__media img,
+.project-card:hover .project-card__media video { transform: scale(1.04); }
+.project-card__tags {
+  position: absolute; z-index: 1; top: var(--space-4); left: var(--space-4); right: var(--space-4);
+  display: flex; flex-wrap: wrap; gap: var(--space-1);
+}
+.project-card__tags .chip:not(.chip--solid) {
+  background: rgb(255 255 255 / .82); border-color: transparent; color: var(--text-primary);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.project-card__text { display: grid; gap: var(--space-1); }
+@media (min-width: 1024px) {
+  .project-card--full .project-card__text { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-6); }
+}
+.project-card h3 { font-size: var(--fs-h3); font-weight: 700; line-height: 1.2; letter-spacing: -0.03em; }
+.project-card p { max-width: 52ch; }
+.project-card h3, .project-card p { transition: color var(--dur); }
+.project-card:hover h3, .project-card:hover p,
+.project-card:focus-visible h3, .project-card:focus-visible p { color: rgb(var(--group, var(--c-accent))); }
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover .project-card__media img, .project-card:hover .project-card__media video { transform: none; }
+}
+
+/* --- Bento grid + card (homepage v2, Apple-event style) ---
+   Rounded tiles that hold their own text and visual. Size each tile with
+   style="--cols: 6; --rows: 3" (12 columns; one row = --bento-row).
+   Layout modifiers:
+     .bento-card--h      text on the left, visual on the right (wide tiles)
+     .bento-card--photo  visual fills the tile, text overlaid in white
+   Default: text on top, visual fills the rest.
+   For a motion thumbnail, use <video … muted loop playsinline> in place of the img. */
+:root { --bento-gap: 20px; --bento-row: 200px; --bento-radius: 28px; }
+.bento { display: grid; gap: var(--bento-gap); }
+@media (min-width: 768px) {
+  .bento { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: var(--bento-row); }
+  .bento-card { grid-column: span var(--cols, 12); grid-row: span var(--rows, 2); }
+}
+.bento-card {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: flex; flex-direction: column;
+  border-radius: var(--bento-radius);
+  background: rgb(var(--c-surface));
+}
+.bento-card__text { display: grid; gap: var(--space-2); padding: clamp(24px, 1rem + 1.5vw, 36px); align-content: start; }
+.bento-card__text h3 { font-size: clamp(1.375rem, 1.1rem + 1vw, 2rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.035em; transition: color var(--dur); }
+.bento-card__text p { max-width: 44ch; transition: color var(--dur); }
+.bento-card__media { position: relative; flex: 1; min-height: 220px; overflow: hidden; }
+.bento-card__media img, .bento-card__media video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transition: transform .8s var(--ease);
+}
+.bento-card:hover .bento-card__media img, .bento-card:hover .bento-card__media video { transform: scale(1.04); }
+.bento-card:hover h3, .bento-card:hover .bento-card__text p,
+.bento-card:focus-visible h3, .bento-card:focus-visible .bento-card__text p { color: rgb(var(--group, var(--c-accent))); }
+
+/* Horizontal: text left (5 cols), visual right */
+@media (min-width: 768px) {
+  .bento-card--h { flex-direction: row; }
+  .bento-card--h .bento-card__text { flex: 0 0 38%; align-content: end; }
+  .bento-card--h .bento-card__media { min-height: 0; }
+}
+
+/* Photo: visual fills the tile, text in white over a soft gradient */
+.bento-card--photo { background: #000; }
+.bento-card--photo .bento-card__media { position: absolute; inset: 0; z-index: -1; min-height: 0; }
+.bento-card--photo .bento-card__media::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / .65), rgb(0 0 0 / 0) 55%);
+}
+.bento-card--photo .bento-card__text { margin-top: auto; }
+.bento-card--photo h3, .bento-card--photo .bento-card__text p { color: #fff; }
+.bento-card--photo:hover h3, .bento-card--photo:hover .bento-card__text p { color: #fff; }
+.bento-card--photo .bento-card__text p { color: rgb(255 255 255 / .8); }
+@media (max-width: 767px) { .bento-card--photo { min-height: 420px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-card:hover .bento-card__media img, .bento-card:hover .bento-card__media video { transform: none; }
+}
+
+/* --- Chip (small tag: "Shipped", "Research"…) ---
+   Default is outlined; .chip--solid fills it with the group colour. */
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: var(--r-pill);
+  border: 1px solid var(--line-strong);
+  font-size: var(--fs-eyebrow); font-weight: 500; line-height: 1.4; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.chip--solid { background: rgb(var(--group, var(--c-ink))); border-color: transparent; color: #fff; }
+.chip img { width: 14px; height: 14px; border-radius: 50%; }
+
+/* --- Hero preview (huge image shown while hovering a .project-row[data-preview]) ---
+   Position (set by site.js from the tokens above):
+     left  = list's left edge + --preview-start
+     width = up to --preview-max-w (and never past the screen edge)
+     top   = image's vertical centre = the hovered row's vertical centre
+   z-index 0 keeps it behind the project text (z-index 1), so they overlap.
+   No fade: it appears and disappears instantly. */
+.hero-preview {
+  position: fixed; z-index: 0; pointer-events: none;
+  top: var(--top, 50%); left: var(--left, 50%);
+  translate: 0 -50%;
+  visibility: hidden;
+}
+.hero-preview.is-visible { visibility: visible; }
+.hero-preview img {
+  display: block; width: auto; height: auto;
+  max-width: var(--max-w, var(--preview-max-w));
+  max-height: calc(100vh - var(--nav-h) - 96px);
+}
+@media (hover: none), (max-width: 1023px) { .hero-preview { display: none; } }
+
+/* --- Case intro (top of every case study) --- */
+.case-intro { padding-top: clamp(56px, 2rem + 5vw, 120px); padding-bottom: var(--block-gap); }
+.case-intro__back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: var(--space-7); font-size: var(--fs-small); color: var(--text-secondary); transition: color var(--dur); }
+.case-intro__back:hover { color: var(--text-primary); }
+.case-intro__back svg { width: 14px; height: 14px; }
+.case-intro h1 { margin-top: var(--space-2); }
+.case-intro__company { color: rgb(var(--group, var(--c-ink))); }
+.case-intro__subtitle { margin-top: var(--space-4); font-weight: 500; color: var(--text-primary); }
+.case-intro__body { display: grid; gap: var(--space-6); margin-top: var(--space-7); }
+@media (min-width: 1024px) {
+  .case-intro__body { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); column-gap: var(--space-9); }
+}
+
+/* --- Meta list (Company / Members / Timeline) --- */
+.meta { display: grid; align-content: start; }
+.meta__row { display: grid; grid-template-columns: 110px 1fr; gap: var(--space-4); padding-block: var(--space-3); border-top: 1px solid var(--line); font-size: var(--fs-small); }
+.meta__row:last-child { border-bottom: 1px solid var(--line); }
+.meta dt { color: var(--text-tertiary); }
+.meta dd { color: var(--text-primary); }
+
+/* --- Figure (single image) --- */
+.figure { margin-top: var(--block-gap); }
+.figure img, .figure video, .media {
+  width: 100%; border-radius: var(--r-lg);
+  background: rgb(var(--c-wash));
+  box-shadow: 0 0 0 1px var(--line);
+}
+/* .figure--plain: no backdrop, edge or rounding (for transparent images) */
+.figure--plain img, .figure--plain video { background: none; box-shadow: none; border-radius: 0; }
+/* Tall images are capped to the viewport height and centred */
+.figure img, .figure video { width: auto; max-width: 100%; max-height: min(88vh, 960px); margin-inline: auto; }
+/* .figure--full: always fill the column width, no height cap */
+.figure--full img, .figure--full video { width: 100%; max-width: none; max-height: none; }
+.figure figcaption { margin-top: var(--space-3); }
+
+/* --- Gallery (row of images at equal height, no cropping) ---
+   Give each item style="--ar: width/height" from its image. */
+.gallery { display: flex; flex-direction: column; gap: var(--space-4); margin-top: var(--block-gap); }
+.gallery + .gallery, .figure + .gallery, .gallery + .figure { margin-top: var(--space-4); }
+.gallery > * { flex: calc(var(--ar, 1)) 1 0%; min-width: 0; }
+@media (min-width: 768px) { .gallery { flex-direction: row; } }
+
+/* --- Prose (body copy block, optionally with a side heading) --- */
+.prose { margin-top: var(--block-gap); }
+.prose__body { display: flex; flex-direction: column; gap: var(--para-gap); }
+.prose--split { display: grid; gap: var(--space-5); }
+@media (min-width: 1024px) {
+  .prose--split { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-6); }
+  .prose--split > h2 { position: sticky; top: calc(var(--nav-h) + var(--space-6)); align-self: start; }
+}
+
+/* --- Impact callout (metric + external links) --- */
+.impact {
+  margin-top: var(--block-gap);
+  padding-block: var(--space-7);
+  border-block: 1px solid var(--line);
+  display: grid; gap: var(--space-5);
+}
+.impact__links { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+@media (min-width: 1024px) {
+  .impact { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-6); }
+  .impact__body { display: grid; gap: var(--space-5); }
+}
+
+/* --- Exploration block (numbered concept with text + gallery) --- */
+.exploration { padding-top: var(--section-gap); }
+.case-intro + .exploration { padding-top: var(--block-gap); }
+.exploration__head { display: grid; gap: var(--space-4); }
+.exploration__index { font-variant-numeric: tabular-nums; }
+.exploration__text { display: flex; flex-direction: column; gap: var(--para-gap); }
+@media (min-width: 1024px) {
+  .exploration__head { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-6); }
+}
+
+/* --- Compare slider (drag to reveal second image) --- */
+.compare {
+  position: relative; margin-top: var(--block-gap);
+  border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: 0 0 0 1px var(--line);
+  background: rgb(var(--c-wash));
+  --pos: 50%;
+  user-select: none; touch-action: pan-y;
+}
+.compare img { width: 100%; pointer-events: none; }
+.compare__after { position: absolute; inset: 0; height: 100%; object-fit: cover; clip-path: inset(0 0 0 var(--pos)); }
+.compare__handle {
+  position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px;
+  background: rgb(var(--c-surface)); box-shadow: 0 0 0 .5px rgb(0 0 0 / .1);
+  pointer-events: none;
+}
+.compare__handle::after {
+  content: ""; position: absolute; top: 50%; left: 50%; width: 36px; height: 36px; translate: -50% -50%;
+  border-radius: var(--r-pill); background: rgb(var(--c-surface)); box-shadow: var(--shadow-2), var(--shadow-3);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23191919' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 4 2 8l4 4M10 4l4 4-4 4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: center;
+}
+.compare__label {
+  position: absolute; top: var(--space-4); z-index: 1; pointer-events: none;
+  padding: 4px 10px; border-radius: var(--r-pill);
+  font-size: 12px; font-weight: 500; line-height: 16px;
+  background: rgb(var(--c-surface) / .9); color: var(--text-primary); box-shadow: var(--shadow-1);
+}
+.compare__label--start { left: var(--space-4); }
+.compare__label--end { right: var(--space-4); }
+.compare + .caption, figure > .caption { margin-top: var(--space-3); }
+.compare__range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+.compare__range:focus-visible + .compare__handle::after { outline: 2px solid rgb(var(--c-accent)); outline-offset: 2px; }
+
+/* --- Scroll sequence (pinned stage; layers fade in as you scroll) ---
+   JS sets --p (0 → 1). Each layer has style="--i: n" (0 = base). */
+.scroll-seq { position: relative; height: calc(var(--steps, 4) * 85vh); margin-top: var(--block-gap); }
+.scroll-seq__stage {
+  position: sticky; top: var(--nav-h);
+  height: calc(100vh - var(--nav-h)); height: calc(100svh - var(--nav-h));
+  display: grid; place-items: center;
+}
+.scroll-seq__frame { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 100%; border-radius: var(--r-lg); overflow: hidden; box-shadow: 0 0 0 1px var(--line); background: rgb(var(--c-wash)); }
+.scroll-seq__layer {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  --start: calc((var(--i) - .5) / (var(--steps, 4) - 1));
+  opacity: clamp(0, (var(--p, 0) - var(--start)) * 6, 1);
+  transform: scale(calc(1.04 - .04 * clamp(0, (var(--p, 0) - var(--start)) * 6, 1)));
+}
+.scroll-seq__layer:first-child { opacity: 1; transform: none; }
+.scroll-seq__captions { position: absolute; left: 16px; top: 16px; z-index: 2; }
+.scroll-seq__captions span {
+  position: absolute; left: 0; top: 0; white-space: nowrap; opacity: 0;
+  padding: 5px 12px; border-radius: var(--r-pill); background: rgb(255 255 255 / .85);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font-size: var(--fs-eyebrow); font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+}
+.scroll-seq__captions span.is-active { opacity: 1; }
+.scroll-seq__dots { position: absolute; bottom: 16px; left: 50%; translate: -50% 0; display: flex; gap: 6px; }
+.scroll-seq__dots span { width: 6px; height: 6px; border-radius: 50%; background: rgb(0 0 0 / .2); transition: background-color var(--dur), width var(--dur); }
+.scroll-seq__dots span.is-active { background: rgb(0 0 0 / .7); width: 16px; border-radius: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-seq { height: auto; }
+  .scroll-seq__stage { position: static; height: auto; display: flex; flex-direction: column; gap: var(--space-4); }
+  .scroll-seq__frame { aspect-ratio: auto; display: contents; }
+  .scroll-seq__layer { position: static; opacity: 1; transform: none; border-radius: var(--r-lg); box-shadow: 0 0 0 1px var(--line); }
+  .scroll-seq__dots, .scroll-seq__captions { display: none; }
+}
+
+/* --- Scroll video (pinned; scrolling scrubs the video) --- */
+.scroll-video { position: relative; height: 220vh; margin-top: var(--block-gap); }
+.scroll-video__stage { position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); height: calc(100svh - var(--nav-h)); display: grid; place-items: center; }
+.scroll-video video { width: 100%; max-height: 100%; object-fit: contain; border-radius: var(--r-lg); box-shadow: 0 0 0 1px var(--line); background: rgb(var(--c-wash)); }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-video { height: auto; }
+  .scroll-video__stage { position: static; height: auto; }
+}
+
+/* --- Note (quiet closing remark) --- */
+.note {
+  margin-top: var(--block-gap);
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--r-lg);
+  background: rgb(var(--c-wash));
+  display: grid; gap: var(--space-2);
+}
+.note p { font-size: var(--fs-small); line-height: 1.6; color: var(--text-secondary); }
+
+/* --- Next project (bottom of case studies) --- */
+.next-project { margin-top: var(--section-gap); }
+.next-project a {
+  display: grid; grid-template-columns: 1fr auto; align-items: end; gap: var(--space-5);
+  padding: var(--space-6) 0; border-top: 1px solid var(--line);
+}
+.next-project h2 { margin-top: var(--space-2); transition: color var(--dur); }
+.next-project__arrow {
+  width: 48px; height: 48px; border-radius: var(--r-pill);
+  display: grid; place-items: center; border: 1px solid var(--line-strong);
+  transition: background-color var(--dur), color var(--dur), transform var(--dur) var(--ease);
+}
+.next-project__arrow svg { width: 18px; height: 18px; }
+.next-project a:hover .next-project__arrow { background: rgb(var(--c-ink-strong)); color: rgb(var(--c-on-dark)); border-color: transparent; transform: translateX(4px); }
+
+
+/* --- Stats (big numbers inside an .impact block) ---
+   <div class="stats"><div class="stat"><p class="stat__value">25Mn+</p><p class="stat__label">users as of 2025</p></div>…</div> */
+.stats { display: flex; flex-wrap: wrap; gap: var(--space-6) var(--space-8); }
+.stat__value { font-size: clamp(2.5rem, 1.8rem + 3vw, 4rem); font-weight: 700; line-height: 1; letter-spacing: -0.04em; color: var(--text-primary); }
+.stat__label { margin-top: var(--space-2); }
+
+/* --- Points (a short list shown as a grid of numbered items) --- */
+.points { display: grid; gap: var(--space-4); margin-block: var(--space-2); padding: 0; list-style: none; }
+@media (min-width: 640px) { .points { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.points li { padding: var(--space-4) var(--space-5); border-radius: var(--r-md); background: rgb(var(--c-surface)); }
+.points li span { display: block; margin-bottom: var(--space-1); }
+.points li strong { font-weight: 700; letter-spacing: -0.02em; }
+.points li p { margin-top: var(--space-1); }
+
+/* --- Trio (three columns of image and/or text) ---
+   <div class="trio"><article class="trio__item">[figure] <p class="eyebrow">…</p><h3>…</h3><p>…</p></article>…</div>
+   Add .trio--large for big statement headings. */
+.trio { display: grid; gap: var(--space-7) var(--space-5); margin-top: var(--block-gap); }
+@media (min-width: 768px) { .trio { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.trio__item { display: grid; gap: var(--space-2); align-content: start; }
+.trio__item figure { margin-bottom: var(--space-3); }
+.trio__item figure img { width: 100%; border-radius: var(--r-md); }
+.trio__item h3 { font-size: var(--fs-h3); font-weight: 700; letter-spacing: -0.025em; }
+.trio__keys { font-size: var(--fs-small); color: var(--text-tertiary); }
+.trio--ruled .trio__item { padding-top: var(--space-5); border-top: 1px solid var(--line); }
+.trio--large .trio__item h3 { font-size: var(--fs-metric); line-height: 1.12; letter-spacing: -0.03em; }
+
+/* --- Carousel (swipe/scroll through slides; arrows from site.js) --- */
+.carousel { margin-top: var(--block-gap); }
+.carousel__track {
+  display: flex; gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__slide { flex: 0 0 100%; scroll-snap-align: start; display: grid; gap: var(--space-3); }
+.carousel__slide img { width: 100%; border-radius: var(--r-lg); background: #000; }
+.carousel__slide h3 { font-size: var(--fs-h3); font-weight: 700; letter-spacing: -0.025em; }
+.carousel__bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-4); }
+.carousel__count { font-size: var(--fs-small); color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+.carousel__nav { display: flex; gap: var(--space-2); }
+.carousel__nav button {
+  width: 42px; height: 42px; border-radius: var(--r-pill); display: grid; place-items: center;
+  border: 1px solid var(--line-strong); background: transparent; color: var(--text-primary); cursor: pointer;
+  transition: background-color var(--dur), opacity var(--dur);
+}
+.carousel__nav button:hover { background: var(--tint-2); }
+.carousel__nav button:disabled { opacity: .35; cursor: default; background: transparent; }
+.carousel__nav svg { width: 16px; height: 16px; }
+
+/* --- Award badges (pills under a case title, with the award's logo) --- */
+.award-badges { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-4); }
+.award-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 12px 5px 5px;
+  border-radius: var(--r-pill); background: #000; color: #fff;
+  font-size: var(--fs-eyebrow); font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  transition: opacity var(--dur);
+}
+.award-badge:hover { opacity: .85; }
+.award-badge__logo { width: 24px; height: 24px; border-radius: 50%; box-shadow: 0 0 0 1px rgb(255 255 255 / .3); }
+.award-badge__logo--wide { width: auto; height: 11px; border-radius: 0; margin-inline: 6px 2px; }
+.award-badge__sub { font-weight: 400; opacity: .7; }
+
+/* --- Problem steps (Finding → Before → Solution) inside an .exploration --- */
+.problem-steps { display: grid; gap: var(--space-4); }
+.problem-steps div { display: grid; gap: var(--space-1); }
+@media (min-width: 768px) { .problem-steps div { grid-template-columns: 96px 1fr; gap: var(--space-4); } }
+.problem-steps dt { padding-top: 2px; }
+.problem-steps dd p { color: var(--text-body); }
+.problem-steps .is-solution dd p { color: var(--text-primary); }
+
+/* --- Image placeholder (until a real image is supplied) --- */
+.placeholder {
+  margin-top: var(--block-gap);
+  display: grid; place-items: center; text-align: center;
+  aspect-ratio: var(--ar, 16 / 9); padding: var(--space-6);
+  border: 1.5px dashed var(--line-strong); border-radius: var(--r-lg);
+  background: repeating-linear-gradient(-45deg, transparent 0 12px, var(--tint-1) 12px 24px);
+}
+.placeholder p { max-width: 44ch; margin-inline: auto; }
+.placeholder .eyebrow { margin-bottom: var(--space-2); }
+
+/* --- Pull quote (one key statement, larger) --- */
+.pull-quote { margin-top: var(--block-gap); padding-block: var(--space-7); border-block: 1px solid var(--line); }
+.pull-quote p { font-size: var(--fs-metric); line-height: 1.22; letter-spacing: -0.025em; color: var(--text-primary); max-width: 32ch; text-wrap: balance; }
+.pull-quote .eyebrow { font-size: var(--fs-eyebrow); letter-spacing: .06em; color: var(--text-tertiary); margin-bottom: var(--space-4); }
+
+/* --- Award section (recognition: awards list + credited team) ---
+   Sits directly on the page (no fill, no card), separated by a hairline. */
+.award {
+  margin-top: var(--section-gap); padding-top: var(--section-gap);
+  border-top: 1px solid var(--line);
+  display: grid; gap: var(--space-7);
+}
+@media (min-width: 1024px) { .award { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--space-8); align-items: start; } }
+.award__body { display: grid; gap: var(--space-7); align-content: start; }
+.award__body h2 { margin-top: var(--space-2); }
+.award__list { display: grid; }
+.award__item {
+  display: grid; grid-template-columns: 64px 1fr; gap: var(--space-5);
+  padding-block: var(--space-6); border-top: 1px solid var(--line);
+}
+.award__item:last-child { border-bottom: 1px solid var(--line); }
+.award__logo { width: 56px; height: 56px; }
+.award__logo--wide { width: 64px; height: auto; align-self: start; margin-top: 4px; }
+.award__text { display: grid; gap: var(--space-2); align-content: start; }
+.award__text h3 { font-size: var(--fs-h3); font-weight: 700; letter-spacing: -0.02em; }
+.award__text > div { margin-top: var(--space-2); }
+.award__category { color: var(--text-secondary); }
+.award__team ul { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-3); }
+.award__team li {
+  border-radius: var(--r-pill); border: 1px solid var(--line-strong);
+  font-size: var(--fs-small); color: var(--text-primary);
+  transition: background-color var(--dur), border-color var(--dur), color var(--dur);
+}
+.award__team li > a, .award__team li:not(:has(a)) { display: inline-block; padding: 6px 12px; }
+.award__team li:has(a):hover {
+  background: rgb(var(--group, var(--c-accent))); border-color: rgb(var(--group, var(--c-accent)));
+  color: #fff;
+}
+.award__media img { width: 100%; border-radius: var(--r-lg); box-shadow: 0 0 0 1px var(--line); }
+@media (min-width: 1024px) { .award__media { position: sticky; top: calc(var(--nav-h) + var(--space-6)); } }
+
+/* 6. UTILITIES ------------------------------------------------------------- */
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.mt-0 { margin-top: 0 !important; }
+.mt-section { margin-top: var(--section-gap) !important; }  /* bigger break between blocks */
+.mt-tight { margin-top: var(--space-4) !important; }       /* image directly following another */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s !important; scroll-behavior: auto !important; }
+}
