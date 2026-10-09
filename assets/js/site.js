@@ -82,6 +82,18 @@
     });
   }
 
+  /* 2a. Name spiral: clone the row, give each its index and fade amount */
+  document.querySelectorAll('.name-spiral').forEach((el) => {
+    const n = +el.dataset.rows || 11;
+    const row = el.querySelector('.name-spiral__row');
+    for (let i = 1; i < n; i++) el.append(row.cloneNode(true));
+    [...el.children].forEach((r, i) => {
+      r.style.setProperty('--i', i);
+      r.style.setProperty('--n', n);
+      r.style.setProperty('--fade', `${(i / (n - 1)) * 100}%`);
+    });
+  });
+
   /* 2b. Motion thumbnails: play project-card videos only while visible */
   const thumbs = document.querySelectorAll('.project-card__media video, .bento-card__media video');
   if (thumbs.length) {
