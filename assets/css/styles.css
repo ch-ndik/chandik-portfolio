@@ -1205,3 +1205,74 @@ main { padding-top: var(--nav-h); }
    +100px below it. v3 is unchanged. --- */
 .intro-sheet--v4 .intro-sheet__links a:hover, .intro-sheet--v4 .intro-sheet__links a:focus-visible { background: #fff; color: var(--hero-bg); }
 .intro-sheet--v4 .intro-sheet__meta { border-top: 0; padding-bottom: calc(clamp(56px, 7vw, 112px) + 100px); }
+/* v4 work history type: 56px / 150%, +1% tracking, regular; grey text, company names stay white */
+.intro-sheet--v4 .intro-sheet__meta {
+  font-size: 56px; line-height: 150%; letter-spacing: 0.01em; font-weight: 400;
+  font-optical-sizing: auto !important; color: rgb(118 118 118 / 45%);
+}
+.intro-sheet--v4 .intro-sheet__meta b { color: #fff; }
+
+/* --- Dark shift (index-v4, body.dark-shift): scroll-linked fade to black.
+   site.js sets --dark on <body>: 0 until the top of "Things I make…" reaches the middle of the
+   screen, then rises to 1 over the next 200px of scroll (data-dark-distance), and back down
+   when scrolling up. Background, dots and text tokens are all mixed by --dark.
+   The title is in the page colour, so it only appears as the background darkens.
+   Group headings (Samsung / Polygon / NID) keep their colours. --- */
+body.dark-shift {
+  --dark: 0;
+  --dark-pc: calc(var(--dark) * 100%);
+  background-color: color-mix(in srgb, rgb(var(--c-page)), #000 var(--dark-pc));
+  background-image: radial-gradient(circle,
+    color-mix(in srgb, rgb(0 0 0 / .16), rgb(255 255 255 / .16) var(--dark-pc)) 1px, transparent 1.4px);
+  --text-primary:   color-mix(in srgb, rgb(var(--c-ink)), rgb(245 245 245) var(--dark-pc));
+  --text-body:      color-mix(in srgb, rgb(112 112 112), rgb(255 255 255 / .6) var(--dark-pc));
+  --text-secondary: color-mix(in srgb, rgb(var(--c-ink) / .56), rgb(255 255 255 / .6) var(--dark-pc));
+  --text-tertiary:  color-mix(in srgb, rgb(var(--c-ink) / .4), rgb(255 255 255 / .45) var(--dark-pc));
+  --line:           color-mix(in srgb, rgb(0 0 0 / .07), rgb(255 255 255 / .14) var(--dark-pc));
+}
+body.dark-shift .side-work__title { color: rgb(var(--c-page)); }
+body.dark-shift .sheet-footer__cta a { color: color-mix(in srgb, rgb(var(--c-deep-blue)), #fff var(--dark-pc)); }
+body.dark-shift .sheet-footer .intro-sheet__links a:hover,
+body.dark-shift .sheet-footer .intro-sheet__links a:focus-visible {
+  background: color-mix(in srgb, rgb(var(--c-deep-blue)), #fff var(--dark-pc));
+  color: color-mix(in srgb, #fff, #000 var(--dark-pc));
+}
+
+/* --- Sticker stack: the CHANDIK wordmark rebuilt from 7 letter layers (sticker-lab.html).
+   Stage keeps the original artwork's 2172 × 724 ratio; each layer is placed in % of it:
+   --x/--y top-left, --w/--h size, --r rotation, --z stacking (higher = on top). --- */
+.sticker-stack { position: relative; width: 100%; aspect-ratio: 2172 / 724; }
+.sticker-stack__layer {
+  position: absolute; left: var(--x); top: var(--y); width: var(--w); height: var(--h);
+  z-index: var(--z, 1); transform: rotate(var(--r, 0deg));
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / .18));
+}
+
+/* Homepage work history: company names use the same regular weight as the sentence */
+.intro-sheet--v4 .intro-sheet__meta b { font-weight: 400; letter-spacing: inherit; }
+
+/* --- Site nav + footer in the homepage style (partials/nav.js, partials/footer.js) ---
+   Nav: dark bar like the homepage's top row; links get the white highlight on hover.
+   Footer: the homepage footer layout on black, light text. */
+.nav {
+  background: #121212; backdrop-filter: none; -webkit-backdrop-filter: none;
+  border-bottom: 1px solid rgb(255 255 255 / .12);
+}
+.nav__logo { font-size: 14px; font-weight: 500; letter-spacing: normal; color: #fff; }
+.nav .intro-sheet__links { font-size: 14px; font-weight: 500; }
+.nav .intro-sheet__links a { color: rgb(255 255 255 / .6); }
+.nav .intro-sheet__links a:hover, .nav .intro-sheet__links a:focus-visible { background: #fff; color: #121212; }
+
+.sheet-footer--dark {
+  --text-primary: rgb(245 245 245);
+  --text-body: rgb(255 255 255 / .6);
+  --text-secondary: rgb(255 255 255 / .6);
+  --line: rgb(255 255 255 / .14);
+  background: #000; color: var(--text-secondary);
+  padding-top: clamp(56px, 7vw, 112px);
+}
+.sheet-footer--dark .sheet-footer__cta { border-top: 0; padding-top: 0; }
+.sheet-footer--dark .sheet-footer__cta a { color: #fff; }
+.sheet-footer--dark .sheet-footer__row { font-size: 14px; }
+.sheet-footer--dark .intro-sheet__links a:hover,
+.sheet-footer--dark .intro-sheet__links a:focus-visible { background: #fff; color: #000; }

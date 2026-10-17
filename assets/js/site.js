@@ -255,6 +255,23 @@
     drift();
   }
 
+  /* 2h. Dark shift (index-v4): --dark on <body> goes 0 → 1 over data-dark-distance px (default 200)
+     of scroll, starting when [data-dark-trigger]'s top edge reaches the middle of the screen.
+     Scroll-linked, so it reverses on the way up. The colours are mixed in CSS. */
+  const darkTrigger = document.querySelector('[data-dark-trigger]');
+  if (darkTrigger && document.body.classList.contains('dark-shift')) {
+    const distance = +darkTrigger.dataset.darkDistance || 200;
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const p = (innerHeight / 2 - darkTrigger.getBoundingClientRect().top) / distance;
+      document.body.style.setProperty('--dark', Math.min(1, Math.max(0, p)).toFixed(3));
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    addEventListener('resize', update);
+    update();
+  }
+
   /* 2i. History peek: hovering a sentence ([data-peek][data-img]) shows its photo behind the paragraph */
   document.querySelectorAll('.intro-sheet__meta').forEach((meta) => {
     const hists = meta.querySelectorAll('[data-peek][data-img]');
