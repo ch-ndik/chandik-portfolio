@@ -1157,15 +1157,18 @@ main { padding-top: var(--nav-h); }
 .play-tile video, .play-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 /* --- Work history hover (index-v3): hovering a company shows its photo, uncropped, behind the
-   paragraph; only that company's phrase stays visible (in white). No fade: it appears instantly. --- */
+   paragraph; only that company's phrase stays visible (in white). Photo and text fade together over 0.2s. --- */
 .intro-sheet__meta { position: relative; isolation: isolate; }
 .history-peek {
   position: absolute; z-index: -1; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: min(1200px, 100vw - 32px); display: none; pointer-events: none;
+  width: min(1200px, 100vw - 32px); display: block; pointer-events: none;
+  opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility 0s linear .2s;
 }
 .history-peek img { display: block; width: 100%; height: auto; }   /* full image, never cropped */
 .history-peek::after { content: ""; position: absolute; inset: 0; background: rgb(0 0 0 / .3); }
-.intro-sheet__meta.is-peek .history-peek { display: block; }
+.intro-sheet__meta.is-peek .history-peek { opacity: 1; visibility: visible; transition: opacity .2s ease, visibility 0s; }
+/* image and text fade together over 0.2s, in and out */
+.intro-sheet__meta .seg, .intro-sheet__meta .seg b { transition: opacity .2s ease, color .2s ease; }
 .intro-sheet__meta.is-peek .seg { opacity: 0; }
 .intro-sheet__meta[data-peek="samsung"] .seg[data-seg="samsung"],
 .intro-sheet__meta[data-peek="polygons"] .seg[data-seg="polygons"],
@@ -1249,19 +1252,24 @@ body.dark-shift .sheet-footer .intro-sheet__links a:focus-visible {
 }
 
 /* Homepage work history: company names use the same regular weight as the sentence */
-.intro-sheet--v4 .intro-sheet__meta b { font-weight: 400; letter-spacing: inherit; }
+.intro-sheet--v4 .intro-sheet__meta b { font-weight: 600; letter-spacing: inherit; }
 
 /* --- Site nav + footer in the homepage style (partials/nav.js, partials/footer.js) ---
-   Nav: dark bar like the homepage's top row; links get the white highlight on hover.
+   Nav: same row as the homepage's top bar (name left, links right, all caps), on the page
+   colour, scrolling away with the page (not fixed). Hover: a dark block behind the link.
    Footer: the homepage footer layout on black, light text. */
+:root { --nav-h: 0px; }   /* nav is no longer fixed, so nothing needs to clear it */
+[data-include="nav"] { position: static; height: 64px; }
 .nav {
-  background: #121212; backdrop-filter: none; -webkit-backdrop-filter: none;
-  border-bottom: 1px solid rgb(255 255 255 / .12);
+  position: relative; height: 64px;
+  background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none;
+  border-bottom: 1px solid var(--line);
 }
-.nav__logo { font-size: 14px; font-weight: 500; letter-spacing: normal; color: #fff; }
+.nav__logo { font-size: 14px; font-weight: 500; letter-spacing: normal; color: var(--text-primary); }
 .nav .intro-sheet__links { font-size: 14px; font-weight: 500; }
-.nav .intro-sheet__links a { color: rgb(255 255 255 / .6); }
-.nav .intro-sheet__links a:hover, .nav .intro-sheet__links a:focus-visible { background: #fff; color: #121212; }
+.nav .intro-sheet__links a:hover, .nav .intro-sheet__links a:focus-visible { background: rgb(var(--c-ink)); color: #fff; }
+/* Top bar text in all caps, on the homepage and every project page */
+.nav, .intro-sheet__top { text-transform: uppercase; }
 
 .sheet-footer--dark {
   --text-primary: rgb(245 245 245);
