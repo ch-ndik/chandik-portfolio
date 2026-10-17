@@ -33,6 +33,14 @@
   --c-samsung:     79 79 255;     /* #4F4FFF Samsung Design Delhi */
   --c-polygon:     224 38 66;     /* #E02642 Polygon Design Inc. */
   --c-nid:         8 150 0;       /* #089600 NID Ahmedabad */
+  --c-award:       200 70 60;     /* #C8463C iF button, award red */
+  /* Soft tints — pair with the colour above them for tiles (home-v2 mosaic) */
+  --c-lilac:       201 201 255;   /* #C9C9FF with Samsung / deep blue */
+  /* Samsung blue shades (home-v2 tiles) */
+  --c-blue-900:    15 31 110;     /* #0F1F6E navy */
+  --c-blue-300:    138 138 255;   /* #8A8AFF */
+  --c-blue-50:     228 228 255;   /* #E4E4FF */
+  --c-mint:        205 238 203;   /* #CDEECB with NID green */
 
   --text-primary:   rgb(var(--c-ink));
   --text-body:      rgb(112 112 112);           /* #707070 — all paragraphs */
@@ -847,3 +855,353 @@ main { padding-top: var(--nav-h); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0s !important; scroll-behavior: auto !important; }
 }
+
+/* --- Studio homepage (home-v2.html, inspired by companypolicy.studio) ---
+   Fixed comma nav · dark full-screen hero · ticker · big light statement ·
+   thin-rule section labels · image grid (full + half cards) with a small label row and a light title.
+   Card width: .studio-card--full spans both columns. Image fit: .studio-card__media--cover for
+   photos; default "contain" sits a mockup on --media-bg (match the image's own background). */
+.studio { --studio-gutter: 16px; --studio-blue: rgb(var(--c-accent)); }
+.studio-wrap { padding-inline: var(--studio-gutter); }
+.studio-nav {
+  position: fixed; inset: 0 0 auto; z-index: 50;
+  display: flex; justify-content: space-between; gap: var(--space-4);
+  padding: 12px var(--studio-gutter);
+  font-size: 13px; font-weight: 500; letter-spacing: .02em; text-transform: uppercase;
+  color: var(--studio-blue);
+  transition: background-color var(--dur);
+}
+.studio-nav.is-solid { background: rgb(var(--c-page) / .9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.studio-nav a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.studio-nav ul { display: flex; flex-wrap: wrap; justify-content: flex-end; }
+.studio-nav li:not(:last-child)::after { content: ",\00a0"; }
+
+.studio-hero {
+  min-height: 100svh; display: grid; place-items: center;
+  background: radial-gradient(60% 50% at 50% 50%, #2a2a2a 0%, rgb(var(--c-footer)) 70%);
+  padding: 72px var(--studio-gutter);
+}
+.studio-hero img { width: min(78vw, 900px); height: auto; filter: drop-shadow(0 0 60px rgb(255 255 255 / .12)); }
+
+.studio-ticker {
+  display: flex; align-items: center; gap: var(--space-4); overflow: hidden;
+  padding: 10px var(--studio-gutter); border-bottom: 1px solid var(--line);
+  font-size: 11px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap;
+}
+.studio-ticker__label { flex: none; padding: 3px 6px; border-radius: 4px; background: var(--tint-2); color: var(--text-secondary); }
+.studio-ticker__viewport { overflow: hidden; flex: 1; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.studio-ticker__track { display: inline-flex; gap: 40px; padding-right: 40px; color: var(--text-secondary); animation: studio-ticker 40s linear infinite; }
+@keyframes studio-ticker { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .studio-ticker__track { animation: none; } }
+
+.studio-statement {
+  padding-block: clamp(48px, 6vw, 96px);
+  font-size: clamp(30px, 1rem + 3.4vw, 64px); font-weight: 300; line-height: 1.08; letter-spacing: -0.035em;
+  color: #000; text-indent: 2.2em; text-wrap: pretty;
+}
+.studio-statement em { font-style: italic; font-weight: 300; }
+.studio-statement__icon { display: inline-block; width: .78em; height: .78em; vertical-align: -.08em; text-indent: 0; }
+.studio-statement a { color: var(--studio-blue); }
+
+.studio-section { padding-top: var(--space-3); border-top: 1px solid rgb(var(--group, var(--c-accent)) / .45); margin-bottom: clamp(56px, 6vw, 96px); }
+.studio-section__label {
+  display: flex; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5);
+  font-size: 11px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase;
+  color: rgb(var(--group, var(--c-accent)));
+}
+.studio-section__label span:last-child { color: var(--text-tertiary); }
+
+.studio-grid { display: grid; gap: clamp(40px, 4vw, 56px) 8px; }
+@media (min-width: 768px) { .studio-grid { grid-template-columns: 1fr 1fr; } .studio-card--full { grid-column: 1 / -1; } }
+.studio-card { display: grid; gap: var(--space-3); align-content: start; }
+.studio-card__media {
+  aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px;
+  background: var(--media-bg, #EAEAEA); display: grid; place-items: center;
+}
+.studio-card--full .studio-card__media { aspect-ratio: 2 / 1; }
+.studio-card__media img, .studio-card__media video {
+  width: 100%; height: 100%; object-fit: contain; padding: 4%;
+  transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+}
+.studio-card__media--cover img, .studio-card__media--cover video { object-fit: cover; padding: 0; }
+.studio-card:hover .studio-card__media img { transform: scale(1.025); }
+.studio-card__meta { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); }
+.studio-card__name { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: #000; }
+.studio-card__tags { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; }
+.studio-card__tags li { padding: 3px 6px; border-radius: 4px; background: var(--tint-2); color: var(--text-secondary); font-size: 10px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+.studio-card__title {
+  font-size: clamp(20px, 1rem + .7vw, 26px); font-weight: 300; line-height: 1.15; letter-spacing: -0.025em;
+  color: #000; max-width: 34ch; text-wrap: balance;
+}
+.studio-card--full .studio-card__title { max-width: 48ch; }
+.studio-card:hover .studio-card__title { color: rgb(var(--group, var(--c-accent))); }
+
+/* Serif variant: add .studio--serif to <body> (and load Newsreader) for a light display serif
+   on the statement and card titles, like the reference. Labels stay DM Sans. */
+.studio--serif .studio-statement,
+.studio--serif .studio-card__title {
+  font-family: "Newsreader", "Times New Roman", serif; font-weight: 300;
+  font-optical-sizing: auto; letter-spacing: -0.03em;
+}
+.studio--serif .studio-statement { line-height: 1.04; letter-spacing: -0.04em; }
+.studio--serif .studio-card__title { font-size: clamp(22px, 1rem + .9vw, 30px); line-height: 1.08; }
+
+/* --- Mosaic homepage (home-v2.html, inspired by brand.dropbox.com) ---
+   Scroll-driven, in three beats inside a tall section with a sticky 100vh stage:
+     1. "I overthink professionally." (no box, max 1000px wide)
+     2. it gives way to the intro paragraph in a smaller size; tiles slide in from the edges
+     3. the text fades and the tiles lock into a full-screen mosaic
+   site.js sets the positions. Each .tile sets grid-area (12 × 6 grid) and --bg / --fg,
+   which swap on hover. .tile__media holds the project thumbnail (fills the space under the title).
+   Below 900px wide, or with reduced motion: no animation, tiles stack in two columns. */
+.mosaic { position: relative; height: 320vh; background: rgb(var(--c-page)); }
+.mosaic__stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.mosaic__grid {
+  position: absolute; inset: 6px;
+  display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(6, 1fr); gap: 6px;
+}
+.tile {
+  position: relative; display: flex; flex-direction: column; overflow: hidden; border-radius: 4px;
+  padding: clamp(12px, 1.2vw, 20px);
+  background: var(--bg); color: var(--fg);
+  transition: background-color .25s, color .25s;
+  will-change: transform; container-type: size;
+}
+.tile__title {
+  position: relative; z-index: 1; display: block; max-width: 14ch;
+  font-size: clamp(18px, .6rem + 1.1vw, 28px); font-weight: 700; line-height: 1.05; letter-spacing: -0.03em;
+}
+/* Hover: thumbnail fills the tile, a scrim keeps the text readable, group + description appear */
+.tile__media { position: absolute; inset: 0; opacity: 0; transition: opacity .3s; }
+.tile__media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.tile__media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 0 0 / .6) 0%, rgb(0 0 0 / .15) 40%, rgb(0 0 0 / .2) 55%, rgb(0 0 0 / .8) 100%); }
+.tile__group, .tile__desc { position: relative; z-index: 1; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s; }
+.tile__group { display: block; margin-top: 6px; font-size: 12px; font-weight: 500; letter-spacing: .01em; }
+.tile__desc { margin-top: auto; max-width: 42ch; font-size: clamp(13px, .7rem + .3vw, 15px); line-height: 1.3; color: #fff; }
+.tile:has(.tile__media) { transition: color .3s; }
+.tile:hover .tile__media, .tile:focus-visible .tile__media { opacity: 1; }
+.tile:hover .tile__media img, .tile:focus-visible .tile__media img { transform: scale(1); }
+.tile:hover:has(.tile__media), .tile:focus-visible:has(.tile__media) { color: #fff; }
+.tile:hover .tile__group, .tile:hover .tile__desc, .tile:focus-visible .tile__group, .tile:focus-visible .tile__desc { opacity: 1; transform: none; }
+/* Small tiles: drop the group label and tighten the description so it fits */
+@container (max-width: 300px) {
+  .tile__group { display: none; }
+  .tile__desc { font-size: 12px; line-height: 1.25; }
+}
+@container (max-height: 260px) { .tile__group { display: none; } }
+
+.mosaic__intro {
+  position: absolute; z-index: 2; top: 24px; bottom: 24px; left: 50%; transform: translateX(-50%);
+  width: min(1000px, 100% - 48px); color: rgb(var(--c-deep-blue)); pointer-events: none;
+}
+.mosaic__line {
+  position: absolute; left: 0; right: 0; top: 0;
+  max-width: none; color: inherit; font-weight: 700; letter-spacing: -0.035em; line-height: 1.04; text-wrap: balance;
+}
+.mosaic__line--1 { font-size: clamp(34px, 1rem + 3vw, 64px); }
+.mosaic__line--2 { font-size: clamp(22px, .8rem + 1.5vw, 36px); opacity: 0; }
+.mosaic__hint { position: absolute; right: 24px; bottom: 20px; width: 28px; color: rgb(var(--c-accent)); animation: mosaic-hint 1.6s ease-in-out infinite; }
+@keyframes mosaic-hint { 50% { transform: translateY(6px); } }
+
+/* Static fallback: small screens and reduced motion */
+@media (max-width: 899px) {
+  .mosaic, .mosaic.is-static { height: auto; }
+}
+.mosaic.is-static { height: auto; }
+.mosaic.is-static .mosaic__stage, .mosaic.is-static .mosaic__grid { position: static; height: auto; overflow: visible; }
+.mosaic.is-static .mosaic__stage { display: flex; flex-direction: column-reverse; gap: 6px; padding: 6px; }
+.mosaic.is-static .mosaic__grid { grid-template-columns: 1fr 1fr; grid-template-rows: none; grid-auto-rows: minmax(200px, auto); }
+.mosaic.is-static .tile { grid-area: auto !important; }
+.mosaic.is-static .mosaic__intro { position: relative; inset: auto; transform: none; width: auto; padding: 24px 10px 40px; }
+.mosaic.is-static .mosaic__line { position: static; }
+.mosaic.is-static .mosaic__line--2 { opacity: 1; margin-top: var(--space-5); }
+.mosaic.is-static .mosaic__hint { display: none; }
+
+/* --- Grid homepage (index-v3.html, refs: rachelchen.tech, manyasingh.in) ---
+   .intro-sheet  ruled intro: name + links, statement, paragraph, Currently / Previously
+   .work-sheet   one per group: ruled head (group colour) + .work-masonry
+   .work-masonry two staggered columns; images keep their own proportions
+   .work-card    image, "Title / meta" caption, short description */
+.intro-sheet { padding-top: clamp(32px, 4vw, 56px); margin-bottom: clamp(72px, 9vw, 144px); border-bottom: 1px solid var(--line); }
+.intro-sheet__top {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3);
+  padding-bottom: var(--space-3); border-bottom: 1px solid var(--line);
+  font-size: 14px; font-weight: 500;
+}
+.intro-sheet__name { color: var(--text-primary); }
+.intro-sheet__links { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+/* Menu hover (after config.figma.com): a tight solid block snaps in behind the text */
+.intro-sheet__links { gap: var(--space-2); }
+.intro-sheet__links a {
+  padding: 3px 5px; margin: -3px 0; color: var(--text-secondary);
+  transition: color 150ms cubic-bezier(.6, 0, .4, 1), background-color 150ms cubic-bezier(.6, 0, .4, 1);
+}
+.intro-sheet__links a:hover, .intro-sheet__links a:focus-visible { background: rgb(var(--c-deep-blue)); color: #fff; }
+.intro-sheet__statement {
+  max-width: none; margin-top: clamp(72px, 12vw, 176px);
+  font-size: clamp(44px, 1rem + 6.6vw, 112px); font-weight: 400; line-height: 1; letter-spacing: -0.012em;
+  color: rgb(var(--c-deep-blue));
+}
+.intro-sheet__sticker { margin-top: clamp(72px, 12vw, 176px); margin-bottom: 0; }   /* v4: sticker in place of the statement */
+.intro-sheet__body { margin-top: clamp(24px, 3vw, 40px); max-width: 520px; }
+.intro-sheet__meta {
+  max-width: none; margin-top: clamp(72px, 10vw, 160px); padding-top: var(--space-6); padding-bottom: clamp(56px, 7vw, 112px);
+  border-top: 1px solid var(--line);
+  font-size: clamp(30px, 1rem + 3.6vw, 64px); font-weight: 500; line-height: 1.12; letter-spacing: -0.012em;
+  color: rgb(var(--c-ink) / .42); text-wrap: pretty;
+}
+.intro-sheet__meta b { font-weight: 700; color: var(--text-primary); }
+/* Logo chip: square box sitting in a line of text (grey placeholder until the logo arrives) */
+.logo-chip {
+  display: inline-block; width: .82em; height: .82em; vertical-align: -.08em; margin-inline: .02em;
+  border-radius: .14em; background: rgb(0 0 0 / .12); object-fit: cover; box-shadow: 0 0 0 1px rgb(0 0 0 / .08);
+}
+
+/* Type reveal: JS types and backspaces; the blinking full stop is the cursor.
+   data-text  final line · data-draft  first attempt (typed, paused, backspaced)
+   data-away  "|"-separated lines it rewrites to while scrolled out of view; it hurries back on return.
+   The invisible ghost copy holds the final size so nothing shifts while typing.
+   "I overthink" always sits on line one; the changing word starts line two. */
+.type-reveal { display: grid; white-space: nowrap; }   /* line breaks are set by the script */
+.type-reveal > * { grid-area: 1 / 1; }
+.type-reveal__ghost { visibility: hidden; }
+.type-reveal__cursor { animation: type-blink 1s steps(1) infinite; }
+@keyframes type-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .type-reveal__cursor { animation: none; } }
+
+/* Light footer for index-v3 (ruled, like the intro) */
+.sheet-footer { margin-top: var(--section-gap); padding-bottom: var(--space-7); }
+.sheet-footer__cta {
+  max-width: none; padding-top: var(--space-5); border-top: 1px solid var(--line);
+  font-size: clamp(26px, 1rem + 2.2vw, 44px); font-weight: 600; line-height: 1.15; letter-spacing: -0.035em; color: var(--text-primary);
+}
+.sheet-footer__cta a { color: rgb(var(--c-deep-blue)); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .12em; }
+.sheet-footer__row {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3);
+  margin-top: clamp(48px, 6vw, 96px); padding-top: var(--space-3); border-top: 1px solid var(--line); font-size: 14px;
+}
+
+.work-sheet { margin-bottom: clamp(56px, 6vw, 96px); }
+.work-sheet__head {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-3);
+  padding-top: var(--space-3); margin-bottom: var(--space-5);
+  border-top: 1px solid rgb(var(--group, var(--c-ink)) / .5);
+}
+.work-sheet__head h2 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; color: rgb(var(--group, var(--c-ink))); }
+.work-sheet__head h2 span { margin-left: var(--space-2); font-weight: 400; color: var(--text-tertiary); }
+.work-sheet__head p { font-size: 14px; }
+.work-masonry { columns: 2 280px; column-gap: 16px; }
+.work-card { display: block; break-inside: avoid; margin-bottom: clamp(28px, 3vw, 40px); }
+.work-card__media { display: block; overflow: hidden; border-radius: var(--r-sm); background: rgb(var(--c-wash)); }
+.work-card__media img { width: 100%; height: auto; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.work-card:hover .work-card__media img { transform: scale(1.03); }
+.work-card__caption { display: block; margin-top: var(--space-3); font-size: 14px; line-height: 1.3; }
+.work-card__caption strong { font-weight: 600; color: var(--text-primary); transition: color var(--dur); }
+.work-card__caption > span { color: var(--text-tertiary); }
+.work-card:hover .work-card__caption strong { color: rgb(var(--group, var(--c-accent))); }
+.work-card__desc { display: block; margin-top: 4px; max-width: 46ch; font-size: 14px; line-height: 1.35; color: var(--text-body); }
+
+/* Dot-grid page background (index-v3): light grey dots on the page colour */
+.dot-grid {
+  background-color: rgb(var(--c-page));
+  background-image: radial-gradient(circle, rgb(0 0 0 / .16) 1px, transparent 1.4px);
+  background-size: 28px 28px; background-position: 14px 14px;
+}
+/* Parallax: the grid is pinned to the screen and site.js drifts it at a fraction of the scroll speed */
+.dot-grid.is-parallax { background-attachment: fixed; background-position: 14px calc(14px + var(--grid-y, 0px)); }
+
+/* --- About (index-v3; ref: a Framer "About" with a scroll-revealed statement) ---
+   .about__tag       small mono label (DM Mono)
+   .about__photo     portrait (images/about/photo.webp)
+   .about__reveal    [data-reveal] letters go from faint to solid as it scrolls through */
+.about { padding-top: var(--space-6); margin-top: clamp(56px, 7vw, 112px); border-top: 1px solid var(--line); }
+.about__intro { display: grid; gap: var(--space-7); }
+@media (min-width: 768px) { .about__intro { grid-template-columns: 1fr minmax(0, 380px); align-items: end; } }
+.about__tag { font-family: "DM Mono", ui-monospace, monospace; font-size: 14px; font-weight: 500; letter-spacing: .03em; color: var(--text-primary); }
+.about__name { margin-top: var(--space-3); max-width: none; font-size: clamp(24px, 1rem + 1vw, 32px); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; color: var(--text-primary); }
+.about__name span { color: var(--text-tertiary); }
+.about__photo { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: var(--r-sm); }
+.about__reveal {
+  max-width: none; margin-top: clamp(48px, 6vw, 96px);
+  font-size: clamp(28px, 1rem + 2.6vw, 48px); font-weight: 500; line-height: 1.08; letter-spacing: -0.012em;
+  text-transform: uppercase; color: var(--text-primary);
+}
+.about__reveal .w { white-space: nowrap; }
+.about__reveal .c { opacity: .16; transition: opacity .2s linear; }
+.about__reveal .c.on { opacity: 1; }
+
+/* --- Side work (index-v3): one piece per row, artwork centred on the page,
+   title / meta + description to its right (same type as the project cards).
+   Sizes: .side-piece--wide (16:9), --tall (9:16), --square (1:1). */
+.side-work { margin-top: clamp(96px, 12vw, 192px); }
+.side-work__title {
+  margin-top: var(--space-3); max-width: 14ch; margin-left: auto; text-align: right;
+  font-size: clamp(36px, 1rem + 4vw, 72px); font-weight: 500; line-height: 1; letter-spacing: -0.012em;
+  text-transform: uppercase; color: rgb(var(--c-ink) / .4);
+}
+.side-work__list { display: grid; gap: clamp(64px, 9vw, 144px); margin-top: clamp(48px, 7vw, 120px); }
+.side-piece { display: grid; gap: var(--space-4); --w: 420px; }
+.side-piece--wide   { --w: 560px; }
+.side-piece--tall   { --w: 300px; }
+.side-piece--square { --w: 400px; }
+.side-piece .play-tile { width: min(100%, var(--w)); }
+@media (min-width: 900px) {
+  /* 1fr | artwork | 1fr keeps the artwork exactly centred; the caption sits in the right column */
+  .side-piece { grid-template-columns: 1fr var(--w) 1fr; column-gap: 32px; align-items: end; }
+  .side-piece .play-tile { grid-column: 2; width: 100%; }
+  .side-piece__caption { grid-column: 3; max-width: 260px; }
+}
+.side-piece__caption .work-card__caption { margin-top: 0; }
+
+.play-tile { position: relative; display: block; aspect-ratio: var(--ar, 4 / 3); overflow: hidden; background: rgb(0 0 0 / .07); }
+.play-tile video, .play-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* --- Work history hover (index-v3): hovering a company shows its photo, uncropped, behind the
+   paragraph; only that company's phrase stays visible (in white). No fade: it appears instantly. --- */
+.intro-sheet__meta { position: relative; isolation: isolate; }
+.history-peek {
+  position: absolute; z-index: -1; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(1200px, 100vw - 32px); display: none; pointer-events: none;
+}
+.history-peek img { display: block; width: 100%; height: auto; }   /* full image, never cropped */
+.history-peek::after { content: ""; position: absolute; inset: 0; background: rgb(0 0 0 / .3); }
+.intro-sheet__meta.is-peek .history-peek { display: block; }
+.intro-sheet__meta.is-peek .seg { opacity: 0; }
+.intro-sheet__meta[data-peek="samsung"] .seg[data-seg="samsung"],
+.intro-sheet__meta[data-peek="polygons"] .seg[data-seg="polygons"],
+.intro-sheet__meta[data-peek="nid"] .seg[data-seg="nid"] { opacity: 1; color: #fff; }
+.intro-sheet__meta.is-peek .seg b { color: #fff; }
+.hist { cursor: default; }
+.hist .nb { display: inline-block; white-space: nowrap; }   /* logo + first word move as one, so the logo never ends a line */
+
+/* --- Dark hero (index-v3): hero + work history on #121212, dot grid continues on top.
+   The panel is a full-bleed ::before; its dots use the same fixed, parallax-shifted
+   pattern as the page, so the grid lines up across the edge. --- */
+.intro-sheet {
+  --hero-bg: #121212; --hero-accent: #EBFFA3; --hero-line: rgb(255 255 255 / .12);
+  position: relative; isolation: isolate; border-bottom-color: transparent;
+}
+.intro-sheet::before {
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: calc(50% - 50vw); right: calc(50% - 50vw);
+  background-color: var(--hero-bg);
+  background-image: radial-gradient(circle, rgb(255 255 255 / .16) 1px, transparent 1.4px);
+  background-size: 28px 28px; background-position: 14px 14px;
+}
+.dot-grid.is-parallax .intro-sheet::before { background-attachment: fixed; background-position: 14px calc(14px + var(--grid-y, 0px)); }
+.intro-sheet__top { border-bottom-color: var(--hero-line); }
+.intro-sheet__name { color: #fff; }
+.intro-sheet .intro-sheet__links a { color: rgb(255 255 255 / .6); }
+.intro-sheet .intro-sheet__links a:hover, .intro-sheet .intro-sheet__links a:focus-visible { background: var(--hero-accent); color: var(--hero-bg); }
+.intro-sheet .intro-sheet__statement { color: var(--hero-accent); }
+.intro-sheet .intro-sheet__body { color: rgb(255 255 255 / .6); }
+.intro-sheet .intro-sheet__meta { border-top-color: var(--hero-line); color: rgb(255 255 255 / .45); }
+.intro-sheet .intro-sheet__meta b { color: #fff; }
+.intro-sheet .logo-chip { box-shadow: 0 0 0 1px rgb(255 255 255 / .14); }
+/* Work history: non-highlighted text is lighter and more open; company names keep their own style */
+.intro-sheet .intro-sheet__meta { font-weight: 400; letter-spacing: 1px; }
+.intro-sheet .intro-sheet__meta b { font-weight: 700; letter-spacing: -0.012em; }
+
+/* --- index-v4 tweaks (.intro-sheet--v4): white menu highlight, no rule above work history,
+   +100px below it. v3 is unchanged. --- */
+.intro-sheet--v4 .intro-sheet__links a:hover, .intro-sheet--v4 .intro-sheet__links a:focus-visible { background: #fff; color: var(--hero-bg); }
+.intro-sheet--v4 .intro-sheet__meta { border-top: 0; padding-bottom: calc(clamp(56px, 7vw, 112px) + 100px); }
