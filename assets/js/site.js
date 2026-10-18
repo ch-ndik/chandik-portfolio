@@ -272,29 +272,58 @@
     update();
   }
 
-  /* 2i. History peek: hovering a sentence ([data-peek][data-img]) shows its photo behind the paragraph */
+  /* 2i. History peek: hovering a sentence ([data-peek][data-img]) shows its photo behind the paragraph.
+     Touch screens in v4 (.intro-sheet--v4, no hover): the sentence crossing the middle of the screen shows it. */
   document.querySelectorAll('.intro-sheet__meta').forEach((meta) => {
-    const hists = meta.querySelectorAll('[data-peek][data-img]');
-    if (!hists.length || !matchMedia('(hover: hover)').matches) return;
+    const hists = [...meta.querySelectorAll('[data-peek][data-img]')];
+    const canHover = matchMedia('(hover: hover)').matches;
+    const byScroll = !canHover && meta.closest('.intro-sheet--v4');
+    if (!hists.length || (!canHover && !byScroll)) return;
     const peek = document.createElement('span');
     peek.className = 'history-peek';
     peek.setAttribute('aria-hidden', 'true');
     peek.innerHTML = '<img alt="">';
     meta.prepend(peek);
     const img = peek.firstElementChild;
-    hists.forEach((h) => {
-      new Image().src = h.dataset.img;
-      h.addEventListener('mouseenter', () => {
-        img.src = h.dataset.img;
-        meta.dataset.peek = h.dataset.peek;
-        // centre the photo on the phrase that stays visible
-        const seg = meta.querySelector(`.seg[data-seg="${h.dataset.peek}"]`);
-        const rs = [...(seg || meta).getClientRects()], top = meta.getBoundingClientRect().top;
-        peek.style.top = `${(Math.min(...rs.map((r) => r.top)) + Math.max(...rs.map((r) => r.bottom))) / 2 - top}px`;
-        meta.classList.add('is-peek');
+    let shown = null;
+    const show = (h) => {
+      if (shown === h) return;
+      shown = h;
+      img.src = h.dataset.img;
+      meta.dataset.peek = h.dataset.peek;
+      // centre the photo on the phrase that stays visible
+      const seg = meta.querySelector(`.seg[data-seg="${h.dataset.peek}"]`);
+      const rs = [...(seg || meta).getClientRects()], top = meta.getBoundingClientRect().top;
+      peek.style.top = `${(Math.min(...rs.map((r) => r.top)) + Math.max(...rs.map((r) => r.bottom))) / 2 - top}px`;
+      meta.classList.add('is-peek');
+    };
+    const hide = () => { shown = null; meta.classList.remove('is-peek'); delete meta.dataset.peek; };
+    hists.forEach((h) => { new Image().src = h.dataset.img; });
+
+    if (canHover) {
+      hists.forEach((h) => {
+        h.addEventListener('mouseenter', () => show(h));
+        h.addEventListener('mouseleave', hide);
       });
-      h.addEventListener('mouseleave', () => { meta.classList.remove('is-peek'); delete meta.dataset.peek; });
-    });
+      return;
+    }
+    // touch: whichever sentence spans the screen's middle line; none → hide
+    let queued = false;
+    const check = () => {
+      queued = false;
+      const mid = innerHeight / 2;
+      let best = null, bestD = Infinity;
+      hists.forEach((h) => {
+        const r = h.getBoundingClientRect();
+        if (r.top > mid || r.bottom < mid) return;
+        const d = Math.abs((r.top + r.bottom) / 2 - mid);
+        if (d < bestD) { best = h; bestD = d; }
+      });
+      if (best) show(best); else if (shown) hide();
+    };
+    addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(check); } }, { passive: true });
+    addEventListener('resize', check);
+    check();
   });
 
   /* 2b. Motion thumbnails: play project-card videos only while visible */
