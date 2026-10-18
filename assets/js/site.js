@@ -307,7 +307,8 @@
       });
       return;
     }
-    // touch: whichever sentence spans the screen's middle line; none → hide
+    // touch: whichever sentence spans the screen's middle line; none → hide. Other sentences stay visible.
+    meta.classList.add('is-scroll-peek');
     let queued = false;
     const check = () => {
       queued = false;

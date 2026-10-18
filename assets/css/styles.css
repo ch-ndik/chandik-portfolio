@@ -1286,3 +1286,5 @@ body.dark-shift .sheet-footer .intro-sheet__links a:focus-visible {
 .sheet-footer--dark .intro-sheet__links a:focus-visible { background: #fff; color: #000; }
 /* index-v4 on phones: smaller work-history text (it scrolls through the photos instead of hovering) */
 @media (max-width: 600px) { .intro-sheet--v4 .intro-sheet__meta { font-size: clamp(20px, 6vw, 30px); } }
+/* phones (scroll-driven peek): the other sentences stay visible; only the photo changes */
+.intro-sheet__meta.is-scroll-peek.is-peek .seg { opacity: 1; }
