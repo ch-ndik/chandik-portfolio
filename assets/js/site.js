@@ -36,6 +36,63 @@
     }
   });
 
+  /* 1b. Scrollbar width as --sbw, so full-bleed pieces (.figure--bleed) stop at the scrollbar */
+  if (document.querySelector('.figure--bleed')) {
+    const sbw = () => document.documentElement.style.setProperty('--sbw', `${innerWidth - document.documentElement.clientWidth}px`);
+    sbw();
+    addEventListener('resize', sbw);
+  }
+
+  /* 1c. Custom cursor (pages with [data-cursor], mouse only): a blob, dark grey on light
+     backgrounds and white on dark ones, turning into a rounded label with the project type
+     over anything carrying data-cursor="…". */
+  if (document.querySelector('[data-cursor]') && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const cur = document.createElement('div');
+    cur.className = 'cursor';
+    cur.setAttribute('aria-hidden', 'true');
+    cur.innerHTML = '<span class="cursor__blob"></span><span class="cursor__label"></span>';
+    document.body.append(cur);
+    document.documentElement.classList.add('has-cursor');
+    const label = cur.querySelector('.cursor__label');
+    let x = -100, y = -100, cx = x, cy = y, raf = 0;
+    const isDark = (el) => !!el?.closest?.('.intro-sheet, .footer, footer, .sheet-footer--dark')
+      || parseFloat(getComputedStyle(document.body).getPropertyValue('--dark')) > 0.5;
+    const tick = () => {
+      const k = reduceMotion ? 1 : 0.35;
+      cx += (x - cx) * k; cy += (y - cy) * k;
+      cur.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+      raf = Math.abs(x - cx) + Math.abs(y - cy) > 0.1 ? requestAnimationFrame(tick) : 0;
+    };
+    addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      x = e.clientX; y = e.clientY;
+      cur.classList.add('is-visible');
+      const t = e.target.closest?.('[data-cursor]');
+      cur.classList.toggle('is-on-dark', isDark(e.target));
+      if (t) {
+        if (label.dataset.for !== t.dataset.cursor) {
+          label.dataset.for = t.dataset.cursor;
+          // every label ends with a top-right arrow
+          label.innerHTML = t.dataset.cursor.replace(/</g, '&lt;')
+            + ' <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11l6-6M6 5h5v5"/></svg>';
+        }
+      }
+      cur.classList.toggle('is-label', !!t);
+      if (!raf) raf = requestAnimationFrame(tick);
+    }, { passive: true });
+    // scrolling changes what's under a still mouse (and the dark fade), so re-check then too
+    addEventListener('scroll', () => {
+      if (!cur.classList.contains('is-visible')) return;
+      const el = document.elementFromPoint(x, y);
+      cur.classList.toggle('is-on-dark', isDark(el));
+      const t = el?.closest?.('[data-cursor]');
+      cur.classList.toggle('is-label', !!t && label.dataset.for === t.dataset.cursor);
+    }, { passive: true });
+    document.documentElement.addEventListener('pointerleave', () => cur.classList.remove('is-visible'));
+    addEventListener('pointerdown', () => cur.classList.add('is-down'));
+    addEventListener('pointerup', () => cur.classList.remove('is-down'));
+  }
+
   /* 2. Hover preview ------------------------------------------------------ */
   const rows = document.querySelectorAll('.project-row[data-preview]');
   if (rows.length && matchMedia('(hover: hover) and (min-width: 1024px)').matches) {
@@ -229,9 +286,20 @@
 
   /* 2f. Scroll reveal: letters of [data-reveal] turn solid in reading order as it scrolls through */
   document.querySelectorAll('[data-reveal]').forEach((el) => {
-    const words = el.textContent.trim().split(/\s+/);
-    el.setAttribute('aria-label', el.textContent.trim());
-    el.innerHTML = words.map((w) => `<span class="w" aria-hidden="true">${[...w].map((c) => `<span class="c">${c}</span>`).join('')}</span>`).join(' ');
+    // letters keep a highlight from any <span class="hl"> they sat in
+    const letters = [];
+    const walk = (node, hl) => node.childNodes.forEach((n) => {
+      if (n.nodeType === 3) [...n.textContent].forEach((ch) => letters.push({ ch, hl }));
+      else walk(n, hl || n.classList?.contains('hl'));
+    });
+    walk(el, false);
+    const words = [];
+    letters.forEach((l) => {
+      if (/\s/.test(l.ch)) { if (words.at(-1)?.length) words.push([]); }
+      else { if (!words.length) words.push([]); words.at(-1).push(l); }
+    });
+    el.setAttribute('aria-label', el.textContent.trim().replace(/\s+/g, ' '));
+    el.innerHTML = words.filter((w) => w.length).map((w) => `<span class="w" aria-hidden="true">${w.map((l) => `<span class="c${l.hl ? ' hl' : ''}">${l.ch}</span>`).join('')}</span>`).join(' ');
     const chars = [...el.querySelectorAll('.c')];
     if (reduceMotion) { chars.forEach((c) => c.classList.add('on')); return; }
     const update = () => {

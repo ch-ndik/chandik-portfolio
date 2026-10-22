@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I dream in pixels — Chandik A Chandran</title>
+<meta name="description" content="I dream in pixels: an exploration series of interactive pixel artworks made with Claude Code.">
+<link rel="icon" href="images/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="icon" href="images/favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/site.js" defer></script>
+<script src="assets/js/dream-in-pixels.js" defer></script>
+</head>
+<body data-page="work" class="page-dark">
+<div data-include="nav"></div>
+
+<!-- I dream in pixels (dr-i-p): interactive pixel artworks, one after the other.
+     Each <section class="artwork" data-art="…"> is brought to life by assets/js/dream-in-pixels.js,
+     which also fills its .artwork__controls. To add a piece: write it there, then add a section here. -->
+<main class="container">
+  <header class="case-intro">
+    <a class="case-intro__back" href="index.html#side-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M7 4 3 8l4 4"/></svg>All work</a>
+    <h1>I dream in pixels</h1>
+    <p class="case-intro__subtitle">An exploration series · made with Claude Code · 2026</p>
+    <div class="case-intro__body">
+      <div class="stack">
+        <p>There’s an unexplainable beauty in imperfect visuals: noise, grunge, scratches, blur, light bleeds, and huge, chunky pixels.</p>
+        <p>I have a love-hate relationship with colours, so I thought I’d get over my fear of them.</p>
+        <p>One of my faculty members back in college made us draw caricatures before we moved on to realistic portraits. His explanation was that the human brain is afraid of making mistakes, so we limit ourselves. So go all in and make everything extra. Then, when you try a less exaggerated version, you see every curve and detail, and you know exactly how much is necessary.</p>
+        <p>I’m trying to do the same here by going to the extreme. Some might call these colours ugly, but does it really matter?</p>
+        <p>This is an exploration series where I literally dream in pixels.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- 01 -->
+  <section class="artwork" data-art="pixel-moves" aria-labelledby="art-1">
+    <div class="artwork__stage"><canvas aria-label="Four pixel flowers slowly turning while their colours flow outward from the centre"></canvas></div>
+    <div class="artwork__controls"></div>
+    <div class="artwork__info">
+      <div><p class="eyebrow">01</p><h2 id="art-1">Pixel Moves</h2></div>
+      <div>
+        <div class="artwork__how"><p>Use <strong>Petals</strong> to give every flower anywhere from 4 to 10 petals. The flowers redraw instantly and keep turning.</p></div>
+        <div class="artwork__what"><p>Each flower is drawn on a 26 × 26 grid. For every cell, its angle and distance from the centre decide whether it belongs to a petal, the inner star or the black centre, which is why every edge is stair-stepped.</p><p>The flowers turn slowly, two each way, so the grid is re-decided on every frame and the steps shift as they rotate. The colour of a cell depends on time and on its distance from the centre, so each new colour starts in the middle and drips outward, with the inner star running two colours ahead of the petals.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="artwork" data-art="ripple-field" aria-labelledby="art-2">
+    <div class="artwork__stage"><canvas aria-label="A grid of squares where cross-shaped ripples of colour spread from the centre. Tap to send another."></canvas></div>
+    <div class="artwork__controls"></div>
+    <div class="artwork__info">
+      <div><p class="eyebrow">02</p><h2 id="art-2">Ripple Field I</h2></div>
+      <div>
+        <div class="artwork__how"><p><strong>Tap or click</strong> anywhere on the artwork to release a ripple. It also releases its own, every second or so, so it never sits still.</p></div>
+        <div class="artwork__what"><p>The canvas is an 85 × 85 grid of squares that rest at zero size. Every ripple is a cross through the centre with a random width, from a single line to the whole grid, mostly thin. It travels outward as a chevron: the middle line leads and every line beside it trails a step behind. Wider crosses travel faster.</p><p>As the front passes, each square swells to full size and blends between a pair of colours drawn from periwinkle, blue, violet and red, with neighbouring squares taking the pair in opposite order, like a checkerboard. A fine layer of grain sits on top.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="artwork" data-art="ripple-field-ii" aria-labelledby="art-3">
+    <div class="artwork__stage"><canvas aria-label="A grid of squares where turning, cross-shaped ripples of colour spread from the centre. Tap to send another."></canvas></div>
+    <div class="artwork__controls"></div>
+    <div class="artwork__info">
+      <div><p class="eyebrow">03</p><h2 id="art-3">Ripple Field II</h2></div>
+      <div>
+        <div class="artwork__how"><p><strong>Tap or click</strong> to release a ripple; it keeps releasing its own between them.</p></div>
+        <div class="artwork__what"><p>The same field as Ripple Field I, with one change: every cross turns clockwise as it travels. Each square is checked against the cross in the cross’s own rotated frame, so the lines sweep around the centre instead of running straight.</p><p>Here the widths stay between 1 and 30 lines, and the relationship flips: the narrowest crosses run and turn the fastest, the widest drift slowly.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="artwork" data-art="stitch" aria-labelledby="art-4">
+    <div class="artwork__stage"><canvas aria-label="A woven grid. Tap a cell to send a thread wandering from it."></canvas></div>
+    <div class="artwork__controls"></div>
+    <div class="artwork__info">
+      <div><p class="eyebrow">04</p><h2 id="art-4">Stitch</h2></div>
+      <div>
+        <div class="artwork__how"><p><strong>Tap a cell</strong> to start a thread from it, in a random colour. <strong>Reset</strong> clears the cloth and sends one thread of each colour out from the centre to fight for space again.</p><p>Tap a <strong>colour</strong> to recolour that thread everywhere, live, and <strong>Clear</strong> empties the cloth. The four set off on their own as soon as the artwork comes into view.</p></div>
+        <div class="artwork__what"><p>The cloth is a 24 × 24 grid whose rows and columns slowly breathe, gliding to new widths in turns. Every 45 milliseconds each thread takes one step, choosing between going straight and turning either way, weighted by its colour’s nature: grey hugs walls and fills the gaps between threads, near-black keeps turning the same way and coils into spirals, charcoal can barely go straight so it squiggles, and blue mostly runs straight, laying long corridors.</p><p>A thread never covers a stitched cell. When it’s boxed in, its tail reels in until it’s gone. Each thread keeps its last 50 cells, shading from full colour at the head to dark at the tail, and now and then splits a second head. While the four are fighting, a colour that gets trapped regrows from a random free spot.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-include="footer"></div>
+</body>
+</html>

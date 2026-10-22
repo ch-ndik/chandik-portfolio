@@ -1132,7 +1132,7 @@ main { padding-top: var(--nav-h); }
 
 /* --- Side work (index-v3): one piece per row, artwork centred on the page,
    title / meta + description to its right (same type as the project cards).
-   Sizes: .side-piece--wide (16:9), --tall (9:16), --square (1:1). */
+   Sizes: .side-piece--wide (16:9), --tall (9:16), --square (1:1), --portrait (4:5). */
 .side-work { margin-top: clamp(96px, 12vw, 192px); }
 .side-work__title {
   margin-top: var(--space-3); max-width: 14ch; margin-left: auto; text-align: right;
@@ -1144,6 +1144,7 @@ main { padding-top: var(--nav-h); }
 .side-piece--wide   { --w: 560px; }
 .side-piece--tall   { --w: 300px; }
 .side-piece--square { --w: 400px; }
+.side-piece--portrait { --w: 360px; }   /* 4:5 */
 .side-piece .play-tile { width: min(100%, var(--w)); }
 @media (min-width: 900px) {
   /* 1fr | artwork | 1fr keeps the artwork exactly centred; the caption sits in the right column */
@@ -1288,3 +1289,116 @@ body.dark-shift .sheet-footer .intro-sheet__links a:focus-visible {
 @media (max-width: 600px) { .intro-sheet--v4 .intro-sheet__meta { font-size: clamp(20px, 6vw, 30px); } }
 /* phones (scroll-driven peek): the other sentences stay visible; only the photo changes */
 .intro-sheet__meta.is-scroll-peek.is-peek .seg { opacity: 1; }
+
+/* --- Colour swatches (Polygons case study): a chip + hex value per colour, set with --sw --- */
+.swatches { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); margin: 0; padding: 0; list-style: none; font-size: 14px; font-weight: 500; color: var(--text-primary); }
+.swatches li { display: flex; align-items: center; gap: var(--space-2); }
+.swatches span { width: 28px; height: 28px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgb(0 0 0 / .08); }
+
+/* .media-plain (on <body>): every image and video on the page sits bare —
+   no rounded corners, backdrop or edge line. Used on the Polygons case study. */
+.media-plain .figure img, .media-plain .figure video, .media-plain .media { border-radius: 0; background: none; box-shadow: none; }
+/* .page-white (on <body>): pure white page background, used on the Polygons case study */
+.page-white { --c-page: 255 255 255; --c-surface: 245 245 245; }   /* cards swap to the usual page grey so they still read */
+/* About text: highlighted phrases (<span class="hl"> inside [data-reveal]) in blue */
+.about__reveal .hl { color: rgb(9 0 255); }
+/* …set in a handwritten script (Caveat), normal case and a touch larger to sit with the capitals */
+.about__reveal .c.hl { font-family: 'Caveat', cursive; font-weight: 600; font-size: 1.32em; line-height: .8; text-transform: none; letter-spacing: 0; }
+/* .figure--bleed: runs edge to edge across the viewport, ignoring the page's max width.
+   The page clips sideways overflow so the 100vw width never adds a horizontal scrollbar. */
+.figure--bleed { --full: calc(100vw - var(--sbw, 0px)); width: var(--full); max-width: none; margin-left: calc(50% - var(--full) / 2); }   /* --sbw: scrollbar width, set by site.js */
+.figure--bleed img, .figure--bleed video { width: 100%; max-width: none; max-height: none; border-radius: 0; }
+body:has(.figure--bleed) { overflow-x: clip; }
+
+/* --- Custom cursor (site.js 1c; homepage). Blob: dark grey on light backgrounds, white on
+   dark ones (.is-on-dark). Over [data-cursor] it becomes a rounded label with the project type,
+   in the same colours. --- */
+html.has-cursor, html.has-cursor * { cursor: none !important; }
+.cursor { position: fixed; left: 0; top: 0; z-index: 10000; pointer-events: none; opacity: 0; transition: opacity .2s; }
+.cursor.is-visible { opacity: 1; }
+.cursor__blob {
+  position: absolute; left: 0; top: 0; width: 13px; height: 13px; border-radius: 50%;
+  background: #222; transform: translate(-50%, -50%);
+  transition: transform .25s cubic-bezier(.2, .8, .2, 1), opacity .2s;
+}
+.cursor.is-down .cursor__blob { transform: translate(-50%, -50%) scale(1.8); }
+.cursor__label {
+  position: absolute; left: 0; top: 0; white-space: nowrap;
+  padding: 8px 14px; border-radius: 100px;
+  background: #000; color: #fff; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  transform: translate(-50%, -50%) scale(.4); opacity: 0;
+  transition: transform .25s cubic-bezier(.2, .8, .2, 1), opacity .15s;
+}
+.cursor.is-on-dark .cursor__label { background: #fff; color: #000; }
+.cursor.is-on-dark .cursor__blob { background: #fff; }
+.cursor.is-label .cursor__label { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+.cursor.is-label .cursor__blob { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+.cursor__label { display: inline-flex; align-items: center; gap: 4px; }
+.cursor__label svg { width: 13px; height: 13px; }
+
+/* --- Artwork sections (dream-in-pixels.html): one interactive piece per section, page scrolls.
+   .artwork__stage     the artwork, full page width, square; nothing else sits on it
+   .artwork__controls  the piece's controls, directly below the artwork
+   .artwork__info      title on the left; on the right, how to play (bright) then what's happening (grey) --- */
+.artwork { margin-top: var(--section-gap); }
+.artwork__stage { position: relative; width: 100%; aspect-ratio: 1 / 1; background: #000; border-radius: var(--r-md); overflow: hidden; }
+.artwork__stage canvas { display: block; width: 100%; height: 100%; touch-action: manipulation; }
+.artwork__stage canvas[data-tap] { cursor: crosshair; }
+.artwork__texture { position: absolute; inset: 0; pointer-events: none; image-rendering: pixelated; background-size: 128px 128px; }
+.artwork__controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-5); margin-top: var(--space-5); }
+.artwork__controls:empty { display: none; }   /* pieces without controls (Ripple Field) */
+.artwork__info { display: grid; gap: var(--space-5); margin-top: var(--space-7); }
+@media (min-width: 768px) { .artwork__info { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: var(--space-8); } }
+.artwork__info h2 { margin-top: var(--space-1); }
+.artwork__how, .artwork__what { display: grid; gap: var(--space-3); }
+.artwork__how p { color: var(--text-primary); }
+.artwork__what { margin-top: var(--space-5); }
+.artwork__what p { color: var(--text-secondary); }
+
+/* .page-dark (on <body>): the whole page on black, light text; used by dream-in-pixels.html */
+.page-dark {
+  --c-page: 0 0 0;
+  --c-ink: 245 245 245;
+  --c-ink-strong: 255 255 255;
+  --c-on-dark: 0 0 0;
+  --text-primary: rgb(245 245 245);
+  --text-body: rgb(255 255 255 / .6);
+  --text-secondary: rgb(255 255 255 / .55);
+  --line: rgb(255 255 255 / .14);
+  --line-strong: rgb(255 255 255 / .24);
+  --tint-2: rgb(255 255 255 / .08);
+}
+.page-dark h1 { color: #fff; }
+.page-dark .nav .intro-sheet__links a:hover, .page-dark .nav .intro-sheet__links a:focus-visible { background: #fff; color: #000; }
+.page-dark .artwork__stage { border-radius: 0; }
+
+/* Controls: a small uppercase label next to its input */
+.ctl { display: inline-flex; align-items: center; gap: var(--space-3); font-size: var(--fs-small); color: var(--text-primary); }
+.ctl__label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-secondary); }
+/* stepper: − value + inside one pill */
+.stepper { display: inline-flex; align-items: center; height: 34px; border: 1px solid var(--line-strong); border-radius: var(--r-pill); }
+.stepper button {
+  width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: var(--text-primary);
+  font: inherit; font-size: 16px; line-height: 1; cursor: pointer; transition: background-color var(--dur), opacity var(--dur);
+}
+.stepper button:hover:not(:disabled) { background: var(--tint-2); }
+.stepper button:disabled { opacity: .3; cursor: default; }
+.stepper output { min-width: 2.5ch; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+/* toggle buttons (e.g. Black / White): the pressed one fills in */
+.btn[aria-pressed="true"] { background: rgb(var(--c-ink-strong)); color: rgb(var(--c-on-dark)); border-color: transparent; }
+.btn svg.btn__icon { width: 11px; height: 11px; fill: currentColor; stroke: none; }
+/* range slider: hairline track, round thumb in the deep blue */
+.ctl input[type=range] { width: 110px; appearance: none; -webkit-appearance: none; background: transparent; height: 24px; margin: 0; cursor: pointer; }
+.ctl input[type=range]::-webkit-slider-runnable-track { height: 2px; border-radius: 2px; background: var(--line-strong); }
+.ctl input[type=range]::-moz-range-track { height: 2px; border-radius: 2px; background: var(--line-strong); }
+.ctl input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -6px; border-radius: 50%; border: 0; background: rgb(var(--c-deep-blue)); }
+.ctl input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; border: 0; background: rgb(var(--c-deep-blue)); }
+/* colour chips: each one opens a colour picker */
+.tally { display: inline-flex; flex-wrap: wrap; gap: var(--space-3); font-variant-numeric: tabular-nums; }
+.tally span { display: inline-flex; }
+.tally input[type=color] { width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; box-shadow: 0 0 0 1px var(--line-strong); overflow: hidden; }
+.tally input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+.tally input[type=color]::-webkit-color-swatch { border: none; border-radius: 50%; }
+.tally input[type=color]::-moz-color-swatch { border: none; border-radius: 50%; }
+/* the footer email is one long word: let it break on narrow phones instead of pushing the page sideways */
+.sheet-footer__cta a { overflow-wrap: anywhere; }
