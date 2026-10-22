@@ -1139,7 +1139,7 @@ main { padding-top: var(--nav-h); }
   font-size: clamp(36px, 1rem + 4vw, 72px); font-weight: 500; line-height: 1; letter-spacing: -0.012em;
   text-transform: uppercase; color: rgb(var(--c-ink) / .4);
 }
-.side-work__list { display: grid; gap: clamp(64px, 9vw, 144px); margin-top: clamp(48px, 7vw, 120px); }
+.side-work__list { display: grid; gap: clamp(112px, 14vw, 224px); margin-top: clamp(48px, 7vw, 120px); }
 .side-piece { display: grid; gap: var(--space-4); --w: 420px; }
 .side-piece--wide   { --w: 560px; }
 .side-piece--tall   { --w: 300px; }
