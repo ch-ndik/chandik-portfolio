@@ -78,6 +78,8 @@
         }
       }
       cur.classList.toggle('is-label', !!t);
+      // project type colours: visual / branding in the NID green, UX / research in the Samsung blue
+      cur.dataset.tone = t?.dataset.cursorTone || '';
       if (!raf) raf = requestAnimationFrame(tick);
     }, { passive: true });
     // scrolling changes what's under a still mouse (and the dark fade), so re-check then too

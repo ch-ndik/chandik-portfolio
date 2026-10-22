@@ -1153,6 +1153,20 @@ main { padding-top: var(--nav-h); }
   .side-piece__caption { grid-column: 3; max-width: 260px; }
 }
 .side-piece__caption .work-card__caption { margin-top: 0; }
+/* phones and tablets: the artwork and its caption sit centred */
+@media (max-width: 899px) {
+  .side-piece { justify-items: center; text-align: center; }
+  .side-piece__caption { max-width: 420px; }
+}
+/* touch screens have no hover label, so each tile shows where a tap goes (its data-cursor text) */
+@media (hover: none) {
+  .play-tile[data-cursor]::after {
+    content: attr(data-cursor) " ↗"; position: absolute; left: 10px; bottom: 10px; z-index: 1;
+    padding: 6px 11px; border-radius: 100px; background: rgb(0 0 0 / .62); color: #fff;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; line-height: 1;
+  }
+}
 
 .play-tile { position: relative; display: block; aspect-ratio: var(--ar, 4 / 3); overflow: hidden; background: rgb(0 0 0 / .07); }
 .play-tile video, .play-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -1331,6 +1345,9 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 }
 .cursor.is-on-dark .cursor__label { background: #fff; color: #000; }
 .cursor.is-on-dark .cursor__blob { background: #fff; }
+/* project type colours (data-cursor-tone on the card): visual & branding green, UX & research blue */
+.cursor[data-tone="visual"] .cursor__label { background: rgb(var(--c-nid)); color: #fff; }
+.cursor[data-tone="ux"] .cursor__label { background: rgb(var(--c-samsung)); color: #fff; }
 .cursor.is-label .cursor__label { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 .cursor.is-label .cursor__blob { transform: translate(-50%, -50%) scale(0); opacity: 0; }
 .cursor__label { display: inline-flex; align-items: center; gap: 4px; }
