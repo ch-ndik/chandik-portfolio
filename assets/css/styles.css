@@ -1345,8 +1345,8 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 }
 .cursor.is-on-dark .cursor__label { background: #fff; color: #000; }
 .cursor.is-on-dark .cursor__blob { background: #fff; }
-/* project type colours (data-cursor-tone on the card): visual & branding green, UX & research blue */
-.cursor[data-tone="visual"] .cursor__label { background: rgb(var(--c-nid)); color: #fff; }
+/* project type colours (data-cursor-tone on the card): visual & branding Polygon red, UX & research blue */
+.cursor[data-tone="visual"] .cursor__label { background: rgb(var(--c-polygon)); color: #fff; }
 .cursor[data-tone="ux"] .cursor__label { background: rgb(var(--c-samsung)); color: #fff; }
 .cursor.is-label .cursor__label { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 .cursor.is-label .cursor__blob { transform: translate(-50%, -50%) scale(0); opacity: 0; }
