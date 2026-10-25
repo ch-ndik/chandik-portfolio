@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chandik A Chandran — Visual Experience Designer (v6)</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Portfolio of Chandik A Chandran, Visual Experience Designer at Samsung Design Delhi.">
+<link rel="icon" href="images/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="icon" href="images/favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,401,500,501,600,700&display=swap">
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="assets/css/v6.css">
+<script src="assets/js/site.js" defer></script>
+<script src="assets/js/sticker-peel.js?v=3" defer></script>
+</head>
+<body data-page="work" class="no-nav dot-grid dark-shift type-general">
+<!-- Homepage v6: v4 (index.html, live) with every font in General Sans; styles in assets/css/v6.css -->
+<!-- Homepage (was v4): dark intro sheet with the peelable CHANDIK stickers, work history,
+     two-column project grid, About, side work, then the page fades to black (dark-shift).
+     Earlier versions: index-v1.html (text list), index-v3.html. -->
+
+<main class="container">
+  <header class="intro-sheet intro-sheet--v4">
+    <h1 class="visually-hidden">Chandik A Chandran</h1>
+    <div class="intro-sheet__top">
+      <p class="intro-sheet__name">Chandik A Chandran</p>
+      <nav class="intro-sheet__links" aria-label="Links">
+        <a href="#about">About</a>
+        <a href="files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a href="https://www.linkedin.com/in/chandik/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/chandik_/" target="_blank" rel="noopener">Instagram</a>
+        <a href="mailto:chandikachandran@gmail.com">Get in touch</a>
+      </nav>
+    </div>
+    <!-- CHANDIK as 7 peelable letter stickers (assets/js/sticker-peel.js): hover to lift, drag anywhere on the page -->
+    <div class="sticker-stack intro-sheet__sticker" data-peel role="img" aria-label="CHANDIK, spelled in vintage produce-label stickers">
+      <img class="sticker-stack__layer" src="images/home/sticker-letters/c.webp" alt="" style="--x:2.16%; --y:18.85%; --w:17.86%; --h:61.74%; --r:-7deg; --z:3" data-letter="C">
+      <img class="sticker-stack__layer" src="images/home/sticker-letters/h.webp" alt="" style="--x:17.73%; --y:22.79%; --w:15.19%; --h:54.14%; --r:-3deg; --z:1" data-letter="H">
+      <img class="sticker-stack__layer" src="images/home/sticker-letters/a.webp" alt="" style="--x:28.82%; --y:23.07%; --w:19.24%; --h:56.63%; --r:0deg; --z:3" data-letter="A">
+      <img class="sticker-stack__layer" src="images/home/sticker-letters/n.webp" alt="" style="--x:44.38%; --y:23.14%; --w:17.03%; --h:54.28%; --r:-4deg; --z:2" data-letter="N">
+      <img class="sticker-stack__layer" src="images/home/sticker-letters/d.webp" alt="" style="--x:59.83%; --y:24.17%; --w:14.96%; --h:52.49%; --r:8deg; --z:1" data-letter="D">
+      <img class="sticker-stack__layer" src="images/home/sticker-letters/i.webp" alt="" style="--x:74.42%; --y:20.86%; --w:7.50%; --h:56.35%; --r:-2deg; --z:2" data-letter="I">
+      <img class="sticker-stack__layer" src="images/home/sticker-letters/k.webp" alt="" style="--x:81.40%; --y:25.14%; --w:14.73%; --h:52.76%; --r:-3deg; --z:1" data-letter="K">
+    </div>
+    <!-- Work history. Hovering a sentence (.seg[data-peek]) shows that company's photo behind the text;
+         only that sentence stays visible. .nb keeps each logo on the same line as the first word. -->
+    <p class="intro-sheet__meta"><span class="seg" data-seg="samsung" data-peek="samsung" data-img="images/history/samsung.webp">I spent nearly 4 years at <span class="hist"><span class="nb"><img class="logo-chip" src="images/logos/history-samsung.webp" width="160" height="160" alt="Samsung Design Delhi logo"> <b>Samsung</b></span><b> Design Delhi</b></span>, shaping system-level UX for mobile and wearables, from research to shipped features. </span><span class="seg" data-seg="polygons" data-peek="polygons" data-img="images/history/polygons.webp">Before that, I spent over a year at <span class="hist"><span class="nb"><img class="logo-chip" src="images/logos/history-polygons.webp" width="160" height="160" alt="Polygon Design Inc. logo"> <b>Polygon</b></span><b> Design Inc.</b></span>, building its brand from the identity and packaging to the online storefront. </span><span class="seg" data-seg="nid" data-peek="nid" data-img="images/history/nid.webp">And it all started with graphic design at <span class="hist"><span class="nb"><img class="logo-chip" src="images/logos/history-nid.webp" width="160" height="160" alt="NID Ahmedabad logo"> <b>NID</b></span><b> Ahmedabad.</b></span></span></p>
+  </header>
+
+  <div id="work">
+    <section class="work-sheet theme-samsung" aria-labelledby="g-samsung">
+      <div class="work-sheet__head">
+        <h2 id="g-samsung">Samsung Design Delhi <span>2022 – 2026</span></h2>
+        <p>Visual Experience Designer</p>
+      </div>
+      <div class="work-masonry">
+        <a data-cursor="Research &amp; Localization" data-cursor-tone="ux" class="work-card" href="work/samsung-health-india/index.html">
+          <span class="work-card__media"><img src="images/home/samsung-health-india.webp" width="1112" height="1028" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>Samsung Health India</strong> <span>/ Shipped · iF Design Award 2026</span></span>
+          <span class="work-card__desc">Supported partner integration with TATA 1mg, enabling reliable medicine data from one of India’s largest inventories, while ensuring clarity &amp; consistency.</span>
+        </a>
+        <a data-cursor="Visual Explorations" data-cursor-tone="visual" class="work-card" href="work/galaxy-watch-faces/index.html">
+          <span class="work-card__media"><img src="images/home/galaxy-watch-faces.webp" width="1472" height="1680" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>Galaxy Watch Face Design Explorations</strong> <span>/ Visual exploration</span></span>
+          <span class="work-card__desc">Visual explorations for analogue based and personal photo based watch faces for next generation of Galaxy watches</span>
+        </a>
+        <a data-cursor="Interaction Design" data-cursor-tone="ux" class="work-card" href="work/in-call-notes/index.html">
+          <span class="work-card__media"><img src="images/home/in-call-notes.webp" width="1112" height="1028" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>In-Call Notes</strong> <span>/ Shipped</span></span>
+          <span class="work-card__desc">New UX touchpoint to launch during call without leaving phone application. Additional touchpoints to increase engagement and visibility</span>
+        </a>
+        <a data-cursor="Visual Strategy" data-cursor-tone="visual" class="work-card" href="work/one-ui-icon-strategy/index.html">
+          <span class="work-card__media"><img src="images/home/one-ui-icon-strategy.webp" width="912" height="654" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>One UI 7 Native Icons Strategy</strong> <span>/ Research</span></span>
+          <span class="work-card__desc">Understanding current pain points of Samsung’s Android skin through competition benchmarking &amp; defining next philosophy.</span>
+        </a>
+        <a data-cursor="Visual Explorations" data-cursor-tone="visual" class="work-card" href="work/one-ui-visual-philosophy/index.html">
+          <span class="work-card__media"><img src="images/home/one-ui-visual-philosophy.webp" width="915" height="752" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>Future One UI Visual Design Exploration</strong> <span>/ Visual exploration</span></span>
+          <span class="work-card__desc">Understanding current pain points of Samsung’s Android skin through competition benchmarking &amp; defining next philosophy.</span>
+        </a>
+        <a data-cursor="Application Design" data-cursor-tone="ux" class="work-card" href="work/rcs-caller-id/index.html">
+          <span class="work-card__media"><img src="images/home/rcs-caller-id.webp" width="938" height="1028" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>Business Caller ID</strong> <span>/ Shipped</span></span>
+          <span class="work-card__desc">Samsung’s in-house solution against fighting spam calls by partnering with network carriers directly. UX implementation support for multiple carriers across multiple regions.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="work-sheet theme-polygon" aria-labelledby="g-polygon">
+      <div class="work-sheet__head">
+        <h2 id="g-polygon">Polygon Design Inc. <span>2021 – 2022</span></h2>
+        <p>Graphic Designer</p>
+      </div>
+      <div class="work-masonry">
+        <a data-cursor="Branding" data-cursor-tone="visual" class="work-card" href="work/polygons-rebranding/index.html">
+          <span class="work-card__media"><img src="images/home/polygon-rebranding.webp" width="1566" height="948" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>Rebranding Polygons</strong> <span>/ Branding</span></span>
+          <span class="work-card__desc">Understanding existing visual identity to find early perception gaps, clarify inconsistencies, and define a more cohesive direction for future brand evolution.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="work-sheet theme-nid" aria-labelledby="g-nid">
+      <div class="work-sheet__head">
+        <h2 id="g-nid">National Institute of Design, Ahmedabad <span>Graduated 2021</span></h2>
+        <p>B. Des projects</p>
+      </div>
+      <div class="work-masonry">
+        <a data-cursor="Wayfinding Design" data-cursor-tone="visual" class="work-card" href="https://www.behance.net/gallery/109468851/Signage-Wayfinding-at-NID-Ahmedabad-DesignProject3" target="_blank" rel="noopener">
+          <span class="work-card__media"><img src="images/home/nid-wayfinding-signage.webp" width="1817" height="1436" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>Wayfinding system concept at NID <span aria-hidden="true">↗</span></strong> <span>/ Academic</span></span>
+          <span class="work-card__desc">Understanding the fundamentals of wayfinding, how it should adapt towards purpose and building a new dynamic wayfinding system for a university where designations of rooms are not constant, frequency of events hosted are high with lots of visitors.</span>
+        </a>
+        <a data-cursor="Exhibition Design" data-cursor-tone="visual" class="work-card" href="https://www.behance.net/gallery/108483365/Lines-of-Inquiry-Annual-Design-Show-2020-NID" target="_blank" rel="noopener">
+          <span class="work-card__media"><img src="images/home/nid-lines-of-inquiry.webp" width="1502" height="632" loading="lazy" alt=""></span>
+          <span class="work-card__caption"><strong>Lines of Inquiry, Annual Design Show 2020 <span aria-hidden="true">↗</span></strong> <span>/ Exhibition · 2020</span></span>
+          <span class="work-card__desc">Visual identity and exhibition for NID’s Annual Design Show at the 40th Convocation, curating the year’s best student work as a series of questions, or lines of inquiry.</span>
+        </a>
+      </div>
+    </section>
+  </div>
+  <!-- About: scroll-reveal paragraph (letters go from faint to solid as you scroll). Photo placeholder until the real one arrives. -->
+  <section class="about" id="about" aria-labelledby="about-title">
+    <h2 class="visually-hidden" id="about-title">About</h2>
+    <div class="about__intro">
+      <div class="about__hello">
+        <p class="about__name"><span>I’m</span> Chandik A Chandran</p>
+      </div>
+      <img class="about__photo" src="images/about/photo.webp" width="900" height="1200" alt="Portrait of Chandik A Chandran">
+    </div>
+    <p class="about__reveal" data-reveal><span class="hl">I overthink professionally</span>. Mostly that means I want to understand why something works, and why people feel the way they do when they use it. In UX, <span class="hl">everyone treats function as God, and I’m an atheist.</span> We are emotional beings, and that’s what people actually respond to, so that’s what I like designing for. I spend a lot of time on the small moments that make a screen feel like it was made for a person.</p>
+  </section>
+  <!-- Side work: each piece sits centred on the page with its title + description to the right.
+       Videos: 540px wide, silent, ≤15 s, in videos/ with a still in images/play/; they load lazily and play only on screen. -->
+  <section class="side-work" aria-labelledby="side-title">
+    <p class="about__tag">-- {“OFF THE CLOCK”}</p>
+    <h2 class="side-work__title" id="side-title" data-dark-trigger data-dark-distance="200">Things I make when no one’s asking.</h2>
+    <div class="side-work__list">
+      <figure class="side-piece side-piece--tall">
+        <a data-cursor="Play the artworks" class="play-tile" style="--ar: 9 / 16" href="dream-in-pixels.html" aria-label="DR.I.P, Dream in Pixels: a series of interactive pixel artworks">
+          <video src="videos/pixel-flowers.mp4" poster="images/play/pixel-flowers.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption class="side-piece__caption">
+          <span class="work-card__caption"><strong>DR.I.P (Dream in Pixels)</strong> <span>/ Series · Interactive art · 2026</span></span>
+          <span class="work-card__desc">An ongoing series of interactive pixel artworks made with Claude Code, starting with Pixel Moves. Four pieces so far.</span>
+        </figcaption>
+      </figure>
+      <figure class="side-piece side-piece--wide">
+        <a data-cursor="View on Instagram" data-cursor-ext class="play-tile" style="--ar: 16 / 9" href="https://www.instagram.com/p/DVyVM-Yk0Dz/" target="_blank" rel="noopener" aria-label="Shuffle 2025 (opens Instagram)">
+          <video src="videos/wrap-2025.mp4" poster="images/play/wrap-2025.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption class="side-piece__caption">
+          <span class="work-card__caption"><strong>Shuffle 2025</strong> <span>/ Video edit · 2026</span></span>
+          <span class="work-card__desc">Something very personal: a wrap-up of the best moments. I make it for myself, not for an audience.</span>
+        </figcaption>
+      </figure>
+      <!-- Hidden for now: ASCII, with Claude
+      <figure class="side-piece side-piece—tall">
+        <a data-cursor="View on Instagram" data-cursor-ext class="play-tile" style="—ar: 9 / 16" href="https://www.instagram.com/p/DXwrAX9zWbF/" target="_blank" rel="noopener" aria-label="ASCII, with Claude (opens Instagram)">
+          <video src="videos/ascii-claude.mp4" poster="images/play/ascii-claude.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption class="side-piece__caption">
+          <span class="work-card__caption"><strong>ASCII, with Claude</strong> <span>/ Generative art · 2026</span></span>
+          <span class="work-card__desc">Generative ASCII art, written and tuned with Claude Code.</span>
+        </figcaption>
+      </figure>
+      -->
+      <figure class="side-piece side-piece--square">
+        <a data-cursor="View on Instagram" data-cursor-ext class="play-tile" style="--ar: 1 / 1" href="https://www.instagram.com/p/COj-nkgp3AN/?img_index=1" target="_blank" rel="noopener" aria-label="Black ice (opens Instagram)">
+          <video src="videos/black-ice.mp4" poster="images/play/black-ice.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption class="side-piece__caption">
+          <span class="work-card__caption"><strong>Black ice</strong> <span>/ 3D · 2021</span></span>
+          <span class="work-card__desc">A 3D study of dark water and ice. Cinema 4D, rendered with Arnold.</span>
+        </figcaption>
+      </figure>
+      <figure class="side-piece side-piece--square">
+        <a data-cursor="View on Instagram" data-cursor-ext class="play-tile" style="--ar: 1 / 1" href="https://www.instagram.com/p/B_M8jq8jw4v/" target="_blank" rel="noopener" aria-label="Shuffle 2019 (opens Instagram)">
+          <video src="videos/good-times-2019.mp4" poster="images/play/good-times-2019.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption class="side-piece__caption">
+          <span class="work-card__caption"><strong>Shuffle 2019</strong> <span>/ Video edit · 2020</span></span>
+          <span class="work-card__desc">Something very personal: a wrap-up of the best moments. I make it for myself, not for an audience.</span>
+        </figcaption>
+      </figure>
+      <!-- Hidden for now: Last winter holiday
+      <figure class="side-piece side-piece—portrait">
+        <a data-cursor="View on Instagram" data-cursor-ext class="play-tile" style="—ar: 540 / 676" href="https://www.instagram.com/p/CBFl03ynfLg/" target="_blank" rel="noopener" aria-label="Last winter holiday (opens Instagram)">
+          <video src="videos/goa-holiday.mp4" poster="images/play/goa-holiday.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption class="side-piece__caption">
+          <span class="work-card__caption"><strong>Last winter holiday</strong> <span>/ Video edit · 2020</span></span>
+          <span class="work-card__desc">A winter in Goa with friends, good food and the sea. Shot on iPhone and cut in split screens.</span>
+        </figcaption>
+      </figure>
+      -->
+      <figure class="side-piece side-piece--wide">
+        <a data-cursor="View on Behance" data-cursor-ext class="play-tile" style="--ar: 1080 / 460" href="https://www.behance.net/gallery/92437901/A-Casual-Breakfast-BBC-League-Promo-2020" target="_blank" rel="noopener" aria-label="A Casual Breakfast (opens Behance)">
+          <video src="videos/casual-breakfast.mp4" poster="images/play/casual-breakfast.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption class="side-piece__caption">
+          <span class="work-card__caption"><strong>A Casual Breakfast</strong> <span>/ Promo film · 2020</span></span>
+          <span class="work-card__desc">A promo for BBC League, NID’s mini football tournament, played out at a breakfast table instead of a pitch. My concept, choreographed and animated frame by frame with a team of friends.</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="sheet-footer">
+  <div class="container">
+    <p class="sheet-footer__cta">Let’s talk. <a href="mailto:chandikachandran@gmail.com">chandikachandran@gmail.com</a></p>
+    <div class="sheet-footer__row">
+      <p>© 2026 Chandik A Chandran</p>
+      <nav class="intro-sheet__links" aria-label="Footer links">
+        <a href="files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a href="https://www.linkedin.com/in/chandik/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.instagram.com/chandik_/" target="_blank" rel="noopener">Instagram</a>
+        <a href="mailto:chandikachandran@gmail.com">Email</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,43 @@
+/* Homepage v6 (index-v6.html): v4 with every font set in General Sans (Fontshare).
+   Loaded after styles.css and scoped to body.type-general, so no other page changes.
+   General Sans runs a little wider and looser than DM Sans, so tracking is pulled in a touch,
+   paragraphs get a little more leading, and the old mono label and script highlight become
+   General Sans too (spaced capitals / italic). */
+body.type-general {
+  --font: "General Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font);
+  letter-spacing: -0.005em;
+}
+.type-general p { line-height: 1.35; letter-spacing: -0.01em; }
+.type-general h2 { letter-spacing: -0.02em; }
+.type-general .btn, .type-general button { font-family: inherit; }
+
+/* top bar and links: all caps, so a little open tracking */
+.type-general .nav, .type-general .intro-sheet__top { letter-spacing: .02em; }
+
+/* hero paragraph and the large work-history statement */
+.type-general .intro-sheet__body { line-height: 1.4; }
+.type-general .intro-sheet .intro-sheet__meta { font-size: clamp(28px, 1rem + 3.3vw, 60px); line-height: 1.14; letter-spacing: -0.015em; }
+.type-general .intro-sheet .intro-sheet__meta b { font-weight: 600; letter-spacing: -0.02em; }
+@media (max-width: 600px) { .type-general .intro-sheet--v4 .intro-sheet__meta { font-size: clamp(19px, 5.6vw, 28px); } }
+
+/* project grid */
+.type-general .work-sheet__head h2 { font-size: 14px; font-weight: 600; letter-spacing: 0; }
+.type-general .work-card__caption { letter-spacing: 0; }
+.type-general .work-card__caption strong { font-weight: 600; }
+.type-general .work-card__desc { line-height: 1.4; letter-spacing: 0; }
+
+/* about: the small tag was DM Mono, the highlights were the Caveat script */
+.type-general .about__tag { font-family: var(--font); font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; }
+.type-general .about__name { font-weight: 500; letter-spacing: -0.025em; }
+.type-general .about__reveal { font-weight: 500; line-height: 1.06; letter-spacing: -0.015em; }
+.type-general .about__reveal .c.hl { font-family: var(--font); font-style: italic; font-weight: 500; font-size: 1em; line-height: inherit; text-transform: none; letter-spacing: -0.02em; }
+
+/* "Things I make when no one's asking." */
+.type-general .side-work__title { font-weight: 500; letter-spacing: -0.02em; line-height: .98; }
+
+/* footer call to action */
+.type-general .sheet-footer__cta { letter-spacing: -0.025em; }
+
+/* hover label */
+.type-general .cursor__label { font-family: var(--font); letter-spacing: .07em; }
