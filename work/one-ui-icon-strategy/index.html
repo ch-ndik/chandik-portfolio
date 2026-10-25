@@ -5,39 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>One UI 7 Native Icons Strategy — Chandik A Chandran</title>
 <meta name="description" content="A study of One UI 6’s app icons against Apple and other Android brands, which set the direction for the One UI 7 icons.">
+<meta name="theme-color" content="#F3F2EC">
+<script>document.documentElement.classList.add('js')</script>
 <link rel="icon" href="../../images/favicon-light.png" media="(prefers-color-scheme: light)">
 <link rel="icon" href="../../images/favicon-dark.png" media="(prefers-color-scheme: dark)">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap">
-<link rel="stylesheet" href="../../assets/css/styles.css">
+<link rel="preload" href="../../assets/fonts/GeneralSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/css/v5.css">
+<script src="../../assets/vendor/gsap.min.js" defer></script>
+<script src="../../assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="../../assets/vendor/SplitText.min.js" defer></script>
 <script src="../../assets/js/site.js" defer></script>
+<script src="../../assets/js/v5.js" defer></script>
 </head>
-<body data-page="work" class="theme-samsung">
-<div data-include="nav"></div>
+<body class="v5">
+<!-- One UI 7 Native Icons Strategy case study, in the v5 style (General Sans, paper, hairlines). The pre-redesign version is
+     frozen in work-v1/one-ui-icon-strategy/. Case-study elements are styled in v5.css, section 9 (.cs …). -->
 
-<main class="container">
-  <!-- Case intro -->
-  <header class="case-intro">
-    <a class="case-intro__back" href="../../index.html#work"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M7 4 3 8l4 4"/></svg>All work</a>
-    <h1>One UI 7 Native Icons Strategy</h1>
-    <p class="case-intro__subtitle">Research &amp; visual direction setting · 2025</p>
-    <div class="case-intro__body">
-      <div class="stack">
+<header class="mast" data-mast>
+  <a class="mast__mark" href="../../index.html" aria-label="Chandik A Chandran, home">Chandik.</a>
+  <nav class="mast__tabs" aria-label="Sections">
+    <a href="../../index.html#work" class="is-active">Work</a>
+    <a href="../../index.html#about">About</a>
+    <a href="../../index.html#after-hours">After hours</a>
+  </nav>
+  <div class="mast__cells">
+    <a class="mast__cell" href="../../files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Résumé <span aria-hidden="true">↗</span></a>
+    <a class="mast__cell mast__cell--strong" href="#contact">Get in touch</a>
+  </div>
+</header>
+
+<main class="cs">
+  <!-- Intro: back link, meta line, big title, proof stamps; story on the left, spec table on the right -->
+  <header class="cs-intro">
+    <div class="case__meta"><a href="../../index.html#work">← All work</a><span>Samsung Design Delhi · Research &amp; visual direction setting · 2025</span></div>
+    <h1 class="cs-intro__title" data-lines>One UI 7 Native Icons Strategy</h1>
+    <div class="cs-intro__body">
+      <div class="cs-intro__text">
         <p class="intro">One UI Icons was a strategic redesign initiative that challenged Samsung’s long-standing flat and highly simplified icon system, arguing that the future of iconography lies in essential yet expressive visuals that combine depth, relatability and emotional storytelling, while preserving the clarity and harmony that define One UI.</p>
         <p>A research project on One UI 6’s app icons, which set the direction for the icons in One UI 7. I was one of the hands-on designers, working on the competitive benchmarking, the research and the strategy.</p>
       </div>
-      <dl class="meta">
-        <div class="meta__row"><dt>Company</dt><dd>Samsung Design Delhi</dd></div>
-        <div class="meta__row"><dt>Team</dt><dd>3 designers</dd></div>
-        <div class="meta__row"><dt>My part</dt><dd>Benchmarking, research, strategy</dd></div>
-        <div class="meta__row"><dt>Timeline</dt><dd>3 months</dd></div>
-        <div class="meta__row"><dt>Outcome</dt><dd>Direction used for the One UI 7 icons</dd></div>
+      <dl class="spec cs-intro__spec">
+        <div class="ruled"><dt>Company</dt><dd>Samsung Design Delhi</dd></div>
+        <div class="ruled"><dt>Team</dt><dd>3 designers</dd></div>
+        <div class="ruled"><dt>My part</dt><dd>Benchmarking, research, strategy</dd></div>
+        <div class="ruled"><dt>Timeline</dt><dd>3 months</dd></div>
+        <div class="ruled"><dt>Outcome</dt><dd>Direction used for the One UI 7 icons</dd></div>
       </dl>
     </div>
   </header>
 
-  <section class="prose prose--split mt-0" aria-labelledby="background">
+
+  <section class="prose prose--split" aria-labelledby="background">
     <h2 id="background">Background</h2>
     <div class="prose__body">
       <p>For years, One UI’s icons have been bright squircles with flat white symbols: simple, consistent and instantly Samsung.</p>
@@ -47,7 +65,7 @@
     </div>
   </section>
 
-  <section class="prose prose--split mt-section" aria-labelledby="research">
+  <section class="prose prose--split" aria-labelledby="research">
     <h2 id="research">Research</h2>
     <div class="prose__body">
       <p>We began by studying how other platforms design their interfaces and icons: iOS, stock Android, Nothing, the major Chinese manufacturers such as Xiaomi, Huawei and Oppo, and Microsoft.</p>
@@ -56,7 +74,7 @@
     </div>
   </section>
 
-  <section class="prose prose--split mt-section" aria-labelledby="container">
+  <section class="prose prose--split" aria-labelledby="container">
     <h2 id="container">Container &amp; grid</h2>
     <div class="prose__body">
       <p>One UI’s icons sit smaller within their containers than most competitors’. That leaves breathing room, but the overall proportions lose a sense of scale and perspective.</p>
@@ -70,7 +88,7 @@
     <img src="../../images/one-ui-icon-strategy/finding-container.webp" width="2400" height="760" loading="lazy" alt="Icon size within the container compared across iOS, HyperOS, HarmonyOS, ColorOS, One UI and Pixel, from rounded rectangle to squircle to circle">
   </figure>
 
-  <section class="prose prose--split mt-section" aria-labelledby="metaphor">
+  <section class="prose prose--split" aria-labelledby="metaphor">
     <h2 id="metaphor">Shape &amp; metaphor</h2>
     <div class="prose__body">
       <p>One UI uses the same metaphors as its competitors, but expresses them more statically. Where competitors use metaphors to communicate purpose, a One UI icon often feels like a symbol placed inside a container rather than an expressive object.</p>
@@ -86,7 +104,7 @@
     <img src="../../images/one-ui-icon-strategy/finding-metaphor.webp" width="1306" height="416" loading="lazy" alt="Phone icons compared across Apple, Xiaomi, Huawei, Oppo, Pixel and One UI, with lines showing each handset’s angle; One UI’s stands upright">
   </figure>
 
-  <section class="prose prose--split mt-section" aria-labelledby="material">
+  <section class="prose prose--split" aria-labelledby="material">
     <h2 id="material">Colour &amp; material</h2>
     <div class="prose__body">
       <p>Icons across the industry are moving from simple layered graphics to natural shadows, gradients, reflections and volume. Glassmorphism and natural lighting add a sense of space, and a wider range of colour creates a richer hierarchy.</p>
@@ -100,7 +118,7 @@
     <img src="../../images/one-ui-icon-strategy/finding-material.webp" width="2400" height="1774" loading="lazy" alt="Competitor icons drawing on real objects, such as an airmail envelope, a leather notebook, a camera lens and a calculator key, compared with flat One UI icons">
   </figure>
 
-  <section class="prose prose--split mt-section" aria-label="The argument">
+  <section class="prose prose--split" aria-label="The argument">
     <div></div>
     <div class="prose__body">
       <p class="quote">Not less simple, but more expressive.</p>
@@ -108,7 +126,7 @@
     </div>
   </section>
 
-  <section class="impact mt-section" aria-label="Outcome">
+  <section class="impact" aria-label="Outcome">
     <p class="eyebrow">Outcome</p>
     <div class="impact__body">
       <p class="metric">Samsung’s HQ design team created the <strong>One UI 7 icons</strong> based on our proposed direction.</p>
@@ -127,8 +145,30 @@
     </div>
   </section>
 
+
+  <!-- Next project -->
+  <a class="cs-next ruled" href="../one-ui-visual-philosophy/index.html">
+    <span class="case__meta"><span>Next project</span><span>Samsung Design Delhi · Research &amp; visual direction setting · 2024</span></span>
+    <span class="cs-next__title">Future One UI Visual Design Exploration →</span>
+  </a>
 </main>
 
-<div data-include="footer"></div>
+<footer class="sec contact" id="contact" aria-label="Contact">
+  <p class="contact__big" data-lines>Let’s talk.</p>
+  <p class="contact__note"><span class="dot" aria-hidden="true"></span>Open to new roles: in-house teams and independent studios.</p>
+  <div class="contact__grid">
+    <a class="contact__mail" href="mailto:chandikachandran@gmail.com">chandikachandran@gmail.com</a>
+    <nav class="contact__links" aria-label="Elsewhere">
+      <a href="https://www.linkedin.com/in/chandik/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://www.instagram.com/chandik_/" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="../../files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+    </nav>
+  </div>
+  <div class="colophon ruled">
+    <p>© 2026 Chandik A Chandran</p>
+    <p>Set in General Sans</p>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
 </body>
 </html>

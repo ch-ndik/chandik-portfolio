@@ -5,37 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Watch Face Visual Explorations — Chandik A Chandran</title>
 <meta name="description" content="Four analogue and photo watch face directions for the next generation of Galaxy watches.">
+<meta name="theme-color" content="#F3F2EC">
+<script>document.documentElement.classList.add('js')</script>
 <link rel="icon" href="../../images/favicon-light.png" media="(prefers-color-scheme: light)">
 <link rel="icon" href="../../images/favicon-dark.png" media="(prefers-color-scheme: dark)">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap">
-<link rel="stylesheet" href="../../assets/css/styles.css">
+<link rel="preload" href="../../assets/fonts/GeneralSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/css/v5.css">
+<script src="../../assets/vendor/gsap.min.js" defer></script>
+<script src="../../assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="../../assets/vendor/SplitText.min.js" defer></script>
 <script src="../../assets/js/site.js" defer></script>
+<script src="../../assets/js/v5.js" defer></script>
 </head>
-<body data-page="work" class="theme-samsung">
-<div data-include="nav"></div>
+<body class="v5">
+<!-- Watch Face Visual Explorations case study, in the v5 style (General Sans, paper, hairlines). The pre-redesign version is
+     frozen in work-v1/galaxy-watch-faces/. Case-study elements are styled in v5.css, section 9 (.cs …). -->
 
-<main class="container">
-  <!-- Case intro -->
-  <header class="case-intro">
-    <a class="case-intro__back" href="../../index.html#work"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M7 4 3 8l4 4"/></svg>All work</a>
-    <h1>Watch Face Visual Explorations</h1>
-    <p class="case-intro__subtitle">Research &amp; visual direction setting · 2024</p>
-    <div class="case-intro__body">
-      <div class="stack">
+<header class="mast" data-mast>
+  <a class="mast__mark" href="../../index.html" aria-label="Chandik A Chandran, home">Chandik.</a>
+  <nav class="mast__tabs" aria-label="Sections">
+    <a href="../../index.html#work" class="is-active">Work</a>
+    <a href="../../index.html#about">About</a>
+    <a href="../../index.html#after-hours">After hours</a>
+  </nav>
+  <div class="mast__cells">
+    <a class="mast__cell" href="../../files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Résumé <span aria-hidden="true">↗</span></a>
+    <a class="mast__cell mast__cell--strong" href="#contact">Get in touch</a>
+  </div>
+</header>
+
+<main class="cs">
+  <!-- Intro: back link, meta line, big title, proof stamps; story on the left, spec table on the right -->
+  <header class="cs-intro">
+    <div class="case__meta"><a href="../../index.html#work">← All work</a><span>Samsung Design Delhi · Research &amp; visual direction setting · 2024</span></div>
+    <h1 class="cs-intro__title" data-lines>Watch Face Visual Explorations</h1>
+    <div class="cs-intro__body">
+      <div class="cs-intro__text">
         <p>The brief had two parts. For analogue faces: take inspiration from traditional watches and understand what gives them their art-deco character, beyond the physical craftsmanship. For personalised photo faces: create a dynamic, expressive photo gallery that also tells the time.</p>
         <p>The research was done as a team of four. The four watch faces shown here were designed end to end by me.</p>
       </div>
-      <dl class="meta">
-        <div class="meta__row"><dt>Company</dt><dd>Samsung Design Delhi</dd></div>
-        <div class="meta__row"><dt>Team</dt><dd>4 designers (research)</dd></div>
-        <div class="meta__row"><dt>My part</dt><dd>All four watch faces, end to end</dd></div>
-        <div class="meta__row"><dt>Timeline</dt><dd>6 months</dd></div>
-        <div class="meta__row"><dt>Status</dt><dd>Under consideration for a future release</dd></div>
+      <dl class="spec cs-intro__spec">
+        <div class="ruled"><dt>Company</dt><dd>Samsung Design Delhi</dd></div>
+        <div class="ruled"><dt>Team</dt><dd>4 designers (research)</dd></div>
+        <div class="ruled"><dt>My part</dt><dd>All four watch faces, end to end</dd></div>
+        <div class="ruled"><dt>Timeline</dt><dd>6 months</dd></div>
+        <div class="ruled"><dt>Status</dt><dd>Under consideration for a future release</dd></div>
       </dl>
     </div>
   </header>
+
 
   <section class="exploration" aria-labelledby="x1">
     <div class="exploration__head">
@@ -51,7 +69,7 @@
       <figure style="--ar: 1670/2076"><img class="media" src="../../images/galaxy-watch-faces/pop-analogue-colours.webp" width="1670" height="2076" loading="lazy" alt="Pop Analogue watch faces in blue, violet and coral"></figure>
       <figure style="--ar: 1024/1024"><img class="media" src="../../images/galaxy-watch-faces/pop-analogue-wrist.webp" width="1024" height="1024" loading="lazy" alt="Pop Analogue watch face on a wrist"></figure>
     </div>
-    <figure class="figure mt-tight"><img src="../../images/galaxy-watch-faces/pop-analogue-rocks.webp" width="2400" height="1451" loading="lazy" alt="Pop Analogue on a rugged Galaxy Watch among dark rocks"></figure>
+    <figure class="figure"><img src="../../images/galaxy-watch-faces/pop-analogue-rocks.webp" width="2400" height="1451" loading="lazy" alt="Pop Analogue on a rugged Galaxy Watch among dark rocks"></figure>
   </section>
 
   <section class="exploration" aria-labelledby="x2">
@@ -115,8 +133,30 @@
     <p>All four directions are in Samsung’s consideration library and are being looked at for a potential future release.</p>
   </aside>
 
+
+  <!-- Next project -->
+  <a class="cs-next ruled" href="../polygons-rebranding/index.html">
+    <span class="case__meta"><span>Next project</span><span>Polygons Design Inc., Texas · Brand identity &amp; visual system · 2021</span></span>
+    <span class="cs-next__title">Rebranding Polygons →</span>
+  </a>
 </main>
 
-<div data-include="footer"></div>
+<footer class="sec contact" id="contact" aria-label="Contact">
+  <p class="contact__big" data-lines>Let’s talk.</p>
+  <p class="contact__note"><span class="dot" aria-hidden="true"></span>Open to new roles: in-house teams and independent studios.</p>
+  <div class="contact__grid">
+    <a class="contact__mail" href="mailto:chandikachandran@gmail.com">chandikachandran@gmail.com</a>
+    <nav class="contact__links" aria-label="Elsewhere">
+      <a href="https://www.linkedin.com/in/chandik/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://www.instagram.com/chandik_/" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="../../files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+    </nav>
+  </div>
+  <div class="colophon ruled">
+    <p>© 2026 Chandik A Chandran</p>
+    <p>Set in General Sans</p>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
 </body>
 </html>

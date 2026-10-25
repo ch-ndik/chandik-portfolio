@@ -667,3 +667,100 @@ body.has-hero .hero { min-height: 100svh; }
 .about5__reveal .c.hl { font-weight: 700; }
 .about5__photo { align-self: center; width: clamp(140px, calc(15 * var(--vw)), 190px); margin-top: clamp(48px, 6vw, 88px); }
 @media (max-width: 900px) { .about5__photo { width: 140px; } .about5__text { margin-top: 0; } }
+
+/* 9b. More case-study components (Samsung pages) --------------------------------------- */
+.cs-intro__text .intro { font-size: clamp(22px, calc(2 * var(--vw)), 32px); font-weight: 500; line-height: 1.2; letter-spacing: -0.03em; color: var(--ink); }
+.cs-intro .stamps img { border-radius: 50%; }
+
+/* Impact: label left, big metric sentence right */
+.cs .impact { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); margin-top: clamp(96px, 12vw, 192px); padding-top: 16px; border-top: 1px solid var(--rule); }
+.cs .impact > .eyebrow { grid-column: 1 / span 4; }
+.cs .impact__body { grid-column: 6 / -1; }
+.cs .impact__body > p { font-size: clamp(16px, calc(1.2 * var(--vw)), 19px); line-height: 1.55; color: var(--ink-2); }
+.cs .impact__body > * + * { margin-top: 1em; }
+.cs .metric { font-size: clamp(26px, calc(2.8 * var(--vw)), 46px) !important; font-weight: 400; line-height: 1.12 !important; letter-spacing: -0.035em; color: var(--ink-2); }
+.cs .metric strong { font-weight: 600; color: var(--ink); }
+.cs .impact__links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+
+/* Awards: list + team on the left, a tall image on the right */
+.cs .award { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); margin-top: clamp(96px, 12vw, 192px); padding-top: 16px; border-top: 1px solid var(--rule); }
+.cs .award__body { grid-column: 1 / span 7; display: grid; gap: clamp(32px, 4vw, 56px); align-content: start; }
+.cs .award__body h2 { margin-top: 10px; font-size: clamp(30px, calc(3.4 * var(--vw)), 56px); font-weight: 500; line-height: 1; letter-spacing: -0.045em; }
+.cs .award__item { display: grid; grid-template-columns: 56px 1fr; gap: 20px; padding: 24px 0; border-top: 1px solid var(--rule); }
+.cs .award__item:last-child { border-bottom: 1px solid var(--rule); }
+.cs .award__logo { width: 48px; height: 48px; border-radius: 50%; }
+.cs .award__text { display: grid; gap: 8px; align-content: start; }
+.cs .award__text h3 { font-size: clamp(20px, calc(1.7 * var(--vw)), 28px); font-weight: 600; letter-spacing: -0.03em; }
+.cs .award__text p:not(.eyebrow) { font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+.cs .award__category { color: var(--ink-3) !important; }
+.cs .award__team ul { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.cs .award__team li { border: 1px solid var(--rule-strong); border-radius: 100px; font-size: 14px; font-weight: 500; transition: background-color .25s var(--ease), color .25s var(--ease); }
+.cs .award__team li > a, .cs .award__team li:not(:has(a)) { display: inline-block; padding: 6px 12px; }
+.cs .award__team li:has(a):hover { background: var(--ink); color: var(--bg); }
+.cs .award__media { grid-column: 9 / -1; background: var(--plate); align-self: start; }
+.cs .award__media img { width: 100%; height: auto; }
+
+/* Problem → solution steps (inside an exploration head) */
+.cs .problem-steps { grid-column: 7 / -1; display: grid; gap: 0; }
+.cs .problem-steps > div { display: grid; grid-template-columns: 6.5em 1fr; gap: 12px; padding: 14px 0; border-top: 1px solid var(--rule); }
+.cs .problem-steps dd p { font-size: 16px; line-height: 1.5; color: var(--ink-2); }
+.cs .problem-steps .is-solution dd p { color: var(--ink); font-weight: 500; }
+
+/* Compare slider (site.js): drag to reveal the second image */
+.cs .compare { position: relative; margin-top: 28px; overflow: hidden; background: var(--plate); --pos: 50%; user-select: none; touch-action: pan-y; }
+.cs .compare img { width: 100%; pointer-events: none; }
+.cs .compare__after { position: absolute; inset: 0; height: 100%; object-fit: cover; clip-path: inset(0 0 0 var(--pos)); }
+.cs .compare__handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: var(--ink); pointer-events: none; }
+.cs .compare__handle::after {
+  content: "↔"; position: absolute; top: 50%; left: 50%; translate: -50% -50%; display: grid; place-items: center;
+  width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--bg); font-size: 16px;
+}
+.cs .compare__label { position: absolute; top: 14px; z-index: 1; padding: 5px 11px; border-radius: 100px; background: var(--ink); color: var(--bg); font-size: 12px; font-weight: 600; pointer-events: none; }
+.cs .compare__label--start { left: 14px; }
+.cs .compare__label--end { right: 14px; }
+.cs .compare__range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+
+/* Scroll sequence (site.js): pinned frame, layers fade in as you scroll */
+.cs .scroll-seq { position: relative; height: calc(var(--steps, 4) * 85vh); margin-top: clamp(56px, 7vw, 112px); }
+.cs .scroll-seq__stage { position: sticky; top: var(--row); height: calc(100svh - var(--row)); display: grid; place-items: center; }
+.cs .scroll-seq__frame { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 100%; overflow: hidden; background: var(--plate); }
+.cs .scroll-seq__layer {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  --start: calc((var(--i) - .5) / (var(--steps, 4) - 1));
+  opacity: clamp(0, (var(--p, 0) - var(--start)) * 6, 1);
+  transform: scale(calc(1.04 - .04 * clamp(0, (var(--p, 0) - var(--start)) * 6, 1)));
+}
+.cs .scroll-seq__layer:first-child { opacity: 1; transform: none; }
+.cs .scroll-seq__captions { position: absolute; left: 16px; top: 16px; z-index: 2; }
+.cs .scroll-seq__captions span { position: absolute; left: 0; top: 0; white-space: nowrap; opacity: 0; padding: 5px 12px; border-radius: 100px; background: var(--ink); color: var(--bg); font-size: 12px; font-weight: 600; }
+.cs .scroll-seq__captions span.is-active { opacity: 1; }
+.cs .scroll-seq__dots { position: absolute; bottom: 16px; left: 50%; translate: -50% 0; display: flex; gap: 6px; }
+.cs .scroll-seq__dots span { width: 6px; height: 6px; border-radius: 50%; background: rgb(0 0 0 / .25); transition: width .2s, background-color .2s; }
+.cs .scroll-seq__dots span.is-active { width: 16px; border-radius: 3px; background: rgb(0 0 0 / .75); }
+
+/* Scroll video (site.js): pinned; scrolling scrubs the video */
+.cs .scroll-video { position: relative; height: 220vh; margin-top: clamp(56px, 7vw, 112px); }
+.cs .scroll-video__stage { position: sticky; top: var(--row); height: calc(100svh - var(--row)); display: grid; place-items: center; }
+.cs .scroll-video video { width: 100%; max-height: 100%; object-fit: contain; background: var(--plate); }
+
+/* Note: a quiet closing remark */
+.cs .note { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); margin-top: clamp(96px, 12vw, 192px); padding-top: 16px; border-top: 1px solid var(--rule); }
+.cs .note > * { grid-column: 6 / span 6; }
+.cs .note > .eyebrow { grid-column: 1 / span 4; grid-row: 1 / span 9; }
+.cs .note p:not(.eyebrow) { font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+
+.cs .placeholder { display: grid; place-items: center; aspect-ratio: var(--ar, 16 / 9); margin-top: clamp(40px, 5vw, 72px); border: 1px dashed var(--rule-strong); text-align: center; color: var(--ink-3); }
+
+@media (max-width: 900px) {
+  .cs .impact > .eyebrow, .cs .impact__body, .cs .award__body, .cs .award__media,
+  .cs .problem-steps, .cs .note > *, .cs .note > .eyebrow { grid-column: 1 / -1; grid-row: auto; }
+  .cs .impact__body, .cs .award__media, .cs .problem-steps, .cs .note > p { margin-top: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cs .scroll-seq, .cs .scroll-video { height: auto; }
+  .cs .scroll-seq__stage, .cs .scroll-video__stage { position: static; height: auto; }
+  .cs .scroll-seq__stage { display: flex; flex-direction: column; gap: 16px; }
+  .cs .scroll-seq__frame { aspect-ratio: auto; display: contents; }
+  .cs .scroll-seq__layer { position: static; opacity: 1; transform: none; }
+  .cs .scroll-seq__dots, .cs .scroll-seq__captions { display: none; }
+}

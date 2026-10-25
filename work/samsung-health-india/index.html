@@ -5,49 +5,67 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Samsung Health India — iF Design Award 2026 — Chandik A Chandran</title>
 <meta name="description" content="Adapting Samsung Health's Medication feature for India and designing the UX for Personal Health Records. iF Design Award 2026 winner.">
+<meta name="theme-color" content="#F3F2EC">
+<script>document.documentElement.classList.add('js')</script>
 <link rel="icon" href="../../images/favicon-light.png" media="(prefers-color-scheme: light)">
 <link rel="icon" href="../../images/favicon-dark.png" media="(prefers-color-scheme: dark)">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap">
-<link rel="stylesheet" href="../../assets/css/styles.css">
+<link rel="preload" href="../../assets/fonts/GeneralSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/css/v5.css">
+<script src="../../assets/vendor/gsap.min.js" defer></script>
+<script src="../../assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="../../assets/vendor/SplitText.min.js" defer></script>
 <script src="../../assets/js/site.js" defer></script>
+<script src="../../assets/js/v5.js" defer></script>
 </head>
-<body data-page="work" class="theme-samsung">
-<div data-include="nav"></div>
+<body class="v5">
+<!-- Samsung Health India case study, in the v5 style (General Sans, paper, hairlines). The pre-redesign version is
+     frozen in work-v1/samsung-health-india/. Case-study elements are styled in v5.css, section 9 (.cs …). -->
 
-<main class="container">
-  <!-- Case intro -->
-  <header class="case-intro">
-    <a class="case-intro__back" href="../../index.html#work"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M7 4 3 8l4 4"/></svg>All work</a>
-    <h1>Samsung Health India</h1>
-    <div class="award-badges">
-      <a class="award-badge" href="#award"><img class="award-badge__logo" src="../../images/logos/if-logo.png" width="352" height="352" alt="iF">Design Award 2026 <span class="award-badge__sub">· Winner</span></a>
-      <a class="award-badge" href="#award"><img class="award-badge__logo" src="../../images/logos/samsung-logo-circle.png" width="704" height="704" alt="Samsung">Project of the Year 2024 <span class="award-badge__sub">· SDD</span></a>
-    </div>
-    <div class="case-intro__body">
-      <div class="stack">
+<header class="mast" data-mast>
+  <a class="mast__mark" href="../../index.html" aria-label="Chandik A Chandran, home">Chandik.</a>
+  <nav class="mast__tabs" aria-label="Sections">
+    <a href="../../index.html#work" class="is-active">Work</a>
+    <a href="../../index.html#about">About</a>
+    <a href="../../index.html#after-hours">After hours</a>
+  </nav>
+  <div class="mast__cells">
+    <a class="mast__cell" href="../../files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Résumé <span aria-hidden="true">↗</span></a>
+    <a class="mast__cell mast__cell--strong" href="#contact">Get in touch</a>
+  </div>
+</header>
+
+<main class="cs">
+  <!-- Intro: back link, meta line, big title, proof stamps; story on the left, spec table on the right -->
+  <header class="cs-intro">
+    <div class="case__meta"><a href="../../index.html#work">← All work</a><span>Samsung Design Delhi</span></div>
+    <h1 class="cs-intro__title" data-lines>Samsung Health India</h1>
+    <ul class="stamps" aria-label="Recognition">
+      <li><img src="../../images/logos/if-logo.png" alt="" width="40" height="40">Design Award 2026 · Winner</li>
+      <li><img src="../../images/logos/samsung-logo-circle.png" alt="" width="40" height="40">Project of the Year 2024 · SDD</li>
+    </ul>
+    <div class="cs-intro__body">
+      <div class="cs-intro__text">
         <p>Adapting Samsung Health’s Medication feature for India, and designing the UX for Samsung’s Personal Health Records (PHR). Together, the work won an iF Design Award in 2026, and was named Project of the Year 2024 at Samsung Design Delhi.</p>
       </div>
-      <dl class="meta">
-        <div class="meta__row"><dt>Company</dt><dd>Samsung Design Delhi</dd></div>
-        <div class="meta__row"><dt>Partners</dt><dd>Tata 1mg (medication data), Eka Care (health records)</dd></div>
-        <!-- HIDDEN FOR NOW: <div class="meta__row"><dt>Research</dt><dd>Human Factors International (HFI)</dd></div> -->
-        <div class="meta__row"><dt>Launch</dt><dd>October 2024</dd></div>
-        <div class="meta__row"><dt>Recognition</dt><dd>iF Design Award 2026<br>Project of the Year 2024, Samsung Design Delhi</dd></div>
+      <dl class="spec cs-intro__spec">
+        <div class="ruled"><dt>Company</dt><dd>Samsung Design Delhi</dd></div>
+        <div class="ruled"><dt>Partners</dt><dd>Tata 1mg (medication data), Eka Care (health records)</dd></div>
+        <div class="ruled"><dt>Launch</dt><dd>October 2024</dd></div>
+        <div class="ruled"><dt>Recognition</dt><dd>iF Design Award 2026<br>Project of the Year 2024, Samsung Design Delhi</dd></div>
       </dl>
     </div>
   </header>
 
-  <figure class="figure mt-0">
+
+  <figure class="figure">
     <img src="../../images/samsung-health-india/if-key-visual.webp" width="2400" height="1340" alt="India Digital Health: Health records and Review medication screens in Samsung Health">
   </figure>
-  <figure class="figure mt-tight">
+  <figure class="figure">
     <img src="../../images/samsung-health-india/if-medication-journey.webp" width="2400" height="1350" alt="Medication journey: Scan a prescription, Digitize it, Purchase, Remind, Log and Track">
   </figure>
 
   <!-- 1. Why Medication, and why India -->
-  <section class="prose prose--split mt-section" aria-labelledby="why">
+  <section class="prose prose--split" aria-labelledby="why">
     <h2 id="why">Why Medication, and why India</h2>
     <div class="prose__body">
       <p>Samsung Health already offered medication tracking globally, with its UX framework defined by the global team. But it wasn’t built around India’s pharmacy and healthcare ecosystem. The data layer, the UX and the assumptions behind them all came from elsewhere.</p>
@@ -55,7 +73,7 @@
   </section>
 
   <!-- 2. Partner data -->
-  <section class="prose prose--split mt-section" aria-labelledby="partner">
+  <section class="prose prose--split" aria-labelledby="partner">
     <h2 id="partner">Partner data, and what it changed</h2>
     <div class="prose__body">
       <p>Samsung partnered with Tata 1mg, a trusted Indian medication database, to provide verified medication information.</p>
@@ -68,7 +86,7 @@
   </figure>
 
   <!-- HIDDEN FOR NOW: HFI research, Problems 01–02 and Feasibility. Remove this line and the closing "END HIDDEN" line to restore.
-  <section class="prose prose--split mt-section" aria-labelledby="research">
+  <section class="prose prose--split" aria-labelledby="research">
     <h2 id="research">Field research with HFI</h2>
     <div class="prose__body">
       <p>In 2025, Samsung partnered with Human Factors International for field research across Delhi, Jaipur, Hyderabad, Mumbai and Lucknow. The research defined the enhancement opportunities. Two became the main design problems.</p>
@@ -121,7 +139,7 @@
     </div>
   </section>
 
-  <section class="prose prose--split mt-section" aria-labelledby="feasibility">
+  <section class="prose prose--split" aria-labelledby="feasibility">
     <h2 id="feasibility">Feasibility and HQ alignment</h2>
     <div class="prose__body">
       <p>Before development, I ran tech feasibility checks and aligned with stakeholders at HQ.</p>
@@ -131,7 +149,7 @@
   END HIDDEN -->
 
   <!-- 7. Impact -->
-  <section class="impact mt-section" aria-label="Impact">
+  <section class="impact" aria-label="Impact">
     <p class="eyebrow">Impact</p>
     <div class="impact__body">
       <p class="metric">The feature supports <strong>1.6 million monthly active devices</strong>, generating <strong>2+ million medication interactions</strong> every month.</p>
@@ -147,7 +165,7 @@
     <figure style="--ar: 2224/2056"><img class="media" src="../../images/samsung-health-india/hero-reminder-phone-watch.webp" width="2224" height="2056" loading="lazy" alt="Medication reminder on a Galaxy phone and Galaxy Watch: “Time for your 1:30 PM medications”"></figure>
     <figure style="--ar: 2161/1801"><img class="media" src="../../images/samsung-health-india/medication-flow.webp" width="2161" height="1801" loading="lazy" alt="Medication reminder, medication list and medication detail screens"></figure>
   </div>
-  <figure class="figure mt-tight">
+  <figure class="figure">
     <img src="../../images/samsung-health-india/if-ecosystem.webp" width="2400" height="1337" loading="lazy" alt="A user surrounded by Samsung Health screens: health records, medications and ABHA card">
   </figure>
 
@@ -158,7 +176,7 @@
   </section>
 
   <!-- 9. PHR -->
-  <section class="prose prose--split mt-section" aria-labelledby="phr">
+  <section class="prose prose--split" aria-labelledby="phr">
     <h2 id="phr">Personal Health Records</h2>
     <div class="prose__body">
       <p>Samsung’s PHR is part of India’s government health-locker programme under the Ayushman Bharat Digital Mission (ABDM), delivered with Eka Care. Samsung was among the first OEMs to onboard.</p>
@@ -169,7 +187,7 @@
   <figure class="figure">
     <img src="../../images/samsung-health-india/if-abha-card.webp" width="2400" height="1345" loading="lazy" alt="ABHA health ID card on a Galaxy phone with Create ABHA, Link records and Add medication actions">
   </figure>
-  <figure class="figure mt-tight">
+  <figure class="figure">
     <img src="../../images/samsung-health-india/if-health-records-scene.webp" width="2400" height="1386" loading="lazy" alt="Health records screens layered over a person sorting prescriptions and medicines at home">
   </figure>
 
@@ -222,8 +240,30 @@
     </figure>
   </section>
 
+
+  <!-- Next project -->
+  <a class="cs-next ruled" href="../galaxy-watch-faces/index.html">
+    <span class="case__meta"><span>Next project</span><span>Samsung Design Delhi · Research &amp; visual direction setting · 2024</span></span>
+    <span class="cs-next__title">Watch Face Visual Explorations →</span>
+  </a>
 </main>
 
-<div data-include="footer"></div>
+<footer class="sec contact" id="contact" aria-label="Contact">
+  <p class="contact__big" data-lines>Let’s talk.</p>
+  <p class="contact__note"><span class="dot" aria-hidden="true"></span>Open to new roles: in-house teams and independent studios.</p>
+  <div class="contact__grid">
+    <a class="contact__mail" href="mailto:chandikachandran@gmail.com">chandikachandran@gmail.com</a>
+    <nav class="contact__links" aria-label="Elsewhere">
+      <a href="https://www.linkedin.com/in/chandik/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://www.instagram.com/chandik_/" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="../../files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+    </nav>
+  </div>
+  <div class="colophon ruled">
+    <p>© 2026 Chandik A Chandran</p>
+    <p>Set in General Sans</p>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
 </body>
 </html>
