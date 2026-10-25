@@ -347,7 +347,7 @@
   document.querySelectorAll('.intro-sheet__meta').forEach((meta) => {
     const hists = [...meta.querySelectorAll('[data-peek][data-img]')];
     const canHover = matchMedia('(hover: hover)').matches;
-    const byScroll = !canHover && meta.closest('.intro-sheet--v4');
+    const byScroll = !canHover && meta.closest('.intro-sheet--v4, [data-peek-scroll]');
     if (!hists.length || (!canHover && !byScroll)) return;
     const peek = document.createElement('span');
     peek.className = 'history-peek';

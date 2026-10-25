@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chandik A Chandran — Product Designer</title>
+<meta name="description" content="Chandik A Chandran, product designer: visual, interaction and creative code. Nearly four years of system-level UX at Samsung Design Delhi, brand at Polygon Design Inc., graphic design at NID Ahmedabad. Open to new roles.">
+<meta name="theme-color" content="#F3F2EC">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="icon" href="images/favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="icon" href="images/favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="preload" href="assets/fonts/GeneralSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/v5.css">
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/SplitText.min.js" defer></script>
+<script src="assets/js/site.js" defer></script>
+<script src="assets/js/dream-in-pixels.js" defer></script>
+<script src="assets/js/v5.js" defer></script>
+</head>
+<body class="v5">
+<!-- Homepage v5 (test, not linked from the live site). Read like a résumé:
+     summary → experience (projects nested under the job they were made in) → about, skills,
+     recognition → then the page turns to black for "After hours" (DR.I.P live, films & 3D) → contact.
+     Light = office hours, dark = after hours; the switch is scroll-linked (v5.js sets --dark on <body>).
+     Styles: assets/css/v5.css (standalone). Motion: assets/js/v5.js (GSAP ScrollTrigger + SplitText).
+     site.js runs the typewriter, About reveal, cursor and videos; dream-in-pixels.js runs DR.I.P. -->
+
+<a class="skip" href="#work">Skip to work</a>
+
+<!-- Masthead: one row, sticks. Name, then the section tabs as ruled cells (the active one is underlined),
+     then Résumé and Get in touch on the right. -->
+<header class="mast" data-mast>
+  <a class="mast__mark" href="#top" aria-label="Chandik A Chandran, back to top">Chandik.</a>
+  <nav class="mast__tabs" aria-label="Sections">
+    <a href="#work" data-spy="work">Work</a>
+    <a href="#about" data-spy="about">About</a>
+    <a href="#after-hours" data-spy="after-hours">After hours</a>
+  </nav>
+  <div class="mast__cells">
+    <a class="mast__cell" href="files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Résumé <span aria-hidden="true">↗</span></a>
+    <a class="mast__cell mast__cell--strong" href="#contact">Get in touch</a>
+  </div>
+</header>
+
+<main>
+  <!-- Summary: the typewriter line, who I am in one sentence, and the essentials -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <p class="hero__statement type-reveal" aria-label="I overthink professionally."><span class="type-reveal__ghost" aria-hidden="true">I overthink<br>professionally.</span><span class="type-reveal__text" aria-hidden="true" data-text="I overthink professionally" data-draft="I overthink every" data-away="I overthink everything|I overthink everywhere|I overthink every time"></span></p>
+    <h1 class="hero__intro" id="hero-title" data-fade>I’m Chandik A Chandran, a product designer working across <em>visual</em>, <em>interaction</em> and <em>creative code</em>.</h1>
+    <dl class="hero__specs ruled">
+      <div data-fade><dt>Experience</dt><dd>5 years · Samsung Design Delhi, Polygon Design Inc.</dd></div>
+      <div data-fade><dt>Recognition</dt><dd>iF Design Award 2026 · Best Project 2025, SDD</dd></div>
+      <div data-fade><dt>Status</dt><dd><span class="dot" aria-hidden="true"></span>Open to new roles</dd></div>
+      <div data-fade class="hero__cta"><dt class="visually-hidden">Next</dt><dd><a href="#work">See the work <span aria-hidden="true">↓</span></a></dd></div>
+    </dl>
+  </section>
+
+  <!-- EXPERIENCE: projects grouped by the job they were made in. Featured projects get a full entry
+       (.case), related ones share a spread (.pair: Communication, One UI), NID work is thumbnail cards (.thumbs).
+       The job heading rows (.role__head) are commented out for now. -->
+  <section class="sec" id="work" aria-label="Work">
+
+    <!-- Samsung -->
+    <div class="role">
+      <!-- <div class="role__head ruled" data-img="images/history/samsung.webp">
+        <p class="role__years">2022 — 2026</p>
+        <div class="role__name">
+          <h3><img class="logo-chip" src="images/logos/history-samsung.webp" width="160" height="160" alt=""> Samsung Design Delhi</h3>
+          <p>Visual Experience Designer</p>
+        </div>
+        <p class="role__scope">System-level UX for Galaxy phones and watches, from research to features used by tens of millions, and visual direction for One UI.</p>
+      </div> -->
+
+      <article class="case case--split case--split-r ruled">
+        <a class="case__media slides" data-slides style="--ar: 4 / 5" href="work/samsung-health-india/index.html" data-cursor="Research &amp; Localization" data-cursor-tone="ux" tabindex="-1" aria-hidden="true">
+          <figure class="slide"><img src="images/samsung-health-india/home-medications-trio.webp" width="2000" height="1222" alt=""></figure>
+          <figure class="slide"><img src="images/samsung-health-india/home-medication-journey.webp" width="2000" height="1125" alt=""></figure>
+          <figure class="slide"><img src="images/samsung-health-india/home-health-records.webp" width="2000" height="1114" alt=""></figure>
+        </a>
+        <div class="case__text">
+          <div class="case__meta"><span>Samsung Design Delhi · Service design · Shipped October 2024</span></div>
+          <h4 class="case__title" data-lines><a href="work/samsung-health-india/index.html">Samsung Health India</a></h4>
+          <ul class="stamps" aria-label="Recognition">
+            <li><img src="images/logos/if-logo.png" alt="" width="40" height="40">iF Design Award 2026 · Winner</li>
+            <li>Best Project 2025 · Samsung Design Delhi</li>
+          </ul>
+          <div class="case__notes">
+            <p>Samsung Health’s medication tracking was designed globally, around assumptions that didn’t hold in India’s pharmacy and healthcare ecosystem. I adapted it for India around a partnership with Tata 1mg, working out which touchpoints had to change to carry verified partner data, and which new features that data made possible.</p>
+            <p>Alongside it, I designed the UX for Samsung’s Personal Health Records under India’s Ayushman Bharat Digital Mission, with Eka Care: onboarding and record management, inside tight government infrastructure constraints. The India insights went back to the global Samsung Health team, reversing the usual direction.</p>
+            <dl class="figures">
+              <div><dt>1.6M</dt><dd>monthly active devices</dd></div>
+              <div><dt>2M+</dt><dd>medication interactions a month</dd></div>
+            </dl>
+            <dl class="spec">
+              <div class="ruled"><dt>My part</dt><dd>UX for medication and health records, research</dd></div>
+              <div class="ruled"><dt>Partners</dt><dd>Tata 1mg, Eka Care</dd></div>
+              <div class="ruled"><dt>Platform</dt><dd>Samsung Health on Galaxy</dd></div>
+            </dl>
+          </div>
+        </div>
+      </article>
+
+      <article class="case case--split case--split-r ruled">
+        <a class="case__media plate" style="--ar: 1472 / 1680" href="work/galaxy-watch-faces/index.html" data-cursor="Visual Explorations" data-cursor-tone="visual" tabindex="-1" aria-hidden="true"><img src="images/galaxy-watch-faces/simple-photo-wrist.webp" width="1472" height="1680" loading="lazy" alt="Simple Photo watch face on a wrist"></a>
+        <div class="case__text">
+          <div class="case__meta"><span>Samsung Design Delhi · Visual design · Exploration, 2024</span></div>
+          <h4 class="case__title" data-lines><a href="work/galaxy-watch-faces/index.html">Galaxy Watch Faces</a></h4>
+          <div class="case__notes">
+            <p>Two briefs for the next Galaxy Watch. For analogue faces: find what gives traditional watches their art-deco character, beyond the craftsmanship. For photo faces: turn a static picture with the time on top into something personal, contextual and composed for a round screen.</p>
+            <p>The research was a team of four. The four faces, Pop Analogue, Pop Demure, Simple Photo and Fish Eye, I designed end to end, and all four are in Samsung’s consideration library for a future release.</p>
+            <dl class="spec">
+              <div class="ruled"><dt>My part</dt><dd>All four faces, end to end</dd></div>
+              <div class="ruled"><dt>Timeline</dt><dd>6 months</dd></div>
+            </dl>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- Polygon -->
+    <div class="role">
+      <!-- <div class="role__head ruled" data-img="images/history/polygons.webp">
+        <p class="role__years">2021 — 2022</p>
+        <div class="role__name">
+          <h3><img class="logo-chip" src="images/logos/history-polygons.webp" width="160" height="160" alt=""> Polygon Design Inc.</h3>
+          <p>Graphic Designer, in-house</p>
+        </div>
+        <p class="role__scope">Building a product-first startup’s brand, from the identity and packaging to the online storefront.</p>
+      </div> -->
+
+      <!-- image on one side, all the text on the other (.case--split; -r puts the image right) -->
+      <article class="case case--split case--split-r ruled">
+        <a class="case__media plate" style="--ar: 4 / 5" href="work/polygons-rebranding-v2/index.html" data-cursor="Branding" data-cursor-tone="visual" tabindex="-1" aria-hidden="true"><img src="images/polygons-rebranding/render-scatter.webp" width="1948" height="1944" loading="lazy" alt="Folded spoons in pink, red, green and blue scattered through the air"></a>
+        <div class="case__text">
+          <div class="case__meta"><span>Polygon Design Inc. · Brand identity &amp; visual system · 2021</span></div>
+          <h4 class="case__title" data-lines><a href="work/polygons-rebranding-v2/index.html">Rebranding Polygons</a></h4>
+          <ul class="stamps" aria-label="Recognition">
+            <li>As seen on Shark Tank, 2026</li>
+          </ul>
+          <div class="case__notes">
+            <p>Polygons makes everyday products that fold flat, starting with a measuring spoon that becomes three sizes depending on how you pick it up. The product took off faster than the brand around it, so before it reached the market, the identity needed a second look.</p>
+            <p>Working in-house with the founder closely involved, our team streamlined the identity rather than replacing it, and built it from real applications (packaging, web, billboards, social) instead of a rulebook, so anyone joining later could pick it up and use it. In 2026, Polygons pitched on Shark Tank with the brand up on the screen behind them.</p>
+            <dl class="spec">
+              <div class="ruled"><dt>My part</dt><dd>Graphic designer in a team of four</dd></div>
+              <div class="ruled"><dt>Tools</dt><dd>Cinema 4D, Adobe Suite, Figma</dd></div>
+            </dl>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Smaller projects, together after Polygons: Samsung (calling, One UI) then NID university work.
+         Placed loosely on a 12-column grid (.mini--* set columns/offsets); One UI icons and
+         Wayfinding are the larger, highlighted ones (.mini--big). Images keep their proportions. -->
+    <section class="minis ruled" aria-label="More projects">
+      <div class="pair__cols">
+          <article class="pair__col mini--calls">
+            <a class="plate" style="--ar: 2108 / 2104" href="work/in-call-notes/index.html" data-cursor="Interaction Design" data-cursor-tone="ux" tabindex="-1" aria-hidden="true"><img src="images/in-call-notes/take-notes-during-call.webp" width="2108" height="2104" loading="lazy" alt=""></a>
+            <div class="pair__meta"><span>Interaction design · Shipped in One UI 6, 2023</span></div>
+            <h5 class="pair__title"><a href="work/in-call-notes/index.html">In-Call Notes</a></h5>
+            <p>People were leaving active calls to open Samsung Notes, writing down numbers, addresses and action items, then hunting for the way back. The behaviour already existed; the experience just wasn’t designed for it.</p>
+            <p>The Phone app and Samsung Notes belonged to different teams, so the work was as much alignment as design. I reframed it as a bridge between two existing products: notes open from the call with its controls in view, carry the caller and time automatically, come back right after you hang up, and stay linked to the contact.</p>
+            <dl class="figures">
+              <div><dt>25M+</dt><dd>users as of 2025</dd></div>
+              <div><dt>11M+</dt><dd>in the first year</dd></div>
+            </dl>
+            <dl class="spec">
+              <div class="ruled"><dt>My part</dt><dd>End to end, from spotting the opportunity to commercialisation</dd></div>
+              <div class="ruled"><dt>Teams</dt><dd>Phone, Samsung Notes, SRIN-N (R&amp;D)</dd></div>
+            </dl>
+          </article>
+          <article class="pair__col mini--callerid">
+            <a class="plate" style="--ar: 938 / 1028" href="work/rcs-caller-id/index.html" data-cursor="Application Design" data-cursor-tone="ux" tabindex="-1" aria-hidden="true"><img src="images/home/rcs-caller-id.webp" width="938" height="1028" loading="lazy" alt=""></a>
+            <div class="pair__meta"><span>Application design · Shipped, since 2022</span></div>
+            <h5 class="pair__title"><a href="work/rcs-caller-id/index.html">Business Caller ID</a></h5>
+            <p>Samsung’s in-house answer to spam calls. Samsung partners directly with network carriers to verify that a call really comes from the business it claims to be, and shows the reason for the call, provided by the business itself.</p>
+            <p>From 2022 I took it beyond its US launch to new carriers, each with its own requirements: some wanted their network name beside the call message, others didn’t. I designed the incoming-call screen and notification touchpoints to meet each carrier’s needs while staying clear and concise for people.</p>
+            <dl class="figures">
+              <div><dt>8+</dt><dd>network carriers</dd></div>
+              <div><dt>3</dt><dd>regions: USA, Canada &amp; South America</dd></div>
+            </dl>
+            <p class="pair__note">Commercialised across the USA, Canada and South America.</p>
+            <dl class="spec">
+              <div class="ruled"><dt>My part</dt><dd>UX touchpoints per carrier, stakeholder alignment</dd></div>
+              <div class="ruled"><dt>Part of</dt><dd>Rich Call Services (RCS)</dd></div>
+            </dl>
+          </article>
+          <article class="pair__col mini--icons mini--big">
+            <a class="plate" style="--ar: 1101 / 715" href="work/one-ui-icon-strategy/index.html" data-cursor="Visual Strategy" data-cursor-tone="visual" tabindex="-1" aria-hidden="true"><img src="images/one-ui-icon-strategy/icons-proposed.webp" width="1101" height="715" loading="lazy" alt=""></a>
+            <div class="pair__meta"><span>Visual strategy · Research, 2025</span></div>
+            <h5 class="pair__title"><a href="work/one-ui-icon-strategy/index.html">One UI 7 Icons Strategy</a></h5>
+            <p>For years, One UI’s icons have been bright squircles with flat white symbols: simple, consistent and instantly Samsung. But recognisable isn’t the same as intuitive, and across the industry icons were turning back into objects with depth, material and a story.</p>
+            <p>With a team of three, I benchmarked iOS, stock Android, Nothing, Xiaomi, Huawei, Oppo and Microsoft, app by app, through three lenses: container and grid, shape and metaphor, colour and material. The case we made, for essential but expressive icons that keep One UI’s clarity, set the direction for the One UI 7 icons.</p>
+            <dl class="spec">
+              <div class="ruled"><dt>My part</dt><dd>Benchmarking, research, strategy</dd></div>
+              <div class="ruled"><dt>Outcome</dt><dd>Direction used for the One UI 7 icons</dd></div>
+            </dl>
+          </article>
+          <article class="pair__col mini--future">
+            <a class="plate" style="--ar: 2400 / 1350" href="work/one-ui-visual-philosophy/index.html" data-cursor="Visual Explorations" data-cursor-tone="visual" tabindex="-1" aria-hidden="true"><img src="images/one-ui-visual-philosophy/identity-phone.webp" width="2400" height="1350" loading="lazy" alt=""></a>
+            <div class="pair__meta"><span>Visual direction · Exploration, 2024</span></div>
+            <h5 class="pair__title"><a href="work/one-ui-visual-philosophy/index.html">Future One UI Visual Design</a></h5>
+            <p>Galaxy devices are functionally exceptional, yet to Gen Z they feel practical rather than desirable. Competitive analysis of iOS, Nothing OS and Pixel, and user perception studies, pointed to four differentiators: visual clarity, intentional restraint, a cohesive language and subtle personality.</p>
+            <p>Instead of refining screens, I audited the whole ecosystem (every app, widget, notification and system interaction) to find where coherence broke down, then designed the feeling first and let the interface follow. The output is a reference framework to guide product work for years.</p>
+            <dl class="spec">
+              <div class="ruled"><dt>My part</dt><dd>Ecosystem audit, visual direction</dd></div>
+              <div class="ruled"><dt>Status</dt><dd>Exploration, a reference for future work</dd></div>
+            </dl>
+          </article>
+          <article class="pair__col mini--wayfinding mini--big">
+            <a class="plate" style="--ar: 1817 / 1436" href="https://www.behance.net/gallery/109468851/Signage-Wayfinding-at-NID-Ahmedabad-DesignProject3" target="_blank" rel="noopener" data-cursor="Wayfinding Design" data-cursor-tone="visual" tabindex="-1" aria-hidden="true"><img src="images/home/nid-wayfinding-signage.webp" width="1817" height="1436" loading="lazy" alt=""></a>
+            <div class="pair__meta"><span>NID Ahmedabad · University project · Wayfinding</span></div>
+            <h5 class="pair__title"><a href="https://www.behance.net/gallery/109468851/Signage-Wayfinding-at-NID-Ahmedabad-DesignProject3" target="_blank" rel="noopener">Wayfinding System at NID <span aria-hidden="true">↗</span></a></h5>
+            <p>A dynamic signage system for a campus where rooms keep changing purpose, events are frequent and visitors are many: understanding the fundamentals of wayfinding, and how it should adapt to its purpose.</p>
+          </article>
+      </div>
+    </section>
+
+    <!-- NID -->
+    <div class="role">
+      <!-- <div class="role__head ruled" data-img="images/history/nid.webp">
+        <p class="role__years">Graduated 2021</p>
+        <div class="role__name">
+          <h3><img class="logo-chip" src="images/logos/history-nid.webp" width="160" height="160" alt=""> National Institute of Design</h3>
+          <p>B.Des, Graphic Design · Ahmedabad</p>
+        </div>
+        <p class="role__scope">Where it all started: typography, systems, space, film and a lot of making by hand.</p>
+      </div> -->
+    </div>
+  </section>
+
+  <!-- ABOUT: portrait + scroll-revealed statement (site.js 2f), then the rest of the résumé as a spec table -->
+  <section class="sec" id="about" aria-label="About">
+    <div class="about5">
+      <div class="about5__text">
+        <p class="about5__hello" data-fade><span>Hi, I’m</span> Chandik.</p>
+        <p class="about5__reveal" data-reveal><span class="hl">I overthink professionally</span>. Mostly that means I want to understand why something works, and why people feel the way they do when they use it. In UX, <span class="hl">everyone treats function as God, and I’m an atheist.</span> We are emotional beings, and that’s what people actually respond to, so that’s what I like designing for. I spend a lot of time on the small moments that make a screen feel like it was made for a person.</p>
+      </div>
+      <!-- stamp-sized portrait (placeholder until the stamp photo arrives) -->
+      <figure class="about5__photo"><img src="images/about/photo.webp" width="900" height="1200" loading="lazy" alt="Portrait of Chandik A Chandran"></figure>
+    </div>
+    <dl class="details">
+      <div class="ruled"><dt>Disciplines</dt><dd>UX &amp; interaction design · Visual design &amp; direction · Research &amp; benchmarking · Brand identity · 3D · Creative coding</dd></div>
+      <div class="ruled"><dt>Tools</dt><dd>Figma · Illustrator · Photoshop · Premiere Pro · Sketch · Cinema 4D · Midjourney · Claude Code</dd></div>
+      <div class="ruled"><dt>Recognition</dt><dd>iF Design Award 2026, Samsung Health India<br>Best Project 2025, Samsung Design Delhi</dd></div>
+      <div class="ruled"><dt>Education</dt><dd>B.Des, Graphic Design, National Institute of Design, Ahmedabad <span>2021</span></dd></div>
+      <div class="ruled"><dt>Status</dt><dd><span class="dot" aria-hidden="true"></span>Open to new roles</dd></div>
+      <div class="ruled"><dt>Résumé</dt><dd><a href="files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Download PDF ↗</a></dd></div>
+    </dl>
+  </section>
+
+  <!-- THE TURN: the page fades to black across this block (v5.js, scroll-linked, reverses going up).
+       Line two is in the light page colour, so it only appears as the background darkens. -->
+  <section class="turn" aria-label="After hours">
+    <p class="turn__a">That’s the work they pay me for.</p>
+    <p class="turn__b">This is what I make when no one’s asking.</p>
+  </section>
+
+  <!-- AFTER HOURS -->
+  <section class="sec" id="after-hours" aria-label="After hours">
+    <!-- DR.I.P: the four artworks, live. One shows at a time; the others are display:none, so
+         dream-in-pixels.js pauses them (it only draws pieces that are on screen). -->
+    <div class="drip">
+      <div class="drip__stage">
+        <div class="artwork is-on" data-art="pixel-moves" id="drip-1"><div class="artwork__stage"><canvas aria-label="Pixel Moves: four pixel flowers slowly turning while their colours flow outward from the centre"></canvas></div><div class="artwork__controls" hidden></div></div>
+        <div class="artwork" data-art="ripple-field" id="drip-2"><div class="artwork__stage"><canvas aria-label="Ripple Field I: cross-shaped ripples of colour spread across a grid of squares. Tap to send another."></canvas></div><div class="artwork__controls" hidden></div></div>
+        <div class="artwork" data-art="ripple-field-ii" id="drip-3"><div class="artwork__stage"><canvas aria-label="Ripple Field II: turning, cross-shaped ripples spread across a grid of squares. Tap to send another."></canvas></div><div class="artwork__controls" hidden></div></div>
+        <div class="artwork" data-art="stitch" id="drip-4"><div class="artwork__stage"><canvas aria-label="Stitch: threads wander across a woven grid. Tap a cell to start a thread."></canvas></div><div class="artwork__controls" hidden></div></div>
+      </div>
+      <div class="drip__info">
+        <p class="drip__kicker">Series · Interactive art · 2026</p>
+        <h3 class="drip__title" data-lines>DR.I.P</h3>
+        <p class="drip__sub">I dream in pixels</p>
+        <p class="drip__text">There’s an unexplainable beauty in imperfect visuals: noise, grunge, light bleeds and huge, chunky pixels. I have a love-hate relationship with colour, so this series goes all the way to the extreme. Written in code with Claude Code, and running live right here.</p>
+        <ol class="drip__list" aria-label="Pieces">
+          <li><button type="button" data-show="drip-1" data-hint="Watch the colours drip outward." aria-pressed="true"><span>01</span>Pixel Moves</button></li>
+          <li><button type="button" data-show="drip-2" data-hint="Tap the artwork to send a ripple." aria-pressed="false"><span>02</span>Ripple Field I</button></li>
+          <li><button type="button" data-show="drip-3" data-hint="Tap the artwork to send a turning ripple." aria-pressed="false"><span>03</span>Ripple Field II</button></li>
+          <li><button type="button" data-show="drip-4" data-hint="Tap a cell to start a new thread." aria-pressed="false"><span>04</span>Stitch</button></li>
+        </ol>
+        <p class="drip__hint" aria-live="polite">Watch the colours drip outward.</p>
+        <a class="drip__cta" href="dream-in-pixels.html">Open the full series, with controls <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <!-- Films & 3D: one per row, caption beside, placed loosely (.film--1…4 set columns).
+         Silent, lazy videos that only play on screen (site.js 2b). -->
+    <div class="films">
+      <figure class="piece film film--1">
+        <a data-cursor="View on Instagram" class="play-tile" style="--ar: 16 / 9" href="https://www.instagram.com/p/DVyVM-Yk0Dz/" target="_blank" rel="noopener" aria-label="Shuffle 2025 (opens Instagram)">
+          <video src="videos/wrap-2025.mp4" poster="images/play/wrap-2025.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption><span>Video edit · 2026</span><strong>Shuffle 2025</strong><p>A wrap-up of the year’s best moments. Something very personal, made for myself, not for an audience.</p></figcaption>
+      </figure>
+      <figure class="piece film film--2">
+        <a data-cursor="View on Instagram" class="play-tile" style="--ar: 1 / 1" href="https://www.instagram.com/p/COj-nkgp3AN/?img_index=1" target="_blank" rel="noopener" aria-label="Black ice (opens Instagram)">
+          <video src="videos/black-ice.mp4" poster="images/play/black-ice.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption><span>3D · 2021</span><strong>Black ice</strong><p>A 3D study of dark water and ice. Cinema 4D, rendered with Arnold.</p></figcaption>
+      </figure>
+      <figure class="piece film film--3">
+        <a data-cursor="View on Behance" class="play-tile" style="--ar: 1080 / 460" href="https://www.behance.net/gallery/92437901/A-Casual-Breakfast-BBC-League-Promo-2020" target="_blank" rel="noopener" aria-label="A Casual Breakfast (opens Behance)">
+          <video src="videos/casual-breakfast.mp4" poster="images/play/casual-breakfast.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption><span>Promo film · 2020</span><strong>A Casual Breakfast</strong><p>A promo for BBC League, NID’s mini football tournament, played out at a breakfast table instead of a pitch. My concept, choreographed and animated frame by frame with a team of friends.</p></figcaption>
+      </figure>
+      <figure class="piece film film--4">
+        <a data-cursor="View on Instagram" class="play-tile" style="--ar: 1 / 1" href="https://www.instagram.com/p/B_M8jq8jw4v/" target="_blank" rel="noopener" aria-label="Shuffle 2019 (opens Instagram)">
+          <video src="videos/good-times-2019.mp4" poster="images/play/good-times-2019.webp" muted loop playsinline preload="none"></video>
+        </a>
+        <figcaption><span>Video edit · 2020</span><strong>Shuffle 2019</strong><p>Another year’s wrap-up of the best moments, kept for myself.</p></figcaption>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="sec contact" id="contact" aria-label="Contact">
+  <p class="contact__big" data-lines>Let’s talk.</p>
+  <p class="contact__note"><span class="dot" aria-hidden="true"></span>Open to new roles: in-house teams and independent studios.</p>
+  <div class="contact__grid">
+    <a class="contact__mail" href="mailto:chandikachandran@gmail.com">chandikachandran@gmail.com</a>
+    <nav class="contact__links" aria-label="Elsewhere">
+      <a href="https://www.linkedin.com/in/chandik/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://www.instagram.com/chandik_/" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Résumé ↗</a>
+    </nav>
+  </div>
+  <div class="colophon ruled">
+    <p>© 2026 Chandik A Chandran</p>
+    <p>Set in General Sans</p>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+</body>
+</html>
