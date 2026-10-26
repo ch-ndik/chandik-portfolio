@@ -797,3 +797,28 @@ body.has-hero .hero { min-height: 100svh; }
   .cs .scroll-seq__layer { position: static; opacity: 1; transform: none; }
   .cs .scroll-seq__dots, .cs .scroll-seq__captions { display: none; }
 }
+
+/* 10. HERO UNDERLAY (homepage) ----------------------------------------------------------
+   The hero stays pinned at the back (z 0) while the work scrolls up over it (z 1, opaque).
+   At About, the page opens up again: About is transparent, so the hero shows through as if it
+   had been resting underneath, with only the typed line left (its flood colour remembered),
+   and About scrolls over it as the explanation of "I overthink professionally".
+   v5.js (section 7) sets .is-covered / .is-resting on the hero and --rest-o on its line. */
+body.has-hero .hero { position: sticky; top: 0; z-index: 0; }
+body.has-hero #work, body.has-hero .turn, body.has-hero #after-hours, body.has-hero > .contact { position: relative; z-index: 1; background: var(--bg); }
+/* after About, the space between sections is padding (painted) rather than margin (see-through),
+   so the pinned hero can't show in the gaps */
+body.has-hero #after-hours { margin-top: 0; padding-top: clamp(120px, 14vw, 224px); }
+/* About: see-through, and a screen of breathing room first so the resting hero reads on its own.
+   Clicks in the open space fall through to the hero, so its colours can still be played with. */
+body.has-hero #about { position: relative; z-index: 1; padding-top: 72svh; pointer-events: none; }
+body.has-hero #about > * { pointer-events: auto; }
+/* resting: the intro and the specs step back; only the typed line remains */
+.hero .hero__intro, .hero .hero__specs, .hero .hero__statement { transition: filter .6s var(--ease), color .5s var(--ease); }
+/* !important: the flood's blur leaves an inline filter for a moment; the resting state must still win */
+.hero.is-resting .hero__intro, .hero.is-resting .hero__specs { filter: opacity(0) !important; pointer-events: none; }
+.hero.is-resting .hero__statement { filter: opacity(var(--rest-o, 1)) !important; transition: color .5s var(--ease); }
+/* About's text follows the hero's flood, so it stays readable on whatever colour is underneath */
+body:has(.hero.is-flooded) #about { --ink: #0B0B0A; --ink-2: rgb(11 11 10 / .68); --ink-3: rgb(11 11 10 / .44); --rule: rgb(11 11 10 / .2); }
+body:has(.hero.is-flooded-dark) #about { --ink: #FFFFE3; --ink-2: rgb(255 255 227 / .66); --ink-3: rgb(255 255 227 / .45); --rule: rgb(255 255 227 / .22); }
+#about { color: var(--ink); }

@@ -276,7 +276,7 @@
     let inView = true, n = 0;
     const check = () => {
       const r = box.getBoundingClientRect();
-      const now = r.bottom > 0 && r.top < innerHeight;
+      const now = r.bottom > 0 && r.top < innerHeight && !box.closest('.is-covered');   // a pinned hero under the work counts as away
       if (now === inView || !away.length) return;
       inView = now;
       if (now) play([350, [final, 'quick']]);

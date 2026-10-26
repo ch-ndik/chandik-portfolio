@@ -268,3 +268,35 @@
     });
   });
 })();
+
+/* 7. Hero underlay (homepage). The hero is pinned behind the page (v5.css section 10).
+   .is-covered  while the work is over it: the typed line counts as out of view (site.js 2e),
+                so it drifts to an "away" line and types its way back when uncovered.
+   .is-resting  once About arrives: intro and specs fade, only the typed line stays.
+   --rest-o     the line fades back as About's text scrolls over it. */
+(() => {
+  const hero = document.querySelector('.hero');
+  const work = document.getElementById('work');
+  const about = document.getElementById('about');
+  const aboutText = about?.querySelector('.about5');
+  const line = hero?.querySelector('.hero__statement');
+  if (!hero || !work || !about || !document.body.classList.contains('has-hero')) return;
+  const update = () => {
+    const h = innerHeight;
+    const workTop = work.getBoundingClientRect().top;
+    const aboutTop = about.getBoundingClientRect().top;
+    const resting = work.getBoundingClientRect().bottom < h || aboutTop < h * 0.95;   // as soon as the work has scrolled past
+    const covered = workTop < h * 0.15 && !resting;
+    hero.classList.toggle('is-covered', covered);
+    hero.classList.toggle('is-resting', resting);
+    if (aboutText && line) {
+      const overlap = line.getBoundingClientRect().bottom - aboutText.getBoundingClientRect().top;
+      const p = Math.min(1, Math.max(0, overlap / (h * 0.35)));
+      hero.style.setProperty('--rest-o', (1 - 0.88 * p).toFixed(3));
+    }
+  };
+  let queued = false;
+  addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; update(); }); } }, { passive: true });
+  addEventListener('resize', update);
+  update();
+})();
