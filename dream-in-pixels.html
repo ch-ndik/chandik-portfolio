@@ -5,28 +5,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>I dream in pixels — Chandik A Chandran</title>
 <meta name="description" content="I dream in pixels: an exploration series of interactive pixel artworks made with Claude Code.">
+<meta name="theme-color" content="#000000">
+<script>document.documentElement.classList.add('js')</script>
 <link rel="icon" href="images/favicon-light.png" media="(prefers-color-scheme: light)">
 <link rel="icon" href="images/favicon-dark.png" media="(prefers-color-scheme: dark)">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap">
-<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="preload" href="assets/fonts/GeneralSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/v5.css">
+<style>
+  /* I dream in pixels, in the v5 style: the whole page sits in after-hours black */
+  body.v5.dip { --dark: 1; background: var(--bg); color: var(--ink); }
+  .dip .artwork { margin-top: clamp(96px, 12vw, 192px); }
+  .dip .artwork__stage { max-width: min(100%, 80vh); margin-inline: auto; }
+  .dip .artwork__stage canvas[data-tap] { cursor: crosshair; }
+  .dip .artwork__texture { position: absolute; inset: 0; pointer-events: none; image-rendering: pixelated; background-size: 128px 128px; }
+  .dip .artwork__controls { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 24px; margin-top: 20px; }
+  .dip .artwork__controls:empty { display: none; }
+  .dip .artwork__info { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); margin-top: clamp(32px, 4vw, 56px); }
+  .dip .artwork__info > div:first-child { grid-column: 1 / span 4; }
+  .dip .artwork__info > div:last-child { grid-column: 6 / -1; }
+  .dip .artwork__info h2 { margin-top: 6px; font-size: clamp(32px, calc(3.6 * var(--vw)), 64px); font-weight: 600; line-height: 1; letter-spacing: -0.04em; }
+  .dip .artwork__how, .dip .artwork__what { display: grid; gap: 12px; font-size: clamp(16px, calc(1.1 * var(--vw)), 18px); line-height: 1.5; }
+  .dip .artwork__how p { color: var(--ink); }
+  .dip .artwork__what { margin-top: 20px; }
+  .dip .artwork__what p { color: var(--ink-2); }
+  @media (max-width: 900px) { .dip .artwork__info > div { grid-column: 1 / -1 !important; } .dip .artwork__info > div:last-child { margin-top: 16px; } }
+  .dip .cs-intro__text { grid-column: 1 / span 7; }
+  .dip .cs-intro__text p + p { margin-top: 1em; }
+  @media (max-width: 900px) { .dip .cs-intro__text { grid-column: 1 / -1; } }
+  /* controls */
+  .ctl { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink); }
+  .ctl__label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  .stepper { display: inline-flex; align-items: center; height: 34px; border: 1px solid var(--rule-strong); border-radius: 100px; }
+  .stepper button { width: 32px; height: 32px; border-radius: 50%; font-size: 16px; line-height: 1; transition: background-color .2s, opacity .2s; }
+  .stepper button:hover:not(:disabled) { background: var(--rule); }
+  .stepper button:disabled { opacity: .3; cursor: default; }
+  .stepper output { min-width: 2.5ch; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .dip .btn { margin-top: 0; padding: 7px 14px; font-size: 13px; }
+  .dip .btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .tally { display: inline-flex; flex-wrap: wrap; gap: 10px; }
+  .tally span { display: inline-flex; }
+  .tally input[type=color] { width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; box-shadow: 0 0 0 1px var(--rule-strong); overflow: hidden; }
+  .tally input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+  .tally input[type=color]::-webkit-color-swatch { border: none; border-radius: 50%; }
+  .tally input[type=color]::-moz-color-swatch { border: none; border-radius: 50%; }
+</style>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/SplitText.min.js" defer></script>
 <script src="assets/js/site.js" defer></script>
+<script src="assets/js/v5.js" defer></script>
 <script src="assets/js/dream-in-pixels.js" defer></script>
 </head>
-<body data-page="work" class="page-dark">
-<div data-include="nav"></div>
+<body class="v5 dip">
+<header class="mast" data-mast>
+  <a class="mast__mark" href="index.html" aria-label="Chandik A Chandran, home">Chandik.</a>
+  <nav class="mast__tabs" aria-label="Sections">
+    <a href="index.html#work">Work</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#after-hours" class="is-active">After hours</a>
+  </nav>
+  <div class="mast__cells">
+    <a class="mast__cell" href="files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">↗</span></a>
+    <a class="mast__cell mast__cell--strong" href="#contact">Get in touch</a>
+  </div>
+</header>
 
 <!-- I dream in pixels (dr-i-p): interactive pixel artworks, one after the other.
      Each <section class="artwork" data-art="…"> is brought to life by assets/js/dream-in-pixels.js,
      which also fills its .artwork__controls. To add a piece: write it there, then add a section here. -->
-<main class="container">
-  <header class="case-intro">
-    <a class="case-intro__back" href="index.html#side-title"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8H3M7 4 3 8l4 4"/></svg>All work</a>
-    <h1>I dream in pixels</h1>
-    <p class="case-intro__subtitle">An exploration series · made with Claude Code · 2026</p>
-    <div class="case-intro__body">
-      <div class="stack">
+<main class="cs">
+  <header class="cs-intro">
+    <div class="case__meta"><a href="index.html#after-hours">← All work</a><span>Interactive art series · 2026 · Ongoing</span></div>
+    <h1 class="cs-intro__title" data-lines>I dream in pixels</h1>
+    <div class="cs-intro__body">
+      <div class="cs-intro__text">
         <p>There’s an unexplainable beauty in imperfect visuals: noise, grunge, scratches, blur, light bleeds, and huge, chunky pixels.</p>
         <p>I have a love-hate relationship with colours, so I thought I’d get over my fear of them.</p>
         <p>One of my faculty members back in college made us draw caricatures before we moved on to realistic portraits. His explanation was that the human brain is afraid of making mistakes, so we limit ourselves. So go all in and make everything extra. Then, when you try a less exaggerated version, you see every curve and detail, and you know exactly how much is necessary.</p>
@@ -89,6 +141,22 @@
   </section>
 </main>
 
-<div data-include="footer"></div>
+<footer class="sec contact" id="contact" aria-label="Contact">
+  <p class="contact__big" data-lines>Let’s talk.</p>
+  <p class="contact__note"><span class="dot" aria-hidden="true"></span>Open to new roles: in-house teams and independent studios.</p>
+  <div class="contact__grid">
+    <a class="contact__mail" href="mailto:chandikachandran@gmail.com">chandikachandran@gmail.com</a>
+    <nav class="contact__links" aria-label="Elsewhere">
+      <a href="https://www.linkedin.com/in/chandik/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://www.instagram.com/chandik_/" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="files/chandik-chandran-resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+    </nav>
+  </div>
+  <div class="colophon ruled">
+    <p>© 2026 Chandik A Chandran</p>
+    <a class="colophon__home" href="index.html">← Back to home</a>
+    <p class="colophon__made">Made with ❤️, 🧠, Figma and Claude Code.</p>
+  </div>
+</footer>
 </body>
 </html>
