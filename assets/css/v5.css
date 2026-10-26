@@ -711,6 +711,7 @@ body.has-hero .hero { min-height: 100svh; }
 .about5__reveal { max-width: 19em; margin-inline: auto; }
 .about5__reveal { font-size: clamp(26px, calc(3.2 * var(--vw)), 48px); }
 .about5__reveal .c.hl { font-weight: 700; }
+.minis .pair__col.is-linked { cursor: pointer; }
 .about5__photo { align-self: center; width: clamp(140px, calc(15 * var(--vw)), 190px); margin-top: clamp(48px, 6vw, 88px); }
 @media (max-width: 900px) { .about5__photo { width: 140px; } .about5__text { margin-top: 0; } }
 

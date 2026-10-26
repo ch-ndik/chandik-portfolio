@@ -292,16 +292,18 @@
     const letters = [];
     const walk = (node, hl) => node.childNodes.forEach((n) => {
       if (n.nodeType === 3) [...n.textContent].forEach((ch) => letters.push({ ch, hl }));
+      else if (n.nodeName === 'BR') letters.push({ br: true });   // <br>s survive the split
       else walk(n, hl || n.classList?.contains('hl'));
     });
     walk(el, false);
     const words = [];
     letters.forEach((l) => {
-      if (/\s/.test(l.ch)) { if (words.at(-1)?.length) words.push([]); }
+      if (l.br) words.push('<br>', []);
+      else if (/\s/.test(l.ch)) { if (words.at(-1)?.length) words.push([]); }
       else { if (!words.length) words.push([]); words.at(-1).push(l); }
     });
     el.setAttribute('aria-label', el.textContent.trim().replace(/\s+/g, ' '));
-    el.innerHTML = words.filter((w) => w.length).map((w) => `<span class="w" aria-hidden="true">${w.map((l) => `<span class="c${l.hl ? ' hl' : ''}">${l.ch}</span>`).join('')}</span>`).join(' ');
+    el.innerHTML = words.filter((w) => w.length).map((w) => w === '<br>' ? w : `<span class="w" aria-hidden="true">${w.map((l) => `<span class="c${l.hl ? ' hl' : ''}">${l.ch}</span>`).join('')}</span>`).join(' ');
     const chars = [...el.querySelectorAll('.c')];
     if (reduceMotion) { chars.forEach((c) => c.classList.add('on')); return; }
     const update = () => {
@@ -314,6 +316,20 @@
     addEventListener('scroll', update, { passive: true });
     addEventListener('resize', update);
     update();
+  });
+
+  /* 2f2. Homepage project cards: the whole card opens the project, not just the image and title.
+     The card takes the image's cursor label; clicks on real links, or while selecting text, are left alone. */
+  document.querySelectorAll('.minis .pair__col').forEach((card) => {
+    const link = card.querySelector(':scope > a.plate, :scope > a.slides');
+    if (!link) return;
+    card.classList.add('is-linked');
+    if (link.dataset.cursor) { card.dataset.cursor = link.dataset.cursor; card.dataset.cursorTone = link.dataset.cursorTone || ''; }
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a, button') || String(getSelection()).length) return;
+      if (link.target === '_blank' || e.metaKey || e.ctrlKey) window.open(link.href, '_blank', 'noopener');
+      else location.href = link.href;
+    });
   });
 
   /* 2g. Dot-grid parallax: background drifts at 35% of the scroll speed */
