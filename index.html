@@ -59,7 +59,7 @@
   html:has(body.v8) { background: #F3F2EC; }
   /* v9: the layer is the viewport itself, fixed; the page scrolls underneath the strokes */
   .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: normal;   /* plain paint, so it shows on the black after-hours area too */
-    opacity: calc(.5 - .27 * var(--dark, 0)); }   /* 50% on paper, easing to 23% as the page turns black */
+    opacity: calc(.5 - .35 * var(--dark, 0)); }   /* 50% on paper, easing to 15% as the page turns black */
   .hl-layer canvas { position: absolute; left: 0; display: block; }
   /* no overlap darkening: a newer stroke simply sits on top of older ones */
   .hl-clear {
