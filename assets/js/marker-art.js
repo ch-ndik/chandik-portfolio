@@ -2,8 +2,7 @@
    Same canvas as the homepage: strokes are kept in this browser (localStorage, screen coordinates),
    so what you drew on the homepage shows here, and what you draw here shows there. The light content
    above stays clean; the marker only appears, and only draws, inside the dark blocks. Each block holds
-   a screen-sized canvas behind its content, clipped to it and kept lined up with the screen as the page
-   scrolls, so strokes stay put on screen like on the homepage. Mouse only; phones just see the art. */
+   a screen-sized canvas, fixed to the screen and clipped to the block, so strokes stay put on screen like on the homepage. Mouse only; phones just see the art. */
 (() => {
   const blocks = [...document.querySelectorAll('.cs-next.is-dark, body > .contact')];
   if (!blocks.length) return;
@@ -18,8 +17,8 @@
 
   const style = document.createElement('style');
   style.textContent = `
-    .has-marker-art { position: relative; overflow: hidden; isolation: isolate; }
-    .marker-art { position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none; opacity: .8; will-change: transform; }
+    .has-marker-art { position: relative; isolation: isolate; clip-path: inset(0); }   /* clip-path also clips a fixed child */
+    .marker-art { position: fixed; left: 0; top: 0; z-index: -1; pointer-events: none; opacity: .8; }
   `;
   document.head.append(style);
   const canvases = blocks.map((b) => {
@@ -53,15 +52,8 @@
       ctx.drawImage(live, 0, 0);
     });
     canvases.forEach((c) => { c.width = w; c.height = h; c.getContext('2d').drawImage(art, 0, 0); });
-    place();
   };
-  // keep each canvas over the screen: shift it by however far its block is from the screen's corner
-  const place = () => blocks.forEach((b, i) => {
-    const r = b.getBoundingClientRect();
-    canvases[i].style.transform = `translate(${-r.left}px, ${-r.top}px)`;
-  });
   draw();
-  addEventListener('scroll', place, { passive: true });
   let t;
   addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 150); });
 
