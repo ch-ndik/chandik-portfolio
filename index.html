@@ -57,9 +57,17 @@
      Thumbnails sit above it, so strokes never cover them. */
   /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
   html:has(body.v8) { background: #F3F2EC; }
-  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .5; }
+  /* v9: the layer is the viewport itself, fixed; the page scrolls underneath the strokes */
+  .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: normal;   /* v9: plain 50% paint, so it shows on the black after-hours area too */  opacity: .5; }
   .hl-layer canvas { position: absolute; left: 0; display: block; }
   .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* the stroke being drawn darkens the earlier ones it crosses */
+  .hl-clear {
+    position: fixed; right: 16px; bottom: 16px; z-index: 50; padding: 10px 16px; border-radius: 100px;
+    background: var(--bg); color: var(--ink); border: 1px solid var(--rule); font-size: 13px; font-weight: 600;
+    transition: background-color .25s var(--ease), color .25s var(--ease);
+  }   /* page-coloured, and above the marker layer, so strokes never run over it */
+  .hl-clear:hover { background: var(--ink); color: var(--bg); }
+  .hl-clear[hidden] { display: none; }
 </style>
 </head>
 <body class="v5 v7 v8">
@@ -375,7 +383,8 @@
 </footer>
 
 <script>
-/* v8 highlighter: the mouse leaves a #BFFF00 trail wherever it moves (no clicking), including
+/* v9 highlighter (test): like v8, but the canvas is the viewport and stays put while the page scrolls.
+   v8 notes: the mouse leaves a #BFFF00 trail wherever it moves (no clicking), including
    while scrolling with the mouse held still. The trail is
    fixed to the page, so it scrolls with the content. Drawn in 2048px-tall canvas tiles, made only
    where a stroke lands, so a long page doesn't need one giant canvas. Mouse and touch. */
@@ -384,28 +393,30 @@
   const hero = document.querySelector('.hero');
   hero?.addEventListener('click', (e) => e.stopImmediatePropagation(), true);
 
-  const TILE = 2048, WIDTH = 22, COLOUR = '#BFFF00';
+  const TILE = 1e9, WIDTH = 22;
+  // every time the homepage is shown (first visit, refresh, coming back from a project) the marker
+  // takes the next colour: lime, sky blue, peach, yellow, baby pink, then round again.
+  const COLOURS = ['#BFFF00', '#7FD4FF', '#FFB38A', '#FFE500', '#FFB6D9'];
+  const nextColour = () => {
+    let n = 0;
+    try { n = +localStorage.getItem('chandik-marker-visits') || 0; localStorage.setItem('chandik-marker-visits', n + 1); } catch { /* no storage: always lime */ }
+    return COLOURS[n % COLOURS.length];
+  };
+  let COLOUR = nextColour(), mine = COLOUR;
+  // back/forward can restore the page without reloading it: that counts as coming back too
+  addEventListener('pageshow', (e) => { if (e.persisted) { commit(); COLOUR = mine = nextColour(); } });
   const layer = document.createElement('div');
   layer.className = 'hl-layer';
   layer.setAttribute('aria-hidden', 'true');
   document.body.prepend(layer);
-  // the layer is clipped to the end of the footer, so a tile can never make the page longer
-  const fit = () => {
-    const end = document.querySelector('body > .contact') || document.body.lastElementChild;
-    layer.style.height = Math.ceil(end.getBoundingClientRect().bottom + scrollY) + 'px';
-  };
-  fit();
-  addEventListener('load', fit);
-  addEventListener('resize', fit);
-  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(document.querySelector('main') || document.body);
   // each tile = a "done" canvas (finished strokes, multiplied into each other so overlaps darken)
   // and a "live" canvas on top (the stroke being drawn, itself multiplied over the done strokes)
   const tiles = new Map();
   const make = (i, live) => {
     const c = document.createElement('canvas');
     c.width = document.documentElement.clientWidth;
-    c.height = TILE;
-    c.style.top = `${i * TILE}px`;
+    c.height = innerHeight;
+    c.style.top = '0';
     if (live) c.className = 'is-live';
     layer.append(c);
     const ctx = c.getContext('2d');
@@ -420,18 +431,56 @@
     const top = Math.floor((Math.min(a.y, b.y) - WIDTH) / TILE), bottom = Math.floor((Math.max(a.y, b.y) + WIDTH) / TILE);
     for (let i = Math.max(0, top); i <= bottom; i++) {
       const t = tile(i), off = i * TILE;
+      t.live.strokeStyle = COLOUR;
       t.live.beginPath(); t.live.moveTo(a.x, a.y - off); t.live.lineTo(b.x, b.y - off); t.live.stroke();
       t.dirty = true;
     }
+    record(a, b);
     drawn += Math.hypot(b.x - a.x, b.y - a.y);
     clearTimeout(idle);
     idle = setTimeout(commit, 250);
     if (drawn > 1500) commit();   // very long strokes are merged in pieces, so they can cross themselves too
   };
+  // Saved marks (v9): every stroke is kept as a list of screen points in this browser's localStorage,
+  // so the same visitor finds their scribbles on the next visit; another device or browser starts blank.
+  // Nothing leaves the browser. Points closer than 3px are skipped; the oldest strokes go first if it gets big.
+  const KEY = 'chandik-marker-v9', LIMIT = 2e6;
+  let strokes = [], current = null, replaying = false;
+  try { strokes = JSON.parse(localStorage.getItem(KEY)) || []; } catch { strokes = []; }
+  const record = (a, b) => {
+    if (replaying) return;
+    if (!current) current = { c: COLOUR, p: [Math.round(a.x), Math.round(a.y)] };
+    const q = current.p, n = q.length;
+    if (Math.hypot(b.x - q[n - 2], b.y - q[n - 1]) >= 3) q.push(Math.round(b.x), Math.round(b.y));
+  };
+  const save = () => {
+    try {
+      let json = JSON.stringify(strokes);
+      while (json.length > LIMIT && strokes.length > 1) { strokes.splice(0, Math.ceil(strokes.length / 10)); json = JSON.stringify(strokes); }
+      localStorage.setItem(KEY, json);
+    } catch { /* storage full or blocked: marks just aren't kept */ }
+  };
+  // redraw saved strokes one at a time, so overlaps darken exactly as they did when drawn
+  const replay = () => {
+    replaying = true;
+    strokes.forEach((st) => {
+      const pts = Array.isArray(st) ? st : st.p;   // strokes saved before colours were plain point lists (lime)
+      COLOUR = Array.isArray(st) ? COLOURS[0] : st.c;
+      for (let i = 0; i < pts.length; i += 2) {
+        const a = { x: pts[Math.max(0, i - 2)], y: pts[Math.max(1, i - 1)] }, b = { x: pts[i], y: pts[i + 1] };
+        segment(i ? a : b, b);
+      }
+      clearTimeout(idle);
+      commit();
+    });
+    COLOUR = mine;
+    replaying = false;
+  };
   // finish the stroke: multiply it into the done canvas (darkening where it overlaps), clear the live one
   let drawn = 0, idle;
   const commit = () => {
     drawn = 0;
+    if (current) { strokes.push(current); current = null; save(); }
     tiles.forEach((t) => {
       if (!t.dirty) return;
       t.done.globalCompositeOperation = 'multiply';
@@ -446,25 +495,48 @@
     if (e.pointerType !== 'mouse') return;
     for (const ev of (e.getCoalescedEvents?.() || [e])) {
       client = { x: ev.clientX, y: ev.clientY };
-      const p = { x: ev.clientX + scrollX, y: ev.clientY + scrollY };
+      const p = { x: ev.clientX, y: ev.clientY };
       if (last && Math.hypot(p.x - last.x, p.y - last.y) < 600) segment(last, p);
       else { commit(); segment(p, p); }   // a jump: finish the old stroke, dot to start a new one
       last = p;
     }
   }, { passive: true });
-  // scrolling moves the page under a still mouse: the pen stays down, so it streaks along the page
-  addEventListener('scroll', () => {
-    if (!client) return;
-    const p = { x: client.x + scrollX, y: client.y + scrollY };
-    if (last) segment(last, p);
-    last = p;
-  }, { passive: true });
+  // v9: the canvas is the screen, so scrolling draws nothing. A resize rebuilds the canvas at the
+  // new size and redraws the saved strokes where they were; whatever falls outside is cut off.
+  let resizing;
+  addEventListener('resize', () => {
+    last = null;
+    clearTimeout(resizing);
+    resizing = setTimeout(() => {
+      commit();
+      tiles.forEach((t) => { t.done.canvas.remove(); t.live.canvas.remove(); });
+      tiles.clear();
+      replay();
+    }, 150);
+  });
+  replay();
+
+  // Clear canvas: a small button in the corner, shown once there's something to clear
+  const clear = document.createElement('button');
+  clear.type = 'button';
+  clear.className = 'hl-clear';
+  clear.textContent = 'Clear canvas';
+  const showClear = () => { clear.hidden = !strokes.length && !current; };
+  clear.addEventListener('click', () => {
+    current = null; strokes = []; last = null;
+    try { localStorage.removeItem(KEY); } catch { /* nothing saved anyway */ }
+    tiles.forEach((t) => { t.done.clearRect(0, 0, t.done.canvas.width, t.done.canvas.height); t.live.clearRect(0, 0, t.live.canvas.width, t.live.canvas.height); t.dirty = false; });
+    showClear();
+  });
+  document.body.append(clear);
+  showClear();
+  setInterval(showClear, 500);
   document.documentElement.addEventListener('pointerleave', () => { last = null; client = null; commit(); });
 
   // phones: the finger is the pen. Wherever it touches and slides (including while it scrolls the
   // page), the trail follows it; lifting the finger lifts the pen (momentum scrolling doesn't draw).
   let touchLast = null;
-  const touchPoint = (e) => { const t = e.touches[0]; return t && { x: t.pageX, y: t.pageY }; };
+  const touchPoint = (e) => { const t = e.touches[0]; return t && { x: t.clientX, y: t.clientY }; };
   addEventListener('touchstart', (e) => { touchLast = touchPoint(e); if (touchLast) segment(touchLast, touchLast); }, { passive: true });
   addEventListener('touchmove', (e) => {
     const p = touchPoint(e);

@@ -64,10 +64,10 @@
   .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* the stroke being drawn darkens the earlier ones it crosses */
   .hl-clear {
     position: fixed; right: 16px; bottom: 16px; z-index: 50; padding: 10px 16px; border-radius: 100px;
-    background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 600;
-    transition: opacity .25s var(--ease);
-  }
-  .hl-clear:hover { opacity: .8; }
+    background: var(--bg); color: var(--ink); border: 1px solid var(--rule); font-size: 13px; font-weight: 600;
+    transition: background-color .25s var(--ease), color .25s var(--ease);
+  }   /* page-coloured, and above the marker layer, so strokes never run over it */
+  .hl-clear:hover { background: var(--ink); color: var(--bg); }
   .hl-clear[hidden] { display: none; }
 </style>
 </head>
