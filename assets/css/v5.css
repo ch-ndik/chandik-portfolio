@@ -845,3 +845,8 @@ body:has(.hero.is-flooded) .turn { --ink: #0B0B0A; }
 body:has(.hero.is-flooded-dark) .turn { --ink: #FFFFE3; }
 .turn { color: var(--ink); }
 .turn__a { opacity: calc(1 - var(--dark, 0)); }
+
+/* About bio: one size, one weight, all ink */
+.about5__reveal.about5__bio { font-size: 42px; font-weight: 600; }
+.about5__reveal.about5__bio .c { color: var(--ink); }
+@media (max-width: 720px) { .about5__reveal.about5__bio { font-size: 28px; } }
