@@ -62,6 +62,13 @@
   .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: normal;   /* v9: plain 50% paint, so it shows on the black after-hours area too */  opacity: .5; }
   .hl-layer canvas { position: absolute; left: 0; display: block; }
   .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* the stroke being drawn darkens the earlier ones it crosses */
+  .hl-clear {
+    position: fixed; right: 16px; bottom: 16px; z-index: 50; padding: 10px 16px; border-radius: 100px;
+    background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 600;
+    transition: opacity .25s var(--ease);
+  }
+  .hl-clear:hover { opacity: .8; }
+  .hl-clear[hidden] { display: none; }
 </style>
 </head>
 <body class="v5 v7 v8">
@@ -388,20 +395,17 @@
   hero?.addEventListener('click', (e) => e.stopImmediatePropagation(), true);
 
   const TILE = 1e9, WIDTH = 22;
-  // each visit gets the next marker colour: lime, sky blue, peach, yellow, baby pink, then round again.
-  // A visit is a new tab or window (sessionStorage), so reloading the same tab keeps its colour.
+  // every time the homepage is shown (first visit, refresh, coming back from a project) the marker
+  // takes the next colour: lime, sky blue, peach, yellow, baby pink, then round again.
   const COLOURS = ['#BFFF00', '#7FD4FF', '#FFB38A', '#FFE500', '#FFB6D9'];
-  let visit = 0;
-  try {
-    visit = +sessionStorage.getItem('chandik-marker-visit');
-    if (!sessionStorage.getItem('chandik-marker-visit')) {
-      visit = (+localStorage.getItem('chandik-marker-visits') || 0) + 1;
-      localStorage.setItem('chandik-marker-visits', visit);
-      sessionStorage.setItem('chandik-marker-visit', visit);
-    }
-  } catch { /* no storage: always lime */ }
-  let COLOUR = COLOURS[Math.max(0, visit - 1) % COLOURS.length];
-  const mine = COLOUR;
+  const nextColour = () => {
+    let n = 0;
+    try { n = +localStorage.getItem('chandik-marker-visits') || 0; localStorage.setItem('chandik-marker-visits', n + 1); } catch { /* no storage: always lime */ }
+    return COLOURS[n % COLOURS.length];
+  };
+  let COLOUR = nextColour(), mine = COLOUR;
+  // back/forward can restore the page without reloading it: that counts as coming back too
+  addEventListener('pageshow', (e) => { if (e.persisted) { commit(); COLOUR = mine = nextColour(); } });
   const layer = document.createElement('div');
   layer.className = 'hl-layer';
   layer.setAttribute('aria-hidden', 'true');
@@ -512,6 +516,22 @@
     }, 150);
   });
   replay();
+
+  // Clear canvas: a small button in the corner, shown once there's something to clear
+  const clear = document.createElement('button');
+  clear.type = 'button';
+  clear.className = 'hl-clear';
+  clear.textContent = 'Clear canvas';
+  const showClear = () => { clear.hidden = !strokes.length && !current; };
+  clear.addEventListener('click', () => {
+    current = null; strokes = []; last = null;
+    try { localStorage.removeItem(KEY); } catch { /* nothing saved anyway */ }
+    tiles.forEach((t) => { t.done.clearRect(0, 0, t.done.canvas.width, t.done.canvas.height); t.live.clearRect(0, 0, t.live.canvas.width, t.live.canvas.height); t.dirty = false; });
+    showClear();
+  });
+  document.body.append(clear);
+  showClear();
+  setInterval(showClear, 500);
   document.documentElement.addEventListener('pointerleave', () => { last = null; client = null; commit(); });
 
   // phones: the finger is the pen. Wherever it touches and slides (including while it scrolls the
