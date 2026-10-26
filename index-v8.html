@@ -53,7 +53,7 @@
      Thumbnails sit above it, so strokes never cover them. */
   /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
   html:has(body.v8) { background: #F3F2EC; }
-  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .5; }
+  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: 1; }
   .hl-layer canvas { position: absolute; left: 0; display: block; }
 </style>
 </head>
@@ -370,7 +370,8 @@
 </footer>
 
 <script>
-/* v8 highlighter: the mouse leaves a #BFFF00 trail wherever it moves (no clicking). The trail is
+/* v8 highlighter: the mouse leaves a #BFFF00 trail wherever it moves (no clicking), including
+   while scrolling with the mouse held still. The trail is
    fixed to the page, so it scrolls with the content. Drawn in 2048px-tall canvas tiles, made only
    where a stroke lands, so a long page doesn't need one giant canvas. Mouse only. */
 (() => {
@@ -404,19 +405,25 @@
       ctx.beginPath(); ctx.moveTo(a.x, a.y - off); ctx.lineTo(b.x, b.y - off); ctx.stroke();
     }
   };
-  let last = null;
+  let last = null, client = null;   // last point on the page, and where the mouse is on screen
   addEventListener('pointermove', (e) => {
     if (e.pointerType !== 'mouse') return;
     for (const ev of (e.getCoalescedEvents?.() || [e])) {
+      client = { x: ev.clientX, y: ev.clientY };
       const p = { x: ev.clientX + scrollX, y: ev.clientY + scrollY };
       if (last && Math.hypot(p.x - last.x, p.y - last.y) < 600) segment(last, p);
       else segment(p, p);   // a dot to start a new stroke
       last = p;
     }
   }, { passive: true });
-  // scrolling moves the page under a still mouse: lift the pen so it doesn't streak
-  addEventListener('scroll', () => { last = null; }, { passive: true });
-  document.documentElement.addEventListener('pointerleave', () => { last = null; });
+  // scrolling moves the page under a still mouse: the pen stays down, so it streaks along the page
+  addEventListener('scroll', () => {
+    if (!client) return;
+    const p = { x: client.x + scrollX, y: client.y + scrollY };
+    if (last) segment(last, p);
+    last = p;
+  }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => { last = null; client = null; });
 })();
 </script>
 </body>
