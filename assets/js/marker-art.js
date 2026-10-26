@@ -1,31 +1,36 @@
-/* Marker art in the project-page footer.
+/* Marker art in the dark blocks of project pages (the next-project block and the footer).
    The homepage marker saves each visitor's strokes in this browser (localStorage, screen coordinates).
-   Project pages don't show them over the content; only the dark footer does. A screen-sized canvas sits
-   at the bottom of the footer, behind its content and clipped to it, so when you reach the end of the
-   page the strokes appear exactly where they were on screen. Display only: nothing is drawn here. */
+   Project pages don't show them over the content, only inside the dark blocks. Each block holds a
+   screen-sized canvas, behind its content and clipped to it, that is kept lined up with the screen as
+   the page scrolls, so the strokes sit exactly where they were drawn. Display only: nothing is drawn here. */
 (() => {
-  const footer = document.querySelector('body > .contact');
-  if (!footer) return;
+  const blocks = [...document.querySelectorAll('.cs-next.is-dark, body > .contact')];
+  if (!blocks.length) return;
   let strokes = [];
   try { strokes = JSON.parse(localStorage.getItem('chandik-marker-v9')) || []; } catch { return; }
   if (!strokes.length) return;
 
   const style = document.createElement('style');
   style.textContent = `
-    body > .contact { position: relative; overflow: hidden; isolation: isolate; }
-    .contact__art { position: absolute; left: 0; bottom: 0; width: 100%; z-index: -1; pointer-events: none; opacity: .5; }
+    .has-marker-art { position: relative; overflow: hidden; isolation: isolate; }
+    .marker-art { position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none; opacity: .5; will-change: transform; }
   `;
   document.head.append(style);
-  const canvas = document.createElement('canvas');
-  canvas.className = 'contact__art';
-  canvas.setAttribute('aria-hidden', 'true');
-  footer.prepend(canvas);
+  const canvases = blocks.map((b) => {
+    b.classList.add('has-marker-art');
+    const c = document.createElement('canvas');
+    c.className = 'marker-art';
+    c.setAttribute('aria-hidden', 'true');
+    b.prepend(c);
+    return c;
+  });
 
   // same drawing as the homepage: each stroke on a scratch canvas, multiplied in so overlaps darken
+  const art = document.createElement('canvas');
   const draw = () => {
     const w = document.documentElement.clientWidth, h = innerHeight;
-    canvas.width = w; canvas.height = h; canvas.style.height = `${h}px`;
-    const ctx = canvas.getContext('2d');
+    art.width = w; art.height = h;
+    const ctx = art.getContext('2d');
     const live = document.createElement('canvas');
     live.width = w; live.height = h;
     const lc = live.getContext('2d');
@@ -42,8 +47,15 @@
       ctx.globalCompositeOperation = 'multiply';
       ctx.drawImage(live, 0, 0);
     });
+    canvases.forEach((c) => { c.width = w; c.height = h; c.getContext('2d').drawImage(art, 0, 0); });
+    place();
   };
+  // keep each canvas over the screen: shift it up by however far its block's top is from the screen's top
+  const place = () => blocks.forEach((b, i) => {
+    canvases[i].style.transform = `translate(${-b.getBoundingClientRect().left}px, ${-b.getBoundingClientRect().top}px)`;
+  });
   draw();
+  addEventListener('scroll', place, { passive: true });
   let t;
   addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 150); });
 })();
