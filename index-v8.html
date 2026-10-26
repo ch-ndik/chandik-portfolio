@@ -53,7 +53,7 @@
      Thumbnails sit above it, so strokes never cover them. */
   /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
   html:has(body.v8) { background: #F3F2EC; }
-  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: 1; }
+  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .7; }
   .hl-layer canvas { position: absolute; left: 0; display: block; }
 </style>
 </head>
@@ -373,9 +373,8 @@
 /* v8 highlighter: the mouse leaves a #BFFF00 trail wherever it moves (no clicking), including
    while scrolling with the mouse held still. The trail is
    fixed to the page, so it scrolls with the content. Drawn in 2048px-tall canvas tiles, made only
-   where a stroke lands, so a long page doesn't need one giant canvas. Mouse only. */
+   where a stroke lands, so a long page doesn't need one giant canvas. Mouse and touch. */
 (() => {
-  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   // no colour flood on v8: stop the hero's click before v5.js sees it
   const hero = document.querySelector('.hero');
   hero?.addEventListener('click', (e) => e.stopImmediatePropagation(), true);
@@ -424,6 +423,20 @@
     last = p;
   }, { passive: true });
   document.documentElement.addEventListener('pointerleave', () => { last = null; client = null; });
+
+  // phones: the finger is the pen. Wherever it touches and slides (including while it scrolls the
+  // page), the trail follows it; lifting the finger lifts the pen (momentum scrolling doesn't draw).
+  let touchLast = null;
+  const touchPoint = (e) => { const t = e.touches[0]; return t && { x: t.pageX, y: t.pageY }; };
+  addEventListener('touchstart', (e) => { touchLast = touchPoint(e); if (touchLast) segment(touchLast, touchLast); }, { passive: true });
+  addEventListener('touchmove', (e) => {
+    const p = touchPoint(e);
+    if (!p) return;
+    if (touchLast) segment(touchLast, p);
+    touchLast = p;
+  }, { passive: true });
+  addEventListener('touchend', () => { touchLast = null; }, { passive: true });
+  addEventListener('touchcancel', () => { touchLast = null; }, { passive: true });
 })();
 </script>
 </body>
