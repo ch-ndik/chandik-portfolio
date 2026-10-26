@@ -423,6 +423,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .colophon a { color: var(--ink); }
 .colophon__made { text-align: right; }
+.colophon { align-items: center; }
+.colophon a.colophon__home {
+  padding: 10px 18px; border: 1px solid var(--ink); border-radius: 100px; color: var(--ink); font-weight: 600;
+  transition: background-color .25s var(--ease), color .25s var(--ease);
+}
+.colophon a.colophon__home:hover, .colophon a.colophon__home:focus-visible { background: var(--ink); color: var(--bg); }
 .colophon__made s { text-decoration-thickness: 1.5px; }
 @media (max-width: 720px) { .contact__links { text-align: left; } }
 
