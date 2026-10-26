@@ -424,6 +424,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .colophon a { color: var(--ink); }
 .colophon__made { text-align: right; }
 .colophon { align-items: center; }
+/* with the home button, three columns: equal outer columns keep the button on the page's centre line */
+.colophon:has(.colophon__home) { display: grid; grid-template-columns: 1fr auto 1fr; }
+@media (max-width: 720px) { .colophon:has(.colophon__home) { grid-template-columns: 1fr; justify-items: start; } .colophon:has(.colophon__home) .colophon__made { text-align: left; } }
 .colophon a.colophon__home {
   padding: 10px 18px; border: 1px solid var(--ink); border-radius: 100px; color: var(--ink); font-weight: 600;
   transition: background-color .25s var(--ease), color .25s var(--ease);
