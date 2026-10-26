@@ -53,8 +53,9 @@
      Thumbnails sit above it, so strokes never cover them. */
   /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
   html:has(body.v8) { background: #F3F2EC; }
-  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .7; }
+  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .5; }
   .hl-layer canvas { position: absolute; left: 0; display: block; }
+  .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* the stroke being drawn darkens the earlier ones it crosses */
 </style>
 </head>
 <body class="v5 v7 v8">
@@ -384,25 +385,48 @@
   layer.className = 'hl-layer';
   layer.setAttribute('aria-hidden', 'true');
   document.body.prepend(layer);
+  // each tile = a "done" canvas (finished strokes, multiplied into each other so overlaps darken)
+  // and a "live" canvas on top (the stroke being drawn, itself multiplied over the done strokes)
   const tiles = new Map();
-  const tile = (i) => {
-    if (tiles.has(i)) return tiles.get(i);
+  const make = (i, live) => {
     const c = document.createElement('canvas');
     c.width = document.documentElement.clientWidth;
     c.height = TILE;
     c.style.top = `${i * TILE}px`;
+    if (live) c.className = 'is-live';
     layer.append(c);
     const ctx = c.getContext('2d');
     ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = WIDTH; ctx.strokeStyle = COLOUR;
-    tiles.set(i, ctx);
     return ctx;
+  };
+  const tile = (i) => {
+    if (!tiles.has(i)) tiles.set(i, { done: make(i, false), live: make(i, true), dirty: false });
+    return tiles.get(i);
   };
   const segment = (a, b) => {
     const top = Math.floor((Math.min(a.y, b.y) - WIDTH) / TILE), bottom = Math.floor((Math.max(a.y, b.y) + WIDTH) / TILE);
     for (let i = Math.max(0, top); i <= bottom; i++) {
-      const ctx = tile(i), off = i * TILE;
-      ctx.beginPath(); ctx.moveTo(a.x, a.y - off); ctx.lineTo(b.x, b.y - off); ctx.stroke();
+      const t = tile(i), off = i * TILE;
+      t.live.beginPath(); t.live.moveTo(a.x, a.y - off); t.live.lineTo(b.x, b.y - off); t.live.stroke();
+      t.dirty = true;
     }
+    drawn += Math.hypot(b.x - a.x, b.y - a.y);
+    clearTimeout(idle);
+    idle = setTimeout(commit, 250);
+    if (drawn > 1500) commit();   // very long strokes are merged in pieces, so they can cross themselves too
+  };
+  // finish the stroke: multiply it into the done canvas (darkening where it overlaps), clear the live one
+  let drawn = 0, idle;
+  const commit = () => {
+    drawn = 0;
+    tiles.forEach((t) => {
+      if (!t.dirty) return;
+      t.done.globalCompositeOperation = 'multiply';
+      t.done.drawImage(t.live.canvas, 0, 0);
+      t.done.globalCompositeOperation = 'source-over';
+      t.live.clearRect(0, 0, t.live.canvas.width, t.live.canvas.height);
+      t.dirty = false;
+    });
   };
   let last = null, client = null;   // last point on the page, and where the mouse is on screen
   addEventListener('pointermove', (e) => {
@@ -411,7 +435,7 @@
       client = { x: ev.clientX, y: ev.clientY };
       const p = { x: ev.clientX + scrollX, y: ev.clientY + scrollY };
       if (last && Math.hypot(p.x - last.x, p.y - last.y) < 600) segment(last, p);
-      else segment(p, p);   // a dot to start a new stroke
+      else { commit(); segment(p, p); }   // a jump: finish the old stroke, dot to start a new one
       last = p;
     }
   }, { passive: true });
@@ -422,7 +446,7 @@
     if (last) segment(last, p);
     last = p;
   }, { passive: true });
-  document.documentElement.addEventListener('pointerleave', () => { last = null; client = null; });
+  document.documentElement.addEventListener('pointerleave', () => { last = null; client = null; commit(); });
 
   // phones: the finger is the pen. Wherever it touches and slides (including while it scrolls the
   // page), the trail follows it; lifting the finger lifts the pen (momentum scrolling doesn't draw).
@@ -435,7 +459,7 @@
     if (touchLast) segment(touchLast, p);
     touchLast = p;
   }, { passive: true });
-  addEventListener('touchend', () => { touchLast = null; }, { passive: true });
+  addEventListener('touchend', () => { touchLast = null; commit(); }, { passive: true });
   addEventListener('touchcancel', () => { touchLast = null; }, { passive: true });
 })();
 </script>
