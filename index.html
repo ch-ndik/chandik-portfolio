@@ -58,9 +58,10 @@
   /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
   html:has(body.v8) { background: #F3F2EC; }
   /* v9: the layer is the viewport itself, fixed; the page scrolls underneath the strokes */
-  .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: normal;   /* v9: plain 50% paint, so it shows on the black after-hours area too */  opacity: .5; }
+  .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: normal;   /* plain paint, so it shows on the black after-hours area too */
+    opacity: calc(.5 + .3 * var(--dark, 0)); }   /* 50% on paper; 80% on black, where 50% turns muddy */
   .hl-layer canvas { position: absolute; left: 0; display: block; }
-  .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* the stroke being drawn darkens the earlier ones it crosses */
+  /* no overlap darkening: a newer stroke simply sits on top of older ones */
   .hl-clear {
     position: fixed; right: 16px; bottom: 16px; z-index: 50; padding: 10px 16px; border-radius: 100px;
     background: var(--bg); color: var(--ink); border: 1px solid var(--rule); font-size: 13px; font-weight: 600;
@@ -409,8 +410,8 @@
   layer.className = 'hl-layer';
   layer.setAttribute('aria-hidden', 'true');
   document.body.prepend(layer);
-  // each tile = a "done" canvas (finished strokes, multiplied into each other so overlaps darken)
-  // and a "live" canvas on top (the stroke being drawn, itself multiplied over the done strokes)
+  // each tile = a "done" canvas (finished strokes, newer ones painted over older ones)
+  // and a "live" canvas on top (the stroke being drawn)
   const tiles = new Map();
   const make = (i, live) => {
     const c = document.createElement('canvas');
@@ -460,7 +461,7 @@
       localStorage.setItem(KEY, json);
     } catch { /* storage full or blocked: marks just aren't kept */ }
   };
-  // redraw saved strokes one at a time, so overlaps darken exactly as they did when drawn
+  // redraw saved strokes one at a time, oldest first, so newer ones end up on top
   const replay = () => {
     replaying = true;
     strokes.forEach((st) => {
@@ -476,14 +477,13 @@
     COLOUR = mine;
     replaying = false;
   };
-  // finish the stroke: multiply it into the done canvas (darkening where it overlaps), clear the live one
+  // finish the stroke: paint it onto the done canvas, on top of the older strokes, and clear the live one
   let drawn = 0, idle;
   const commit = () => {
     drawn = 0;
     if (current) { strokes.push(current); current = null; save(); }
     tiles.forEach((t) => {
       if (!t.dirty) return;
-      t.done.globalCompositeOperation = 'multiply';
       t.done.drawImage(t.live.canvas, 0, 0);
       t.done.globalCompositeOperation = 'source-over';
       t.live.clearRect(0, 0, t.live.canvas.width, t.live.canvas.height);

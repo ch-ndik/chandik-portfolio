@@ -19,7 +19,7 @@
   const style = document.createElement('style');
   style.textContent = `
     .has-marker-art { position: relative; overflow: hidden; isolation: isolate; }
-    .marker-art { position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none; opacity: .5; will-change: transform; }
+    .marker-art { position: absolute; left: 0; top: 0; z-index: -1; pointer-events: none; opacity: .8; will-change: transform; }
   `;
   document.head.append(style);
   const canvases = blocks.map((b) => {
@@ -31,7 +31,7 @@
     return c;
   });
 
-  // full redraw: each stroke on a scratch canvas, multiplied in so overlaps darken (as on the homepage)
+  // full redraw: each stroke on a scratch canvas, newer strokes on top (as on the homepage)
   const art = document.createElement('canvas');
   const pen = (ctx, c) => { ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = WIDTH; ctx.strokeStyle = c; };
   const draw = () => {
@@ -50,7 +50,6 @@
       for (let i = 2; i < pts.length; i += 2) lc.lineTo(pts[i], pts[i + 1]);
       if (pts.length === 2) lc.lineTo(pts[0], pts[1]);
       lc.stroke();
-      ctx.globalCompositeOperation = 'multiply';
       ctx.drawImage(live, 0, 0);
     });
     canvases.forEach((c) => { c.width = w; c.height = h; c.getContext('2d').drawImage(art, 0, 0); });
@@ -67,7 +66,7 @@
   addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 150); });
 
   // drawing, inside the dark blocks only: segments go straight onto the canvases while the mouse moves;
-  // when it pauses or leaves, the stroke is saved and everything is redrawn so its overlaps darken
+  // when it pauses or leaves, the stroke is saved and everything is redrawn from the saved list
   let current = null, last = null, idle;
   const inDark = (x, y) => blocks.some((b) => { const r = b.getBoundingClientRect(); return y >= r.top && y <= r.bottom && x >= r.left && x <= r.right; });
   const commit = () => {
