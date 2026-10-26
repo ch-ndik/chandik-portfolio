@@ -59,7 +59,7 @@
   /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
   html:has(body.v8) { background: #F3F2EC; }
   /* v9: the layer is the viewport itself, fixed; the page scrolls underneath the strokes */
-  .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .5; }
+  .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: normal;   /* v9: plain 50% paint, so it shows on the black after-hours area too */  opacity: .5; }
   .hl-layer canvas { position: absolute; left: 0; display: block; }
   .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* the stroke being drawn darkens the earlier ones it crosses */
 </style>
