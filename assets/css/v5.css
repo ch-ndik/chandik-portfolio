@@ -833,3 +833,12 @@ body.has-hero #about > * { pointer-events: auto; }
 body:has(.hero.is-flooded) #about { --ink: #0B0B0A; --ink-2: rgb(11 11 10 / .68); --ink-3: rgb(11 11 10 / .44); --rule: rgb(11 11 10 / .2); }
 body:has(.hero.is-flooded-dark) #about { --ink: #FFFFE3; --ink-2: rgb(255 255 227 / .66); --ink-3: rgb(255 255 227 / .45); --rule: rgb(255 255 227 / .22); }
 #about { color: var(--ink); }
+
+/* The turn after About: see-through too, so the hero's flood colour (and the resting line) carry on
+   behind "That's the work they pay me for"; it darkens to black only as the dark shift runs
+   (--dark 0 → 1), and that first line fades out as it does. */
+body.has-hero .turn { background: rgb(0 0 0 / var(--dark, 0)); }
+body:has(.hero.is-flooded) .turn { --ink: #0B0B0A; }
+body:has(.hero.is-flooded-dark) .turn { --ink: #FFFFE3; }
+.turn { color: var(--ink); }
+.turn__a { opacity: calc(1 - var(--dark, 0)); }
