@@ -604,13 +604,16 @@ body:has(main.cs) > .contact { margin-top: 0; padding-top: clamp(72px, 9vw, 144p
   margin: clamp(120px, 14vw, 224px) calc(var(--pad) * -1) 0; padding: clamp(56px, 7vw, 112px) var(--pad) clamp(40px, 5vw, 72px);
 }
 .cs-next__text { grid-column: 1 / span 6; display: grid; gap: 18px; align-content: end; }
-.cs-next .case__meta { color: var(--ink-3); }
-.cs-next__title { font-size: clamp(40px, calc(6 * var(--vw)), 112px); font-weight: 500; line-height: .95; letter-spacing: -0.05em; }
+/* "Next project" label and the project's company/role line on separate lines: label quiet, line clear */
+.cs-next .case__meta { display: grid; justify-content: start; gap: 6px; color: var(--ink-3); }
+.cs-next .case__meta > span:first-child { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.cs-next .case__meta > span + span { font-size: 14px; color: var(--ink-2); }
+.cs-next__title { font-size: clamp(40px, calc(6 * var(--vw)), 112px); font-weight: 500; line-height: .95; letter-spacing: -0.05em; color: var(--ink); opacity: 1; }   /* always full strength */
 .cs-next__teaser { max-width: 40ch; font-size: clamp(16px, calc(1.2 * var(--vw)), 19px); line-height: 1.5; color: var(--ink-2); }
 .cs-next__cta { justify-self: start; margin-top: 6px; padding: 10px 18px; border: 1px solid var(--ink); border-radius: 100px; font-size: 14px; font-weight: 600; transition: background-color .25s var(--ease), color .25s var(--ease); }
 .cs-next:hover .cs-next__cta { background: var(--ink); color: var(--bg); }
 .cs-next__media { grid-column: 8 / -1; overflow: hidden; background: var(--plate); aspect-ratio: 4 / 3; }
-.cs-next__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease), opacity .4s var(--ease); opacity: .82; }
+.cs-next__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease), opacity .4s var(--ease); opacity: .5; }   /* dimmed at rest so the title leads; full on hover */
 .cs-next:hover .cs-next__media img { transform: scale(1.04); opacity: 1; }
 @media (max-width: 900px) {
   .cs-next__text, .cs-next__media { grid-column: 1 / -1; }
