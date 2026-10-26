@@ -418,7 +418,7 @@
     for (let i = 0; i < img.data.length; i += 4) {
       const r = Math.random();
       img.data[i] = img.data[i + 1] = img.data[i + 2] = 255;
-      img.data[i + 3] = r > 0.42 ? 150 + r * 105 : r * 60;   // mostly solid, with gaps and faint dust
+      img.data[i + 3] = r > 0.58 ? 120 + r * 100 : r * 25;   // mostly gaps, with scattered grains (less white, text stays readable)
     }
     gx.putImageData(img, 0, 0);
     return g;
