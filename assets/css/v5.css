@@ -859,3 +859,6 @@ body:has(.hero.is-flooded-dark) .turn { --ink: #FFFFE3; }
 .about5__reveal.about5__bio { max-width: none; width: 100%; text-align: left; font-size: 42px; font-weight: 600; }
 .about5__reveal.about5__bio .c { color: var(--ink); }
 @media (max-width: 720px) { .about5__reveal.about5__bio { font-size: 28px; } }
+/* About, left-aligned: portrait and "Hi, I'm Chandik." line up with the bio */
+.about5 { align-items: flex-start; text-align: left; }
+.about5__photo { align-self: flex-start; }
