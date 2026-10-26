@@ -579,6 +579,14 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 .cs .btn:hover { background: var(--ink); color: var(--bg); }
 .cs .btn svg { width: 14px; height: 14px; }
 
+/* One UI icons page: its takeaway lines as big, plain black statements */
+.cs--icons .quote, .cs--icons .prose__body > p.quote {
+  margin-block: .64em; padding-left: 0; border-left: 0;
+  font-size: 64px; font-style: normal; font-weight: 500; line-height: 1.12;
+  letter-spacing: -0.03em; color: #000000; text-wrap: balance;
+}
+@media (max-width: 720px) { .cs--icons .quote, .cs--icons .prose__body > p.quote { font-size: 38px; } }   /* 64px is too big for a phone column */
+
 /* Dark zone: the after-hours palette for one block. Used by the next-project block and the
    footer on case-study pages, so the end of every case study sits on black like the homepage's. */
 .is-dark, body:has(main.cs) > .contact {
