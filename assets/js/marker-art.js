@@ -95,6 +95,16 @@
       idle = setTimeout(commit, 250);
     }
   }, { passive: true });
+  // a mouse click moves to the next colour, as on the homepage (taps on phones don't)
+  addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    commit();
+    try {
+      const n = +localStorage.getItem('chandik-marker-visits') || 0;
+      localStorage.setItem('chandik-marker-visits', n + 1);
+      colour = COLOURS[n % COLOURS.length];
+    } catch { /* no storage: keep the colour */ }
+  });
   addEventListener('scroll', commit, { passive: true });   // the screen is the canvas: scrolling lifts the pen
   document.documentElement.addEventListener('pointerleave', commit);
 })();
