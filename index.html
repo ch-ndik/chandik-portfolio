@@ -18,6 +18,7 @@
 <script src="assets/js/dream-in-pixels.js" defer></script>
 <script src="assets/js/v5.js" defer></script>
 <style>
+
 /* v7 only: the three big projects join the loose card grid */
 .v7 .minis { margin-top: clamp(32px, 4vw, 56px); }
 .v7 .mini--shi   { grid-column: 1 / span 8; }
@@ -28,8 +29,40 @@
 .v7 .pair__col > p, .v7 .pair__col .case__notes p { font-size: clamp(16px, calc(1.1 * var(--vw)), 18px); line-height: 1.5; color: var(--ink-2); max-width: 54ch; }
 @media (max-width: 900px) { .v7 .minis .pair__cols > .pair__col { grid-column: 1 / -1; margin-top: 0; } }
 </style>
+<style>
+  /* v8 hero: statement top-left, claim + jobs + awards bottom-right (uppercase small type) */
+  .hero8 { display: grid; grid-template-rows: auto 1fr; padding-block: clamp(40px, 6vh, 72px); }
+  .hero8__lead { max-width: 30ch; font-size: clamp(32px, calc(3.2 * var(--vw)), 60px); font-weight: 600; line-height: 1.02; letter-spacing: -0.04em; color: #FFFFFF; }
+  .hero8__lead span { color: var(--ink); }
+  .v8 .about5__reveal .c.hl { font-style: normal; color: #FFFFFF; }
+  @media (max-width: 720px) {   /* phones have no marker to bring the white out, so it stays ink */
+    .hero8__lead, .v8 .about5__reveal .c.hl { color: var(--ink); }
+  }
+  .hero8__side { align-self: end; justify-self: end; width: min(100%, 44%); min-width: 320px; }
+  .hero8__claim { font-size: clamp(28px, calc(2.6 * var(--vw)), 48px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; }
+  .hero8 dl { text-transform: uppercase; font-size: clamp(13px, calc(1.05 * var(--vw)), 16px); font-weight: 500; letter-spacing: .01em; line-height: 1.25; }
+  .hero8__jobs { margin-top: clamp(40px, 6vh, 72px); }
+  .hero8__jobs div { display: grid; grid-template-columns: 6.5em 1fr; }
+  .hero8__awards { display: grid; grid-template-columns: auto auto; justify-content: start; column-gap: 2.5em; margin-top: clamp(48px, 8vh, 104px); margin-left: -16em; }
+  @media (max-width: 900px) { .hero8__side { justify-self: stretch; width: 100%; min-width: 0; margin-top: 48px; } .hero8__awards { margin-left: 0; grid-template-columns: 1fr; row-gap: 6px; } }
+  /* v8: plain scrolling (hero → projects → About), no stacking and no colour flood */
+  body.has-hero.v8 .hero { position: relative; z-index: auto; cursor: auto; }
+  body.has-hero.v8 #work, body.has-hero.v8 .turn, body.has-hero.v8 #after-hours, body.has-hero.v8 > .contact { background: transparent; z-index: auto; }
+  body.has-hero.v8 #about { padding-top: 0; pointer-events: auto; }
+  .v8 .hero__flood { display: none; }
+
+  /* Highlighter trail: tiles of canvas laid over the whole page, under every piece of content
+     (z -1 inside the body's stacking context) and above only the page colour. Multiply against the
+     page: #BFFF00 on paper reads as highlighter, on the black after-hours area it disappears.
+     Thumbnails sit above it, so strokes never cover them. */
+  /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
+  html:has(body.v8) { background: #F3F2EC; }
+  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .5; }
+  .hl-layer canvas { position: absolute; left: 0; display: block; }
+  .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* the stroke being drawn darkens the earlier ones it crosses */
+</style>
 </head>
-<body class="v5 v7">
+<body class="v5 v7 v8">
 <!-- Homepage (2026 redesign; was drafts/index-v7). Health, Watch Faces and Polygons sit as loose cards with the smaller projects.
      Earlier homepages are in drafts/ (the pre-redesign one: drafts/index-live-2026.html). Read like a résumé:
      summary → experience (projects nested under the job they were made in) → about, skills,
@@ -57,15 +90,19 @@
 
 <main>
   <!-- Summary: the typewriter line, who I am in one sentence, and the essentials -->
-  <section class="hero" id="top" aria-labelledby="hero-title">
-    <p class="hero__statement type-reveal" aria-label="I overthink professionally."><span class="type-reveal__ghost" aria-hidden="true">I overthink<br>professionally.</span><span class="type-reveal__text" aria-hidden="true" data-text="I overthink professionally" data-draft="I overthink every" data-away="I overthink everything|I overthink everywhere|I overthink every time"></span></p>
-    <h1 class="hero__intro" id="hero-title" data-fade>I’m Chandik A Chandran, a product designer working across <em>visual</em>, <em>interaction</em> and <em>creative code</em>.</h1>
-    <dl class="hero__specs ruled">
-      <div data-fade><dt>Experience</dt><dd>5 years · Samsung Design Delhi, Polygon Design Inc.</dd></div>
-      <div data-fade><dt>Recognition</dt><dd>iF Design Award 2026 · Best Project 2025, SDD</dd></div>
-      <div data-fade><dt>Status</dt><dd><span class="dot" aria-hidden="true"></span>Open to new roles</dd></div>
-      <div data-fade class="hero__cta"><dt class="visually-hidden">Next</dt><dd><a href="#work">See the work <span aria-hidden="true">↓</span></a></dd></div>
-    </dl>
+  <section class="hero hero8" id="top" aria-labelledby="hero-title">
+    <h1 class="hero8__lead" id="hero-title">Chandik is a product designer who works across <span>visual, interaction &amp; creative code.</span></h1>
+    <div class="hero8__side">
+      <p class="hero8__claim">He overthinks professionally.</p>
+      <dl class="hero8__jobs">
+        <div><dt>2022–26</dt><dd>Samsung Design Delhi</dd></div>
+        <div><dt>2021–22</dt><dd>Polygons Design</dd></div>
+      </dl>
+      <dl class="hero8__awards">
+        <dt>Awards &amp; recognition</dt>
+        <dd>iF Design Award 2026<br>Best Project 2025, SDD</dd>
+      </dl>
+    </div>
   </section>
 
   <!-- EXPERIENCE: projects grouped by the job they were made in. Featured projects get a full entry
@@ -336,5 +373,98 @@
   </div>
 </footer>
 
+<script>
+/* v8 highlighter: the mouse leaves a #BFFF00 trail wherever it moves (no clicking), including
+   while scrolling with the mouse held still. The trail is
+   fixed to the page, so it scrolls with the content. Drawn in 2048px-tall canvas tiles, made only
+   where a stroke lands, so a long page doesn't need one giant canvas. Mouse and touch. */
+(() => {
+  // no colour flood on v8: stop the hero's click before v5.js sees it
+  const hero = document.querySelector('.hero');
+  hero?.addEventListener('click', (e) => e.stopImmediatePropagation(), true);
+
+  const TILE = 2048, WIDTH = 22, COLOUR = '#BFFF00';
+  const layer = document.createElement('div');
+  layer.className = 'hl-layer';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.prepend(layer);
+  // each tile = a "done" canvas (finished strokes, multiplied into each other so overlaps darken)
+  // and a "live" canvas on top (the stroke being drawn, itself multiplied over the done strokes)
+  const tiles = new Map();
+  const make = (i, live) => {
+    const c = document.createElement('canvas');
+    c.width = document.documentElement.clientWidth;
+    c.height = TILE;
+    c.style.top = `${i * TILE}px`;
+    if (live) c.className = 'is-live';
+    layer.append(c);
+    const ctx = c.getContext('2d');
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = WIDTH; ctx.strokeStyle = COLOUR;
+    return ctx;
+  };
+  const tile = (i) => {
+    if (!tiles.has(i)) tiles.set(i, { done: make(i, false), live: make(i, true), dirty: false });
+    return tiles.get(i);
+  };
+  const segment = (a, b) => {
+    const top = Math.floor((Math.min(a.y, b.y) - WIDTH) / TILE), bottom = Math.floor((Math.max(a.y, b.y) + WIDTH) / TILE);
+    for (let i = Math.max(0, top); i <= bottom; i++) {
+      const t = tile(i), off = i * TILE;
+      t.live.beginPath(); t.live.moveTo(a.x, a.y - off); t.live.lineTo(b.x, b.y - off); t.live.stroke();
+      t.dirty = true;
+    }
+    drawn += Math.hypot(b.x - a.x, b.y - a.y);
+    clearTimeout(idle);
+    idle = setTimeout(commit, 250);
+    if (drawn > 1500) commit();   // very long strokes are merged in pieces, so they can cross themselves too
+  };
+  // finish the stroke: multiply it into the done canvas (darkening where it overlaps), clear the live one
+  let drawn = 0, idle;
+  const commit = () => {
+    drawn = 0;
+    tiles.forEach((t) => {
+      if (!t.dirty) return;
+      t.done.globalCompositeOperation = 'multiply';
+      t.done.drawImage(t.live.canvas, 0, 0);
+      t.done.globalCompositeOperation = 'source-over';
+      t.live.clearRect(0, 0, t.live.canvas.width, t.live.canvas.height);
+      t.dirty = false;
+    });
+  };
+  let last = null, client = null;   // last point on the page, and where the mouse is on screen
+  addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    for (const ev of (e.getCoalescedEvents?.() || [e])) {
+      client = { x: ev.clientX, y: ev.clientY };
+      const p = { x: ev.clientX + scrollX, y: ev.clientY + scrollY };
+      if (last && Math.hypot(p.x - last.x, p.y - last.y) < 600) segment(last, p);
+      else { commit(); segment(p, p); }   // a jump: finish the old stroke, dot to start a new one
+      last = p;
+    }
+  }, { passive: true });
+  // scrolling moves the page under a still mouse: the pen stays down, so it streaks along the page
+  addEventListener('scroll', () => {
+    if (!client) return;
+    const p = { x: client.x + scrollX, y: client.y + scrollY };
+    if (last) segment(last, p);
+    last = p;
+  }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => { last = null; client = null; commit(); });
+
+  // phones: the finger is the pen. Wherever it touches and slides (including while it scrolls the
+  // page), the trail follows it; lifting the finger lifts the pen (momentum scrolling doesn't draw).
+  let touchLast = null;
+  const touchPoint = (e) => { const t = e.touches[0]; return t && { x: t.pageX, y: t.pageY }; };
+  addEventListener('touchstart', (e) => { touchLast = touchPoint(e); if (touchLast) segment(touchLast, touchLast); }, { passive: true });
+  addEventListener('touchmove', (e) => {
+    const p = touchPoint(e);
+    if (!p) return;
+    if (touchLast) segment(touchLast, p);
+    touchLast = p;
+  }, { passive: true });
+  addEventListener('touchend', () => { touchLast = null; commit(); }, { passive: true });
+  addEventListener('touchcancel', () => { touchLast = null; }, { passive: true });
+})();
+</script>
 </body>
 </html>
