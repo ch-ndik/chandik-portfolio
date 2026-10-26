@@ -410,12 +410,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .contact__mail {
   font-size: clamp(22px, calc(3.4 * var(--vw)), 60px); font-weight: 500; letter-spacing: -0.035em; overflow-wrap: anywhere;
   text-decoration: underline; text-decoration-thickness: .05em; text-underline-offset: .14em;
-  text-decoration-color: var(--ink-3); transition: text-decoration-color .3s var(--ease);
+  text-decoration-color: var(--ink-3);
 }
-.contact__mail:hover { text-decoration-color: var(--ink); }
 .contact__links { display: flex; flex-direction: column; gap: 6px; font-size: 17px; font-weight: 500; text-align: right; }
 .contact__links a { color: var(--ink-2); }
-.contact__links a:hover { color: var(--ink); }
+/* footer links fill off-white on hover, like the header cells; padding and negative margin cancel, so nothing moves */
+.contact__mail, .contact__links a { padding: .08em .3em; margin: -.08em -.3em; transition: background-color .25s var(--ease), color .25s var(--ease); }
+.contact__mail:hover, .contact__mail:focus-visible, .contact__links a:hover, .contact__links a:focus-visible { background: #F3F2EC; color: #0B0B0A; text-decoration-color: currentColor; }
 .colophon {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
   margin-top: clamp(96px, 10vw, 160px); padding: 16px 0 28px; font-size: 14px; font-weight: 500; color: var(--ink-3);
@@ -847,6 +848,6 @@ body:has(.hero.is-flooded-dark) .turn { --ink: #FFFFE3; }
 .turn__a { opacity: calc(1 - var(--dark, 0)); }
 
 /* About bio: one size, one weight, all ink */
-.about5__reveal.about5__bio { font-size: 42px; font-weight: 600; }
+.about5__reveal.about5__bio { max-width: none; width: 100%; text-align: left; font-size: 42px; font-weight: 600; }
 .about5__reveal.about5__bio .c { color: var(--ink); }
 @media (max-width: 720px) { .about5__reveal.about5__bio { font-size: 28px; } }
