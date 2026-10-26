@@ -417,15 +417,49 @@
       t.live.beginPath(); t.live.moveTo(a.x, a.y - off); t.live.lineTo(b.x, b.y - off); t.live.stroke();
       t.dirty = true;
     }
+    record(a, b);
     drawn += Math.hypot(b.x - a.x, b.y - a.y);
     clearTimeout(idle);
     idle = setTimeout(commit, 250);
     if (drawn > 1500) commit();   // very long strokes are merged in pieces, so they can cross themselves too
   };
+  // Saved marks (v9): every stroke is kept as a list of screen points in this browser's localStorage,
+  // so the same visitor finds their scribbles on the next visit; another device or browser starts blank.
+  // Nothing leaves the browser. Points closer than 3px are skipped; the oldest strokes go first if it gets big.
+  const KEY = 'chandik-marker-v9', LIMIT = 2e6;
+  let strokes = [], current = null, replaying = false;
+  try { strokes = JSON.parse(localStorage.getItem(KEY)) || []; } catch { strokes = []; }
+  const record = (a, b) => {
+    if (replaying) return;
+    if (!current) current = [Math.round(a.x), Math.round(a.y)];
+    const n = current.length, px = current[n - 2], py = current[n - 1];
+    if (Math.hypot(b.x - px, b.y - py) >= 3) current.push(Math.round(b.x), Math.round(b.y));
+  };
+  const save = () => {
+    try {
+      let json = JSON.stringify(strokes);
+      while (json.length > LIMIT && strokes.length > 1) { strokes.splice(0, Math.ceil(strokes.length / 10)); json = JSON.stringify(strokes); }
+      localStorage.setItem(KEY, json);
+    } catch { /* storage full or blocked: marks just aren't kept */ }
+  };
+  // redraw saved strokes one at a time, so overlaps darken exactly as they did when drawn
+  const replay = () => {
+    replaying = true;
+    strokes.forEach((pts) => {
+      for (let i = 0; i < pts.length; i += 2) {
+        const a = { x: pts[Math.max(0, i - 2)], y: pts[Math.max(1, i - 1)] }, b = { x: pts[i], y: pts[i + 1] };
+        segment(i ? a : b, b);
+      }
+      clearTimeout(idle);
+      commit();
+    });
+    replaying = false;
+  };
   // finish the stroke: multiply it into the done canvas (darkening where it overlaps), clear the live one
   let drawn = 0, idle;
   const commit = () => {
     drawn = 0;
+    if (current) { strokes.push(current); current = null; save(); }
     tiles.forEach((t) => {
       if (!t.dirty) return;
       t.done.globalCompositeOperation = 'multiply';
@@ -446,8 +480,20 @@
       last = p;
     }
   }, { passive: true });
-  // v9: the canvas is the screen, so scrolling draws nothing; a resize starts a fresh canvas
-  addEventListener('resize', () => { last = null; tiles.forEach((t) => { t.done.canvas.remove(); t.live.canvas.remove(); }); tiles.clear(); });
+  // v9: the canvas is the screen, so scrolling draws nothing. A resize rebuilds the canvas at the
+  // new size and redraws the saved strokes where they were; whatever falls outside is cut off.
+  let resizing;
+  addEventListener('resize', () => {
+    last = null;
+    clearTimeout(resizing);
+    resizing = setTimeout(() => {
+      commit();
+      tiles.forEach((t) => { t.done.canvas.remove(); t.live.canvas.remove(); });
+      tiles.clear();
+      replay();
+    }, 150);
+  });
+  replay();
   document.documentElement.addEventListener('pointerleave', () => { last = null; client = null; commit(); });
 
   // phones: the finger is the pen. Wherever it touches and slides (including while it scrolls the
