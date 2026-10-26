@@ -419,7 +419,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .contact__mail:hover, .contact__mail:focus-visible, .contact__links a:hover, .contact__links a:focus-visible { background: #F3F2EC; color: #0B0B0A; text-decoration-color: currentColor; }
 .colophon {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
-  margin-top: clamp(96px, 10vw, 160px); padding: 16px 0 28px; font-size: 14px; font-weight: 500; color: var(--ink-3);
+  margin-top: clamp(96px, 10vw, 160px); padding: 16px 0 28px; font-size: 14px; font-weight: 500; color: var(--ink);
 }
 .colophon a { color: var(--ink); }
 .colophon__made { text-align: right; }
