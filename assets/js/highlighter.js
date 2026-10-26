@@ -15,7 +15,7 @@
   // layer styles live here so any page can switch the marker on with just the script + data-highlighter
   const css = document.createElement('style');
   css.textContent = `html { background: #F3F2EC; }
-    .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: ${cfg.highlighterOpacity || .5}; }
+    .hl-layer { position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: ${cfg.highlighterOpacity || .5}; }
     .hl-layer canvas { position: absolute; left: 0; display: block; }
     .hl-layer canvas.is-live { mix-blend-mode: multiply; }`;
   document.head.append(css);
@@ -23,6 +23,15 @@
   layer.className = 'hl-layer';
   layer.setAttribute('aria-hidden', 'true');
   document.body.prepend(layer);
+  // clipped to the end of the page's last block, so a tile can never make the page longer
+  const fit = () => {
+    const end = document.body.lastElementChild === layer ? document.body : document.body.lastElementChild;
+    layer.style.height = Math.ceil(end.getBoundingClientRect().bottom + scrollY) + 'px';
+  };
+  fit();
+  addEventListener('load', fit);
+  addEventListener('resize', fit);
+  if ('ResizeObserver' in window) new ResizeObserver(fit).observe(document.querySelector('main') || document.body);
   // each tile = a "done" canvas (finished strokes, multiplied into each other so overlaps darken)
   // and a "live" canvas on top (the stroke being drawn, itself multiplied over the done strokes)
   const tiles = new Map();
