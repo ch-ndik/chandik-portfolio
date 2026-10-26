@@ -1,6 +1,7 @@
 /* Highlighter marker (shared): the mouse, or a finger on phones, leaves a marker trail on the page.
    Switch it on with <script src="…/highlighter.js" defer> and, on <body>,
-   data-highlighter="#RRGGBB" (colour) and optionally data-highlighter-opacity="0.5".
+   data-highlighter="#RRGGBB" (colour) and optionally data-highlighter-opacity="0.5",
+   data-highlighter-scroll="off" (no streak while scrolling) and data-highlighter-touch="off" (no trail on phones).
    Same as the v8 homepage's marker: drawn under all content (thumbnails cover it), multiplied onto
    the page (vanishes on black), overlapping strokes darken. */
 /* v8 highlighter: the mouse leaves a #BFFF00 trail wherever it moves (no clicking), including
@@ -77,7 +78,8 @@
     }
   }, { passive: true });
   // scrolling moves the page under a still mouse: the pen stays down, so it streaks along the page
-  addEventListener('scroll', () => {
+  if (cfg.highlighterScroll === 'off') addEventListener('scroll', () => { last = null; }, { passive: true });   // lift the pen instead
+  else addEventListener('scroll', () => {
     if (!client) return;
     const p = { x: client.x + scrollX, y: client.y + scrollY };
     if (last) segment(last, p);
@@ -87,6 +89,7 @@
 
   // phones: the finger is the pen. Wherever it touches and slides (including while it scrolls the
   // page), the trail follows it; lifting the finger lifts the pen (momentum scrolling doesn't draw).
+  if (cfg.highlighterTouch === 'off') return;   // data-highlighter-touch="off": no trail on phones
   let touchLast = null;
   const touchPoint = (e) => { const t = e.touches[0]; return t && { x: t.pageX, y: t.pageY }; };
   addEventListener('touchstart', (e) => { touchLast = touchPoint(e); if (touchLast) segment(touchLast, touchLast); }, { passive: true });
