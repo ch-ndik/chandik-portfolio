@@ -53,12 +53,8 @@
      Thumbnails sit above it, so strokes never cover them. */
   /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
   html:has(body.v8) { background: #F3F2EC; }
-  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: calc(.5 * (1 - var(--dark, 0))); }   /* fades out as the page turns black */
+  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .5; }
   .hl-layer canvas { position: absolute; left: 0; display: block; }
-  /* Chalk: the same strokes again in grainy white, screen-blended. Screen does nothing visible on
-     the light paper (white over near-white), but on the black after-hours section it reads as chalk. */
-  .chalk-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: screen; opacity: calc(.9 * var(--dark, 0)); }   /* chalk only once the page is dark */
-  .chalk-layer canvas { position: absolute; left: 0; display: block; }
   .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* the stroke being drawn darkens the earlier ones it crosses */
 </style>
 </head>
@@ -407,49 +403,12 @@
     if (!tiles.has(i)) tiles.set(i, { done: make(i, false), live: make(i, true), dirty: false });
     return tiles.get(i);
   };
-  // chalk: white through a speckled pattern, so the stroke is broken and grainy like chalk on a board
-  const chalkLayer = document.createElement('div');
-  chalkLayer.className = 'chalk-layer';
-  chalkLayer.setAttribute('aria-hidden', 'true');
-  document.body.prepend(chalkLayer);
-  const grain = (() => {
-    const g = document.createElement('canvas'); g.width = g.height = 96;
-    const gx = g.getContext('2d'), img = gx.createImageData(96, 96);
-    for (let i = 0; i < img.data.length; i += 4) {
-      const r = Math.random();
-      img.data[i] = img.data[i + 1] = img.data[i + 2] = 255;
-      img.data[i + 3] = r > 0.58 ? 120 + r * 100 : r * 25;   // mostly gaps, with scattered grains (less white, text stays readable)
-    }
-    gx.putImageData(img, 0, 0);
-    return g;
-  })();
-  const chalkTiles = new Map();
-  const chalk = (i) => {
-    if (chalkTiles.has(i)) return chalkTiles.get(i);
-    const c = document.createElement('canvas');
-    c.width = document.documentElement.clientWidth; c.height = TILE; c.style.top = `${i * TILE}px`;
-    chalkLayer.append(c);
-    const ctx = c.getContext('2d');
-    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.strokeStyle = ctx.createPattern(grain, 'repeat');
-    chalkTiles.set(i, ctx);
-    return ctx;
-  };
-  const chalkSegment = (a, b, i) => {
-    const ctx = chalk(i), off = i * TILE;
-    // two passes: a slightly thinner core and a ragged wider edge
-    for (const [w, alpha] of [[WIDTH * 0.8, 1], [WIDTH * 1.05, 0.45]]) {
-      ctx.globalAlpha = alpha; ctx.lineWidth = w + (Math.random() - 0.5) * 3;
-      ctx.beginPath(); ctx.moveTo(a.x, a.y - off); ctx.lineTo(b.x, b.y - off); ctx.stroke();
-    }
-  };
   const segment = (a, b) => {
     const top = Math.floor((Math.min(a.y, b.y) - WIDTH) / TILE), bottom = Math.floor((Math.max(a.y, b.y) + WIDTH) / TILE);
     for (let i = Math.max(0, top); i <= bottom; i++) {
       const t = tile(i), off = i * TILE;
       t.live.beginPath(); t.live.moveTo(a.x, a.y - off); t.live.lineTo(b.x, b.y - off); t.live.stroke();
       t.dirty = true;
-      chalkSegment(a, b, i);
     }
     drawn += Math.hypot(b.x - a.x, b.y - a.y);
     clearTimeout(idle);
