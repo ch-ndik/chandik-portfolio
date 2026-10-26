@@ -387,7 +387,21 @@
   const hero = document.querySelector('.hero');
   hero?.addEventListener('click', (e) => e.stopImmediatePropagation(), true);
 
-  const TILE = 1e9, WIDTH = 22, COLOUR = '#BFFF00';
+  const TILE = 1e9, WIDTH = 22;
+  // each visit gets the next marker colour: lime, sky blue, peach, yellow, baby pink, then round again.
+  // A visit is a new tab or window (sessionStorage), so reloading the same tab keeps its colour.
+  const COLOURS = ['#BFFF00', '#7FD4FF', '#FFB38A', '#FFE500', '#FFB6D9'];
+  let visit = 0;
+  try {
+    visit = +sessionStorage.getItem('chandik-marker-visit');
+    if (!sessionStorage.getItem('chandik-marker-visit')) {
+      visit = (+localStorage.getItem('chandik-marker-visits') || 0) + 1;
+      localStorage.setItem('chandik-marker-visits', visit);
+      sessionStorage.setItem('chandik-marker-visit', visit);
+    }
+  } catch { /* no storage: always lime */ }
+  let COLOUR = COLOURS[Math.max(0, visit - 1) % COLOURS.length];
+  const mine = COLOUR;
   const layer = document.createElement('div');
   layer.className = 'hl-layer';
   layer.setAttribute('aria-hidden', 'true');
@@ -414,6 +428,7 @@
     const top = Math.floor((Math.min(a.y, b.y) - WIDTH) / TILE), bottom = Math.floor((Math.max(a.y, b.y) + WIDTH) / TILE);
     for (let i = Math.max(0, top); i <= bottom; i++) {
       const t = tile(i), off = i * TILE;
+      t.live.strokeStyle = COLOUR;
       t.live.beginPath(); t.live.moveTo(a.x, a.y - off); t.live.lineTo(b.x, b.y - off); t.live.stroke();
       t.dirty = true;
     }
@@ -431,9 +446,9 @@
   try { strokes = JSON.parse(localStorage.getItem(KEY)) || []; } catch { strokes = []; }
   const record = (a, b) => {
     if (replaying) return;
-    if (!current) current = [Math.round(a.x), Math.round(a.y)];
-    const n = current.length, px = current[n - 2], py = current[n - 1];
-    if (Math.hypot(b.x - px, b.y - py) >= 3) current.push(Math.round(b.x), Math.round(b.y));
+    if (!current) current = { c: COLOUR, p: [Math.round(a.x), Math.round(a.y)] };
+    const q = current.p, n = q.length;
+    if (Math.hypot(b.x - q[n - 2], b.y - q[n - 1]) >= 3) q.push(Math.round(b.x), Math.round(b.y));
   };
   const save = () => {
     try {
@@ -445,7 +460,9 @@
   // redraw saved strokes one at a time, so overlaps darken exactly as they did when drawn
   const replay = () => {
     replaying = true;
-    strokes.forEach((pts) => {
+    strokes.forEach((st) => {
+      const pts = Array.isArray(st) ? st : st.p;   // strokes saved before colours were plain point lists (lime)
+      COLOUR = Array.isArray(st) ? COLOURS[0] : st.c;
       for (let i = 0; i < pts.length; i += 2) {
         const a = { x: pts[Math.max(0, i - 2)], y: pts[Math.max(1, i - 1)] }, b = { x: pts[i], y: pts[i + 1] };
         segment(i ? a : b, b);
@@ -453,6 +470,7 @@
       clearTimeout(idle);
       commit();
     });
+    COLOUR = mine;
     replaying = false;
   };
   // finish the stroke: multiply it into the done canvas (darkening where it overlaps), clear the live one
