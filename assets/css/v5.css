@@ -422,6 +422,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   margin-top: clamp(96px, 10vw, 160px); padding: 16px 0 28px; font-size: 14px; font-weight: 500; color: var(--ink-3);
 }
 .colophon a { color: var(--ink); }
+.colophon__made { text-align: right; }
+.colophon__made s { text-decoration-thickness: 1.5px; }
 @media (max-width: 720px) { .contact__links { text-align: left; } }
 
 .to-top {
