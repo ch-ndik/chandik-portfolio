@@ -32,8 +32,8 @@
 <style>
   /* v8 hero: statement top-left, claim + jobs + awards bottom-right (uppercase small type) */
   .hero8 { display: grid; grid-template-rows: auto 1fr; padding-block: clamp(40px, 6vh, 72px); }
-  .hero8__lead { max-width: 30ch; font-size: clamp(32px, calc(3.2 * var(--vw)), 60px); font-weight: 600; line-height: 1.02; letter-spacing: -0.04em; color: var(--ink); }
-  .hero8__lead span { color: #2B3BE8; }
+  .hero8__lead { max-width: 30ch; font-size: clamp(32px, calc(3.2 * var(--vw)), 60px); font-weight: 600; line-height: 1.02; letter-spacing: -0.04em; color: #FFFFFF; }
+  .hero8__lead span { color: var(--ink); }
   .hero8__side { align-self: end; justify-self: end; width: min(100%, 44%); min-width: 320px; }
   .hero8__claim { font-size: clamp(28px, calc(2.6 * var(--vw)), 48px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; }
   .hero8 dl { text-transform: uppercase; font-size: clamp(13px, calc(1.05 * var(--vw)), 16px); font-weight: 500; letter-spacing: .01em; line-height: 1.25; }
@@ -87,7 +87,7 @@
 <main>
   <!-- Summary: the typewriter line, who I am in one sentence, and the essentials -->
   <section class="hero hero8" id="top" aria-labelledby="hero-title">
-    <h1 class="hero8__lead" id="hero-title">Chandik is a product designer who works across <span>visual, interaction and creative code.</span></h1>
+    <h1 class="hero8__lead" id="hero-title">Chandik is a product designer who works across <span>visual, interaction &amp; creative code.</span></h1>
     <div class="hero8__side">
       <p class="hero8__claim">He overthinks professionally.</p>
       <dl class="hero8__jobs">
