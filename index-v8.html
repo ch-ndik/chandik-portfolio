@@ -41,9 +41,23 @@
   .hero8__jobs div { display: grid; grid-template-columns: 6.5em 1fr; }
   .hero8__awards { display: grid; grid-template-columns: auto auto; justify-content: start; column-gap: 2.5em; margin-top: clamp(48px, 8vh, 104px); margin-left: -16em; }
   @media (max-width: 900px) { .hero8__side { justify-self: stretch; width: 100%; min-width: 0; margin-top: 48px; } .hero8__awards { margin-left: 0; grid-template-columns: 1fr; row-gap: 6px; } }
+  /* v8: plain scrolling (hero → projects → About), no stacking and no colour flood */
+  body.has-hero.v8 .hero { position: relative; z-index: auto; cursor: auto; }
+  body.has-hero.v8 #work, body.has-hero.v8 .turn, body.has-hero.v8 #after-hours, body.has-hero.v8 > .contact { background: transparent; z-index: auto; }
+  body.has-hero.v8 #about { padding-top: 0; pointer-events: auto; }
+  .v8 .hero__flood { display: none; }
+
+  /* Highlighter trail: tiles of canvas laid over the whole page, under every piece of content
+     (z -1 inside the body's stacking context) and above only the page colour. Multiply against the
+     page: #BFFF00 on paper reads as highlighter, on the black after-hours area it disappears.
+     Thumbnails sit above it, so strokes never cover them. */
+  /* the body must paint its own background (not hand it to the window), so multiply has a page to blend with */
+  html:has(body.v8) { background: #F3F2EC; }
+  .hl-layer { position: absolute; left: 0; top: 0; width: 100%; z-index: -1; pointer-events: none; mix-blend-mode: multiply; opacity: .5; }
+  .hl-layer canvas { position: absolute; left: 0; display: block; }
 </style>
 </head>
-<body class="v5 v7">
+<body class="v5 v7 v8">
 <!-- Homepage (2026 redesign; was drafts/index-v7). Health, Watch Faces and Polygons sit as loose cards with the smaller projects.
      Earlier homepages are in drafts/ (the pre-redesign one: drafts/index-live-2026.html). Read like a résumé:
      summary → experience (projects nested under the job they were made in) → about, skills,
@@ -355,5 +369,55 @@
   </div>
 </footer>
 
+<script>
+/* v8 highlighter: the mouse leaves a #BFFF00 trail wherever it moves (no clicking). The trail is
+   fixed to the page, so it scrolls with the content. Drawn in 2048px-tall canvas tiles, made only
+   where a stroke lands, so a long page doesn't need one giant canvas. Mouse only. */
+(() => {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  // no colour flood on v8: stop the hero's click before v5.js sees it
+  const hero = document.querySelector('.hero');
+  hero?.addEventListener('click', (e) => e.stopImmediatePropagation(), true);
+
+  const TILE = 2048, WIDTH = 22, COLOUR = '#BFFF00';
+  const layer = document.createElement('div');
+  layer.className = 'hl-layer';
+  layer.setAttribute('aria-hidden', 'true');
+  document.body.prepend(layer);
+  const tiles = new Map();
+  const tile = (i) => {
+    if (tiles.has(i)) return tiles.get(i);
+    const c = document.createElement('canvas');
+    c.width = document.documentElement.clientWidth;
+    c.height = TILE;
+    c.style.top = `${i * TILE}px`;
+    layer.append(c);
+    const ctx = c.getContext('2d');
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = WIDTH; ctx.strokeStyle = COLOUR;
+    tiles.set(i, ctx);
+    return ctx;
+  };
+  const segment = (a, b) => {
+    const top = Math.floor((Math.min(a.y, b.y) - WIDTH) / TILE), bottom = Math.floor((Math.max(a.y, b.y) + WIDTH) / TILE);
+    for (let i = Math.max(0, top); i <= bottom; i++) {
+      const ctx = tile(i), off = i * TILE;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y - off); ctx.lineTo(b.x, b.y - off); ctx.stroke();
+    }
+  };
+  let last = null;
+  addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    for (const ev of (e.getCoalescedEvents?.() || [e])) {
+      const p = { x: ev.clientX + scrollX, y: ev.clientY + scrollY };
+      if (last && Math.hypot(p.x - last.x, p.y - last.y) < 600) segment(last, p);
+      else segment(p, p);   // a dot to start a new stroke
+      last = p;
+    }
+  }, { passive: true });
+  // scrolling moves the page under a still mouse: lift the pen so it doesn't streak
+  addEventListener('scroll', () => { last = null; }, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => { last = null; });
+})();
+</script>
 </body>
 </html>
