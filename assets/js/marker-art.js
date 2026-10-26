@@ -18,7 +18,7 @@
   const style = document.createElement('style');
   style.textContent = `
     .has-marker-art { position: relative; isolation: isolate; clip-path: inset(0); }   /* clip-path also clips a fixed child */
-    .marker-art { position: fixed; left: 0; top: 0; z-index: -1; pointer-events: none; opacity: .8; }
+    .marker-art { position: fixed; left: 0; top: 0; z-index: -1; pointer-events: none; opacity: .5; }
   `;
   document.head.append(style);
   const canvases = blocks.map((b) => {
