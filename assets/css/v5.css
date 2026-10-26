@@ -541,7 +541,14 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 .cs .stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); margin-top: 32px; }
 .cs .stat__value { font-size: clamp(36px, calc(3.8 * var(--vw)), 64px); font-weight: 500; line-height: 1; letter-spacing: -0.045em; color: var(--ink); }
 .cs .stat__label { margin-top: 6px; font-size: 14px; font-weight: 500; color: var(--ink-3); }
-.cs .quote { margin-block: 1.4em; font-size: clamp(22px, calc(2 * var(--vw)), 34px); font-style: italic; font-weight: 300; line-height: 1.2; letter-spacing: -0.025em; color: var(--ink); }
+/* .quote = a key takeaway: upright, larger and medium weight, in the project's accent colour
+   (--accent: Samsung blue by default; Polygons sets its red) with a matching rule on the left */
+.cs { --accent: var(--c-samsung); }
+.cs .quote, .cs .prose__body > p.quote, .cs .exploration__text p.quote {
+  margin-block: 1.6em; padding-left: .7em; border-left: 3px solid var(--accent);
+  font-size: clamp(24px, calc(2.4 * var(--vw)), 40px); font-style: normal; font-weight: 500;
+  line-height: 1.12; letter-spacing: -0.03em; color: var(--accent); text-wrap: balance;
+}
 .cs .points { margin-block: 28px; }
 .cs .points li { display: grid; grid-template-columns: 6.5em 1fr; column-gap: 12px; padding: 16px 0; border-top: 1px solid var(--rule); }
 .cs .points li:last-child { border-bottom: 1px solid var(--rule); }
@@ -572,9 +579,35 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
 .cs .btn:hover { background: var(--ink); color: var(--bg); }
 .cs .btn svg { width: 14px; height: 14px; }
 
-.cs-next { display: block; margin-top: clamp(120px, 14vw, 224px); padding-top: 14px; }
-.cs-next__title { display: block; margin-top: 16px; font-size: clamp(44px, calc(7.4 * var(--vw)), 140px); font-weight: 500; line-height: .95; letter-spacing: -0.05em; transition: color .3s var(--ease); }
-.cs-next:hover .cs-next__title { color: var(--ink-2); }
+/* Dark zone: the after-hours palette for one block. Used by the next-project block and the
+   footer on case-study pages, so the end of every case study sits on black like the homepage's. */
+.is-dark, body:has(main.cs) > .contact {
+  --bg: #000; --ink: #FFFFE3;
+  --ink-2: rgb(255 255 227 / .62); --ink-3: rgb(255 255 227 / .38);
+  --rule: rgb(255 255 227 / .16); --rule-strong: rgb(255 255 227 / .5); --plate: #0E0E0C;
+  background: var(--bg); color: var(--ink);
+}
+/* footer after a case study: black, joined to the next-project block (no paper gap between) */
+body:has(main.cs) > .contact { margin-top: 0; padding-top: clamp(72px, 9vw, 144px); }
+
+/* Next project: full-width black block, a hint of what's next (thumbnail, title, one line) */
+.cs-next {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: end;
+  margin: clamp(120px, 14vw, 224px) calc(var(--pad) * -1) 0; padding: clamp(56px, 7vw, 112px) var(--pad) clamp(40px, 5vw, 72px);
+}
+.cs-next__text { grid-column: 1 / span 6; display: grid; gap: 18px; align-content: end; }
+.cs-next .case__meta { color: var(--ink-3); }
+.cs-next__title { font-size: clamp(40px, calc(6 * var(--vw)), 112px); font-weight: 500; line-height: .95; letter-spacing: -0.05em; }
+.cs-next__teaser { max-width: 40ch; font-size: clamp(16px, calc(1.2 * var(--vw)), 19px); line-height: 1.5; color: var(--ink-2); }
+.cs-next__cta { justify-self: start; margin-top: 6px; padding: 10px 18px; border: 1px solid var(--ink); border-radius: 100px; font-size: 14px; font-weight: 600; transition: background-color .25s var(--ease), color .25s var(--ease); }
+.cs-next:hover .cs-next__cta { background: var(--ink); color: var(--bg); }
+.cs-next__media { grid-column: 8 / -1; overflow: hidden; background: var(--plate); aspect-ratio: 4 / 3; }
+.cs-next__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease), opacity .4s var(--ease); opacity: .82; }
+.cs-next:hover .cs-next__media img { transform: scale(1.04); opacity: 1; }
+@media (max-width: 900px) {
+  .cs-next__text, .cs-next__media { grid-column: 1 / -1; }
+  .cs-next__media { order: -1; margin-bottom: 28px; }
+}
 
 @media (max-width: 900px) {
   .cs-intro__text, .cs-intro__spec { grid-column: 1 / -1; }
