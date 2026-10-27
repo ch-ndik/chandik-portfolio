@@ -70,6 +70,9 @@
   }   /* page-coloured, and above the marker layer, so strokes never run over it */
   .hl-clear:hover { background: var(--ink); color: var(--bg); }
   .hl-clear[hidden] { display: none; }
+  /* v10: project and after-hours descriptions at 600, in the same full ink as their titles */
+  .v7 .pair__col > p, .v7 .pair__col .case__notes p,
+  .drip__text, .piece figcaption p { font-weight: 600; color: var(--ink); }
 </style>
 </head>
 <body class="v5 v7 v8">
