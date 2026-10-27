@@ -59,9 +59,9 @@
   html:has(body.v8) { background: #F3F2EC; }
   /* v9: the layer is the viewport itself, fixed; the page scrolls underneath the strokes */
   .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: normal;   /* plain paint, so it shows on the black after-hours area too */
-    opacity: calc(.5 - .35 * var(--dark, 0)); }   /* 50% on paper, easing to 15% as the page turns black */
+    opacity: .5; }   /* v10: 50% on paper and on black */
   .hl-layer canvas { position: absolute; left: 0; display: block; }
-  /* no overlap darkening: a newer stroke simply sits on top of older ones */
+  .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* v10: the stroke being drawn darkens the earlier ones it crosses */
   .hl-clear {
     position: fixed; right: 16px; bottom: 16px; z-index: 50; padding: 10px 16px; border-radius: 100px;
     background: var(--bg); color: var(--ink); border: 1px solid var(--rule); font-size: 13px; font-weight: 600;
@@ -69,6 +69,9 @@
   }   /* page-coloured, and above the marker layer, so strokes never run over it */
   .hl-clear:hover { background: var(--ink); color: var(--bg); }
   .hl-clear[hidden] { display: none; }
+  /* v10: project and after-hours descriptions at 600, in the same full ink as their titles */
+  .v7 .pair__col > p, .v7 .pair__col .case__notes p,
+  .drip__text, .piece figcaption p { font-weight: 600; color: var(--ink); }
 </style>
 </head>
 <body class="v5 v7 v8">
@@ -479,13 +482,14 @@
     COLOUR = mine;
     replaying = false;
   };
-  // finish the stroke: paint it onto the done canvas, on top of the older strokes, and clear the live one
+  // finish the stroke: multiply it into the done canvas (v10: darkening where it overlaps), clear the live one
   let drawn = 0, idle;
   const commit = () => {
     drawn = 0;
     if (current) { strokes.push(current); current = null; save(); }
     tiles.forEach((t) => {
       if (!t.dirty) return;
+      t.done.globalCompositeOperation = 'multiply';
       t.done.drawImage(t.live.canvas, 0, 0);
       t.done.globalCompositeOperation = 'source-over';
       t.live.clearRect(0, 0, t.live.canvas.width, t.live.canvas.height);
