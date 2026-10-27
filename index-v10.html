@@ -60,7 +60,7 @@
   html:has(body.v8) { background: #F3F2EC; }
   /* v9: the layer is the viewport itself, fixed; the page scrolls underneath the strokes */
   .hl-layer { position: fixed; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; mix-blend-mode: normal;   /* plain paint, so it shows on the black after-hours area too */
-    opacity: calc(.5 + .3 * var(--dark, 0)); }   /* v10: 50% on paper, rising to 80% on black (brighter there) */
+    opacity: .5; }   /* v10: 50% on paper and on black */
   .hl-layer canvas { position: absolute; left: 0; display: block; }
   .hl-layer canvas.is-live { mix-blend-mode: multiply; }   /* v10: the stroke being drawn darkens the earlier ones it crosses */
   .hl-clear {
