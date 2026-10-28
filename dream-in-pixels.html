@@ -128,17 +128,31 @@
   </section>
 
   <!-- 04 -->
-  <section class="artwork" data-art="stitch" aria-labelledby="art-4">
+  <section class="artwork" data-art="rotating-figure" aria-labelledby="art-4">
+    <div class="artwork__stage"><canvas aria-label="A pixelated circle filled with a colour that fades into the background, its gradient slowly turning"></canvas></div>
+    <div class="artwork__controls"></div>
+    <div class="artwork__info">
+      <div><p class="eyebrow">04</p><h2 id="art-4">Buffering</h2></div>
+      <div>
+        <div class="artwork__how"><p>Pick a <strong>colour</strong> and a <strong>background</strong>. <strong>Corner</strong> rounds every cell, all the way to dots, and <strong>Gap</strong> opens up space between them.</p></div>
+        <div class="artwork__what"><p>A circle drawn on a 10 × 10 grid: only the cells whose centres fall inside it are filled, which gives it its chunky outline. The fill is a gradient from the chosen colour into the background, and its axis turns once every three and a half seconds, so the colour seems to roll around the edge.</p><p>Each cell also carries a faint shade of its own that turns with the circle, giving every square a soft, lit edge.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="artwork" data-art="stitch" aria-labelledby="art-5">
     <div class="artwork__stage"><canvas aria-label="A woven grid. Tap a cell to send a thread wandering from it."></canvas></div>
     <div class="artwork__controls"></div>
     <div class="artwork__info">
-      <div><p class="eyebrow">04</p><h2 id="art-4">Stitch</h2></div>
+      <div><p class="eyebrow">05</p><h2 id="art-5">Stitch</h2></div>
       <div>
         <div class="artwork__how"><p><strong>Tap a cell</strong> to start a thread from it, in a random colour. <strong>Reset</strong> clears the cloth and sends one thread of each colour out from the centre to fight for space again.</p><p>Tap a <strong>colour</strong> to recolour that thread everywhere, live, and <strong>Clear</strong> empties the cloth. The four set off on their own as soon as the artwork comes into view.</p></div>
         <div class="artwork__what"><p>The cloth is a 24 × 24 grid whose rows and columns slowly breathe, gliding to new widths in turns. Every 45 milliseconds each thread takes one step, choosing between going straight and turning either way, weighted by its colour’s nature: grey hugs walls and fills the gaps between threads, near-black keeps turning the same way and coils into spirals, charcoal can barely go straight so it squiggles, and blue mostly runs straight, laying long corridors.</p><p>A thread never covers a stitched cell. When it’s boxed in, its tail reels in until it’s gone. Each thread keeps its last 50 cells, shading from full colour at the head to dark at the tail, and now and then splits a second head. While the four are fighting, a colour that gets trapped regrows from a random free spot.</p></div>
       </div>
     </div>
   </section>
+
 </main>
 
 <footer class="sec contact" id="contact" aria-label="Contact">

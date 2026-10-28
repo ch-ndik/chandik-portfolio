@@ -36,8 +36,8 @@
   const controls = (section) => section.querySelector('.artwork__controls');
   const el = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
 
-  // a − value + stepper; returns nothing, calls onChange(value)
-  function stepper(box, label, { min, max, value }, onChange) {
+  // a − value + stepper (optional step and display format); calls onChange(value)
+  function stepper(box, label, { min, max, value, step = 1, fmt = (v) => v }, onChange) {
     const id = `s${Math.random().toString(36).slice(2, 7)}`;
     const c = el(`<div class="ctl"><span class="ctl__label" id="${id}">${label}</span>
       <span class="stepper" role="group" aria-labelledby="${id}">
@@ -45,9 +45,9 @@
         <output aria-live="polite"></output>
         <button type="button" aria-label="More ${label.toLowerCase()}">+</button></span></div>`);
     const [minus, plus] = c.querySelectorAll('button'), out = c.querySelector('output');
-    const show = () => { out.textContent = value; minus.disabled = value <= min; plus.disabled = value >= max; onChange(value); };
-    minus.addEventListener('click', () => { value = Math.max(min, value - 1); show(); });
-    plus.addEventListener('click', () => { value = Math.min(max, value + 1); show(); });
+    const show = () => { out.textContent = fmt(value); minus.disabled = value <= min; plus.disabled = value >= max; onChange(value); };
+    minus.addEventListener('click', () => { value = Math.max(min, value - step); show(); });
+    plus.addEventListener('click', () => { value = Math.min(max, value + step); show(); });
     box.append(c);
     show();
   }
@@ -378,6 +378,97 @@
     }, { threshold: 0.35 }).observe(s.stage);
   }
 
-  const ARTWORKS = { 'pixel-moves': pixelMoves, 'ripple-field': (s) => rippleField(s, false), 'ripple-field-ii': (s) => rippleField(s, true), stitch };
+  /* ---------------------------------------------------------------------------------------
+     Buffering: a pixel circle on a 10 × 10 grid, filled with a gradient that fades from
+     one colour into the background. The gradient's axis turns once every 3.5 s, and each cell
+     carries a faint shade of its own that turns with it. Starts red, 30% corners, 8px gaps. */
+  function rotatingFigure(section) {
+    const CELLS = 10, PERIOD = 3.5, RADIUS = 0.4, SHADE = 5, SHADE_OFFSET = 76, FADE_END = 0.586;
+    const COLOURS = { Blue: '#1e00ff', Red: '#ff000d', Yellow: '#ffd500', Green: '#0e9510' };
+    const GROUNDS = { Black: '#000000', White: '#ffffff' };
+    const TAU = Math.PI * 2;
+    let colour = 'Red', ground = 'Black', corner = 30, gap = 8, angle = 0, lut = [];
+
+    // 256 colours along the fill: the chosen colour at 0, blending into the background by FADE_END
+    const build = () => {
+      const A = hex(COLOURS[colour]), B = hex(GROUNDS[ground]);
+      lut = Array.from({ length: 256 }, (_, i) => {
+        const k = Math.min(1, (i / 255) / FADE_END);
+        return `rgb(${A.map((v, j) => (v + (B[j] - v) * k) | 0).join(',')})`;
+      });
+    };
+    // one small tile, white to light grey, multiplied over each cell; it turns with the circle
+    let tile = null, tileKey = '';
+    const shadeTile = (size, a) => {
+      const key = `${size}|${a.toFixed(3)}`;
+      if (key === tileKey) return tile;
+      tileKey = key;
+      tile = tile || document.createElement('canvas');
+      tile.width = tile.height = size;
+      const g = tile.getContext('2d'), half = size / 2, reach = half * (Math.abs(Math.cos(a)) + Math.abs(Math.sin(a)));
+      const grad = g.createLinearGradient(half - Math.cos(a) * reach, half - Math.sin(a) * reach, half + Math.cos(a) * reach, half + Math.sin(a) * reach);
+      const dark = Math.round(255 * (1 - SHADE / 100));
+      grad.addColorStop(0, '#fff');
+      grad.addColorStop(1, `rgb(${dark},${dark},${dark})`);
+      g.fillStyle = grad;
+      g.fillRect(0, 0, size, size);
+      return tile;
+    };
+
+    const s = setup(section);
+    const box = controls(section);
+    const group = (label, names, get, set) => {
+      const g = el(`<span class="tally" role="group" aria-label="${label}"></span>`);
+      const buttons = names.map((name) => {
+        const b = el(`<button class="btn btn--secondary btn--sm" type="button">${name}</button>`);
+        b.addEventListener('click', () => { set(name); sync(); build(); });
+        g.append(b);
+        return b;
+      });
+      const sync = () => buttons.forEach((b) => b.setAttribute('aria-pressed', b.textContent === get()));
+      sync();
+      box.append(g);
+    };
+    group('Colour', Object.keys(COLOURS), () => colour, (v) => { colour = v; });
+    group('Background', Object.keys(GROUNDS), () => ground, (v) => { ground = v; });
+    stepper(box, 'Corner', { min: 0, max: 50, value: corner, step: 10, fmt: (v) => `${v}%` }, (v) => { corner = v; });
+    stepper(box, 'Gap', { min: 0, max: 20, value: gap, fmt: (v) => `${v}px` }, (v) => { gap = v; });
+    build();
+
+    loop(s, (now, dt) => {
+      if (!reduce) angle = (angle + dt / PERIOD * TAU) % TAU;
+      const { ctx } = s, S = s.canvas.width, c = (CELLS - 1) / 2, r = RADIUS * CELLS;
+      const cos = Math.cos(angle), sin = Math.sin(angle);
+      const edge = (i) => Math.round(i * S / CELLS);            // whole-pixel edges, no seams
+      const inset = gap * s.dpr / 2;
+      const round = corner / 100 * Math.max(1, S / CELLS - inset * 2);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = GROUNDS[ground];
+      ctx.fillRect(0, 0, S, S);
+      const cells = [];
+      for (let y = 0; y < CELLS; y++) for (let x = 0; x < CELLS; x++) {
+        const dx = x - c, dy = y - c;
+        if (dx * dx + dy * dy > r * r) continue;                  // outside the circle: background
+        const t = (dx * cos + dy * sin) / r * 0.5 + 0.5;          // position along the turning axis
+        ctx.fillStyle = lut[Math.round(Math.min(1, Math.max(0, t)) * 255)];
+        const w0 = edge(x + 1) - edge(x), h0 = edge(y + 1) - edge(y);
+        const ix = Math.min(inset, (w0 - 1) / 2), iy = Math.min(inset, (h0 - 1) / 2);
+        const X = edge(x) + ix, Y = edge(y) + iy, W = w0 - ix * 2, H = h0 - iy * 2;
+        if (round > 0.5) { ctx.beginPath(); ctx.roundRect(X, Y, W, H, Math.min(round, W / 2, H / 2)); ctx.fill(); }
+        else ctx.fillRect(X, Y, W, H);
+        cells.push([X, Y, W, H]);
+      }
+      // per-cell shade, clipped to each cell's shape so the background never darkens
+      const t = shadeTile(Math.ceil(S / CELLS), angle + Math.PI + SHADE_OFFSET * Math.PI / 180);
+      ctx.globalCompositeOperation = 'multiply';
+      for (const [X, Y, W, H] of cells) {
+        if (round > 0.5) { ctx.save(); ctx.beginPath(); ctx.roundRect(X, Y, W, H, Math.min(round, W / 2, H / 2)); ctx.clip(); ctx.drawImage(t, X, Y, W, H); ctx.restore(); }
+        else ctx.drawImage(t, X, Y, W, H);
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    });
+  }
+
+  const ARTWORKS = { 'pixel-moves': pixelMoves, 'ripple-field': (s) => rippleField(s, false), 'ripple-field-ii': (s) => rippleField(s, true), stitch, 'rotating-figure': rotatingFigure };
   document.querySelectorAll('.artwork[data-art]').forEach((section) => ARTWORKS[section.dataset.art]?.(section));
 })();

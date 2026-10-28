@@ -312,7 +312,7 @@
 
   <!-- AFTER HOURS -->
   <section class="sec" id="after-hours" aria-label="After hours">
-    <!-- DR.I.P: the four artworks, live. One shows at a time; the others are display:none, so
+    <!-- DR.I.P: the five artworks, live. One shows at a time; the others are display:none, so
          dream-in-pixels.js pauses them (it only draws pieces that are on screen). -->
     <div class="drip">
       <div class="drip__stage">
@@ -320,6 +320,7 @@
         <div class="artwork" data-art="ripple-field" id="drip-2"><div class="artwork__stage"><canvas aria-label="Ripple Field I: cross-shaped ripples of colour spread across a grid of squares. Tap to send another."></canvas></div><div class="artwork__controls" hidden></div></div>
         <div class="artwork" data-art="ripple-field-ii" id="drip-3"><div class="artwork__stage"><canvas aria-label="Ripple Field II: turning, cross-shaped ripples spread across a grid of squares. Tap to send another."></canvas></div><div class="artwork__controls" hidden></div></div>
         <div class="artwork" data-art="stitch" id="drip-4"><div class="artwork__stage"><canvas aria-label="Stitch: threads wander across a woven grid. Tap a cell to start a thread."></canvas></div><div class="artwork__controls" hidden></div></div>
+        <div class="artwork" data-art="rotating-figure" id="drip-5"><div class="artwork__stage"><canvas aria-label="Buffering: a pixel circle filled with a colour that fades into the background, its gradient slowly turning."></canvas></div><div class="artwork__controls" hidden></div></div>
       </div>
       <div class="drip__info">
         <p class="drip__kicker">Interactive art series · 2026 · Ongoing</p>
@@ -329,7 +330,8 @@
           <li><button type="button" data-show="drip-1" data-hint="Watch the colours drip outward." aria-pressed="true"><span>01</span>Pixel Moves</button></li>
           <li><button type="button" data-show="drip-2" data-hint="" aria-pressed="false"><span>02</span>Ripple Field I</button></li>
           <li><button type="button" data-show="drip-3" data-hint="Tap the artwork to send a turning ripple." aria-pressed="false"><span>03</span>Ripple Field II</button></li>
-          <li><button type="button" data-show="drip-4" data-hint="Tap a cell to start a new thread." aria-pressed="false"><span>04</span>Stitch</button></li>
+          <li><button type="button" data-show="drip-5" data-hint="Watch the colour roll around the circle." aria-pressed="false"><span>04</span>Buffering</button></li>
+          <li><button type="button" data-show="drip-4" data-hint="Tap a cell to start a new thread." aria-pressed="false"><span>05</span>Stitch</button></li>
         </ol>
         <p class="drip__hint" aria-live="polite">Watch the colours drip outward.</p>
         <a class="drip__cta" href="dream-in-pixels.html">Open the full series, with controls <span aria-hidden="true">↗</span></a>
